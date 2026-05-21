@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>Орден Джедаев — Проверка Дня</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#07070f;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:white;min-height:100vh;overflow-x:hidden;}
+    .stars{position:fixed;inset:0;pointer-events:none;z-index:0;}
+    .star{position:absolute;border-radius:50%;background:white;}
+    .screen{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:32px 20px 80px;max-width:480px;margin:0 auto;}
+    .hidden{display:none!important;}
+    .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(7,7,15,0.97);border-top:1px solid #1e3a5a;display:flex;z-index:100;backdrop-filter:blur(12px);}
+    .nav-btn{flex:1;padding:10px 0 14px;background:none;border:none;color:#445566;font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s;}
+    .nav-btn.active{color:#4FCEE4;}
+    .nav-btn span.ni{font-size:18px;}
+    .lightsaber{width:3px;height:90px;background:linear-gradient(to bottom,transparent,#4FCEE4,#00BFFF,#4FCEE4,transparent);border-radius:4px;box-shadow:0 0 20px #4FCEE4,0 0 40px #00BFFF55;margin:0 auto 32px;animation:pulse 2s ease-in-out infinite;}
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.7;box-shadow:0 0 30px #4FCEE4,0 0 60px #00BFFF88;}}
+    .jedi-symbol{font-size:76px;margin-bottom:24px;filter:drop-shadow(0 0 20px #4FCEE4);animation:float 3s ease-in-out infinite;}
+    @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+    .label-small{font-size:12px;letter-spacing:6px;color:#4FCEE4;text-transform:uppercase;margin-bottom:10px;opacity:.8;}
+    .title-main{font-size:28px;font-weight:900;letter-spacing:3px;margin-bottom:8px;}
+    .subtitle{font-size:13px;color:#6a7f96;letter-spacing:2px;margin-bottom:30px;}
+    .quote{font-size:14px;color:#8899aa;line-height:1.8;max-width:290px;font-style:italic;margin-bottom:36px;text-align:center;}
+    .btn-primary{background:linear-gradient(135deg,#1a3a5a,#0d2a4a);border:1px solid #4FCEE4;border-radius:12px;padding:16px 48px;color:#4FCEE4;font-size:14px;font-weight:700;letter-spacing:4px;cursor:pointer;text-transform:uppercase;box-shadow:0 0 20px #4FCEE420;transition:all .2s;width:100%;max-width:320px;}
+    .score-bar{background:linear-gradient(135deg,#0d1a2e,#1a2a3a);border:1px solid #1e3a5a;border-radius:12px;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:16px;}
+    .score-label{font-size:10px;color:#4FCEE4;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;}
+    .score-value{font-size:24px;font-weight:900;}
+    .score-max{font-size:13px;color:#445566;font-weight:400;}
+    .rank-label{font-size:10px;color:#445566;letter-spacing:2px;text-transform:uppercase;text-align:right;margin-bottom:4px;}
+    .rank-title{font-size:13px;font-weight:700;text-align:right;}
+    .progress-dots{display:flex;justify-content:center;gap:5px;margin-top:14px;flex-wrap:wrap;}
+    .dot{width:7px;height:7px;border-radius:50%;border:1px solid #334455;background:#0d1a2e;transition:all .3s;}
+    .dot.yes{background:#4FCEE4;border-color:#4FCEE4;box-shadow:0 0 8px #4FCEE4;}
+    .dot.no{background:#2a1a28;border-color:#5a1a2e;}
+    .dot.special-yes{background:#FFD700;border-color:#FFD700;box-shadow:0 0 10px #FFD700;}
+    .dot.vape-ok{background:#53C546;border-color:#53C546;box-shadow:0 0 8px #53C546;}
+    .dot.vape-bad{background:#FF6B35;border-color:#FF6B35;}
+    .questions{display:flex;flex-direction:column;gap:10px;width:100%;}
+    .question-card{border-radius:14px;padding:16px 18px;transition:all .3s;border:1px solid #1e3a5a;background:linear-gradient(135deg,#0d1a2e,#111a28);}
+    .question-card.answered-yes{background:linear-gradient(135deg,#0a2a1a,#0d2020);border-color:#1a5a3a;}
+    .question-card.answered-no{background:linear-gradient(135deg,#1a0a10,#180d14);border-color:#3a1a28;}
+    .question-card.answered-yes.special{background:linear-gradient(135deg,#1a1500,#2a2200);border-color:#6a5200;box-shadow:0 0 25px #FFD70025;}
+    .question-card.answered-yes.vape-card{background:linear-gradient(135deg,#0a1a08,#0d2010);border-color:#2a5a1a;}
+    .question-card.answered-no.vape-card{background:linear-gradient(135deg,#1a0a00,#2a1000);border-color:#5a2a00;}
+    .question-card.anim{opacity:.4;transform:scale(.97);}
+    .question-card.quest-card{border-color:#4a3a00;background:linear-gradient(135deg,#0f0e00,#181600);}
+    .q-top{display:flex;align-items:center;gap:12px;}
+    .q-icon{font-size:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:#0d1f35;border-radius:10px;border:1px solid #1e3a5a;flex-shrink:0;transition:all .3s;}
+    .answered-yes .q-icon{background:#0d3a20;border-color:#1a5a3a;}
+    .answered-no .q-icon{background:#2a0d18;border-color:#5a1a2a;}
+    .answered-yes.special .q-icon{background:#2a2000;border-color:#6a5200;}
+    .answered-yes.vape-card .q-icon{background:#0a2a10;border-color:#2a5a1a;}
+    .answered-no.vape-card .q-icon{background:#2a1000;border-color:#5a2a00;}
+    .quest-card .q-icon{background:#1a1600;border-color:#4a3a00;}
+    .q-texts{flex:1;}
+    .q-title{font-size:14px;font-weight:700;margin-bottom:2px;}
+    .q-desc{font-size:11px;color:#445566;}
+    .quest-card .q-desc{color:#7a6a00;}
+    .q-result{font-size:20px;margin-left:auto;}
+    .q-badge{font-size:10px;letter-spacing:2px;padding:3px 8px;border-radius:20px;background:#2a2000;border:1px solid #6a5200;color:#FFD700;text-transform:uppercase;white-space:nowrap;}
+    .q-badge.vape-badge{background:#0a2a10;border-color:#2a6a1a;color:#53C546;}
+
+    /* VAPE SELECTOR */
+    .vape-selector{margin-top:12px;}
+    .vape-q{font-size:13px;color:#8899aa;margin-bottom:10px;line-height:1.5;}
+    .vape-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+    .vape-opt{border-radius:10px;padding:10px 8px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid;text-align:center;transition:all .2s;line-height:1.4;}
+    .vape-opt.good{background:linear-gradient(135deg,#0a2a0a,#0d3a18);border-color:#1a5a1a;color:#53C546;}
+    .vape-opt.good:hover{box-shadow:0 0 15px #53C54640;}
+    .vape-opt.bad{background:linear-gradient(135deg,#2a1500,#3a1a00);border-color:#6a3a00;color:#FF6B35;}
+    .vape-opt.bad:hover{box-shadow:0 0 15px #FF6B3540;}
+    .vape-opt.none{background:linear-gradient(135deg,#0a1220,#0d1a2e);border-color:#2a3a5a;color:#4FCEE4;grid-column:span 2;}
+    .vape-opt.none:hover{box-shadow:0 0 15px #4FCEE440;}
+
+    .q-buttons{display:flex;gap:10px;margin-top:12px;}
+    .btn-yes,.btn-no{flex:1;border-radius:10px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:3px;transition:all .2s;border:1px solid;}
+    .btn-yes{background:linear-gradient(135deg,#0a2a0a,#0d3a18);border-color:#1a5a1a;color:#53C546;}
+    .btn-no{background:linear-gradient(135deg,#2a0a0a,#3a0d15);border-color:#5a1a1a;color:#E72930;}
+    .effect-toast{margin-top:10px;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6;border:1px solid;animation:fadeIn .4s ease;}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+    .effect-toast.positive{background:linear-gradient(135deg,#071a10,#0a2518);border-color:#1a5a3a;color:#7de875;}
+    .effect-toast.negative{background:linear-gradient(135deg,#1a0708,#250a0d);border-color:#5a1a2a;color:#f07080;}
+    .effect-toast.special{background:linear-gradient(135deg,#1a1400,#2a2200);border-color:#6a5200;color:#FFD700;}
+    .effect-toast.warning{background:linear-gradient(135deg,#1a1000,#250f00);border-color:#5a3a00;color:#FFB830;}
+    .effect-toast.vape-good{background:linear-gradient(135deg,#071a05,#0a2010);border-color:#1a5a0a;color:#7de875;}
+    .effect-toast.vape-bad{background:linear-gradient(135deg,#1a0a00,#250f00);border-color:#6a3a00;color:#FF6B35;}
+    .effect-toast strong{color:white;}
+
+    .rank-card{width:100%;background:linear-gradient(135deg,#080810,#0d1a2e);border-radius:20px;padding:26px 24px;text-align:center;margin-bottom:14px;}
+    .rank-icon{font-size:52px;margin-bottom:12px;}
+    .rank-sub{font-size:11px;letter-spacing:4px;color:#445566;text-transform:uppercase;margin-bottom:6px;}
+    .rank-name{font-size:24px;font-weight:900;letter-spacing:2px;margin-bottom:6px;}
+    .rank-score-big{font-size:48px;font-weight:900;margin-bottom:4px;}
+    .rank-score-sub{font-size:13px;color:#445566;letter-spacing:2px;}
+    .streak-bar{width:100%;background:#0d1a2e;border:1px solid #1e3a5a;border-radius:12px;padding:14px 20px;margin-bottom:12px;display:flex;gap:8px;justify-content:center;}
+    .streak-item{text-align:center;flex:1;}
+    .streak-num{font-size:22px;font-weight:900;color:#4FCEE4;}
+    .streak-lbl{font-size:9px;color:#445566;letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+    .progress-section{width:100%;background:#0d1a2e;border:1px solid #1e3a5a;border-radius:14px;padding:16px 20px;margin-bottom:12px;}
+    .progress-header{display:flex;justify-content:space-between;margin-bottom:10px;}
+    .progress-header span:first-child{font-size:11px;color:#4FCEE4;letter-spacing:3px;text-transform:uppercase;}
+    .progress-header span:last-child{font-size:14px;font-weight:700;}
+    .progress-track{background:#0a1220;border-radius:6px;height:10px;overflow:hidden;}
+    .progress-fill{height:100%;border-radius:6px;transition:width 1s ease;}
+    .detail-section{width:100%;background:#0d1a2e;border:1px solid #1e3a5a;border-radius:14px;padding:16px 20px;margin-bottom:12px;}
+    .detail-title{font-size:11px;letter-spacing:4px;color:#4FCEE4;text-transform:uppercase;margin-bottom:12px;}
+    .detail-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #0f1e2e;}
+    .detail-row:last-child{border-bottom:none;}
+    .detail-icon{font-size:17px;flex-shrink:0;margin-top:2px;}
+    .detail-info{flex:1;}
+    .detail-name{font-size:13px;color:#aab8c8;margin-bottom:2px;}
+    .detail-effect{font-size:11px;line-height:1.4;}
+    .quote-card{width:100%;background:linear-gradient(135deg,#0a1a0a,#0d1a14);border:1px solid #1a4a2a;border-radius:14px;padding:16px 20px;text-align:center;margin-bottom:14px;}
+    .quote-text{font-size:14px;color:#aac4aa;line-height:1.8;font-style:italic;}
+    .quote-card.gold{background:linear-gradient(135deg,#1a1400,#200a00);border-color:#6a5200;}
+    .quote-text.gold{color:#FFD700;}
+    .btn-restart{width:100%;background:linear-gradient(135deg,#0a1220,#0d1a2e);border:1px solid #4FCEE4;border-radius:12px;padding:14px;color:#4FCEE4;font-size:13px;font-weight:700;letter-spacing:4px;cursor:pointer;text-transform:uppercase;transition:all .2s;}
+    .allstats-section{width:100%;background:#0d1a2e;border:1px solid #1e3a5a;border-radius:14px;padding:16px 20px;margin-bottom:12px;}
+    .allstats-title{font-size:11px;letter-spacing:4px;color:#4FCEE4;text-transform:uppercase;margin-bottom:14px;}
+    .allstats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .astat-card{background:linear-gradient(135deg,#080f1a,#0d1a2e);border:1px solid #1e3a5a;border-radius:12px;padding:12px 14px;}
+    .astat-icon{font-size:18px;margin-bottom:6px;}
+    .astat-label{font-size:10px;color:#445566;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+    .astat-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+    .astat-row:last-child{margin-bottom:0;}
+    .astat-key{font-size:11px;color:#778899;}
+    .astat-val{font-size:13px;font-weight:700;}
+    .astat-val.yes-col{color:#53C546;}
+    .astat-val.no-col{color:#E72930;}
+    .astat-val.gold-col{color:#FFD700;}
+    .astat-val.cyan-col{color:#4FCEE4;}
+    .astat-val.orange-col{color:#FF6B35;}
+    .money-total-card{width:100%;background:linear-gradient(135deg,#071a10,#0a2518);border:1px solid #1a5a3a;border-radius:14px;padding:16px 20px;margin-bottom:12px;text-align:center;}
+    .money-total-label{font-size:11px;letter-spacing:4px;color:#4FCEE4;text-transform:uppercase;margin-bottom:8px;}
+    .money-total-value{font-size:36px;font-weight:900;color:#FFD700;}
+    .money-total-sub{font-size:12px;color:#445566;margin-top:4px;}
+    .cal-header{width:100%;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+    .cal-month{font-size:16px;font-weight:700;letter-spacing:2px;}
+    .cal-nav{background:none;border:1px solid #1e3a5a;border-radius:8px;width:36px;height:36px;color:#4FCEE4;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .cal-grid{width:100%;background:#0d1a2e;border:1px solid #1e3a5a;border-radius:16px;padding:14px;margin-bottom:14px;}
+    .cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:8px;}
+    .cal-wd{text-align:center;font-size:10px;color:#445566;text-transform:uppercase;padding:4px 0;}
+    .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+    .cal-day{aspect-ratio:1;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:default;border:1px solid transparent;transition:all .2s;position:relative;}
+    .cal-day.today{border-color:#4FCEE4;color:#4FCEE4;}
+    .cal-day.has-data{cursor:pointer;}
+    .cal-day .score-pip{width:5px;height:5px;border-radius:50%;position:absolute;bottom:2px;}
+    .cal-day.score-8 .score-pip,.cal-day.score-7 .score-pip{background:#FFD700;box-shadow:0 0 6px #FFD700;}
+    .cal-day.score-6 .score-pip{background:#4FCEE4;}
+    .cal-day.score-5 .score-pip{background:#53C546;}
+    .cal-day.score-4 .score-pip{background:#FFBE4C;}
+    .cal-day.score-3 .score-pip{background:#FF6B35;}
+    .cal-day.score-2 .score-pip,.cal-day.score-1 .score-pip,.cal-day.score-0 .score-pip{background:#E72930;}
+    .cal-day.selected{background:#1a3a5a;border-color:#4FCEE4;}
+    .cal-legend{width:100%;background:#0d1a2e;border:1px solid #1e3a5a;border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:8px;}
+    .legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#778899;}
+    .legend-dot{width:7px;height:7px;border-radius:50%;}
+    .cal-detail{width:100%;background:#0d1a2e;border:1px solid #1e3a5a;border-radius:16px;padding:16px 18px;margin-bottom:12px;animation:fadeIn .3s ease;}
+    .cal-detail-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    .cal-detail-date{font-size:14px;font-weight:700;color:#4FCEE4;}
+    .cal-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #0f1e2e;}
+    .cal-row:last-child{border-bottom:none;}
+    .cal-no-data{text-align:center;color:#334455;font-size:14px;padding:22px 0;font-style:italic;}
+    .stats-trigger{width:100%;margin-top:20px;text-align:center;}
+    .stats-trigger p{font-size:13px;color:#4FCEE4;margin-bottom:12px;}
+
+
+    /* STREAK ALERTS */
+    @keyframes alertPulse{0%,100%{box-shadow:0 0 15px #FF440033;}50%{box-shadow:0 0 30px #FF440066;}}
+    .alert-card{background:linear-gradient(135deg,#1a0500,#2a0800);border:1px solid #8B1A00;border-radius:14px;padding:16px 18px;margin-bottom:10px;animation:fadeIn .4s ease,alertPulse 2s ease-in-out infinite;}
+
+    /* WHY SCREEN */
+    .why-section{width:100%;margin-bottom:14px;}
+    .why-period{font-size:11px;letter-spacing:5px;color:#4FCEE4;text-transform:uppercase;margin-bottom:10px;margin-top:4px;}
+    .why-card{background:linear-gradient(135deg,#0d1a2e,#111a28);border:1px solid #1e3a5a;border-radius:14px;padding:0;margin-bottom:8px;overflow:hidden;}
+    .why-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-bottom:1px solid #0f1e2e;}
+    .why-item:last-child{border-bottom:none;}
+    .why-dot{width:8px;height:8px;border-radius:50%;background:#4FCEE4;box-shadow:0 0 8px #4FCEE4;flex-shrink:0;margin-top:5px;}
+    .why-dot.gold{background:#FFD700;box-shadow:0 0 8px #FFD700;}
+    .why-dot.green{background:#53C546;box-shadow:0 0 6px #53C546;}
+    .why-dot.purple{background:#AA77FF;box-shadow:0 0 6px #AA77FF;}
+    .why-text{flex:1;}
+    .why-main{font-size:14px;font-weight:600;color:white;line-height:1.4;margin-bottom:2px;}
+    .why-sub{font-size:11px;color:#445566;line-height:1.4;}
+    .why-hero{width:100%;background:linear-gradient(135deg,#080810,#0d1a2e);border:1px solid #2a3a5a;border-radius:16px;padding:22px 20px;text-align:center;margin-bottom:20px;}
+    .why-hero-icon{font-size:48px;margin-bottom:12px;filter:drop-shadow(0 0 15px #4FCEE4);}
+    .why-hero-title{font-size:18px;font-weight:900;letter-spacing:3px;color:white;margin-bottom:6px;}
+    .why-hero-sub{font-size:12px;color:#445566;letter-spacing:2px;}
+  </style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<!-- CHECKLIST -->
+<div class="screen hidden" id="checklist">
+  <div style="text-align:center;margin-bottom:20px;width:100%;">
+    <div class="label-small">Орден Джедаев</div>
+    <div class="title-main" style="font-size:19px;letter-spacing:2px;">ДНЕВНОЙ ОТЧЁТ</div>
+    <div class="progress-dots" id="dots"></div>
+  </div>
+  <div class="score-bar">
+    <div><div class="score-label">Очки Силы</div><div class="score-value" id="score-display">0 <span class="score-max">/ 8</span></div></div>
+    <div><div class="rank-label">Ранг</div><div class="rank-title" id="rank-display" style="color:#FF6B35;">Инициат</div></div>
+  </div>
+  <div class="questions" id="questions-container"></div>
+  <div class="stats-trigger hidden" id="stats-trigger">
+    <p>Отчёт завершён. Сила оценена.</p>
+    <button class="btn-primary" onclick="showStats()">СТАТИСТИКА →</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="screen hidden" id="stats-screen">
+  <div style="text-align:center;margin-bottom:16px;width:100%;">
+    <div class="label-small">Орден Джедаев</div>
+    <div class="title-main" style="font-size:19px;letter-spacing:2px;">ИТОГИ ДНЯ</div>
+  </div>
+  <div class="rank-card" id="rank-card">
+    <div class="rank-icon" id="stat-icon">&#128293;</div>
+    <div class="rank-sub">Ваш ранг сегодня</div>
+    <div class="rank-name" id="stat-rank">Инициат</div>
+    <div class="rank-score-big" id="stat-score">0</div>
+    <div class="rank-score-sub">очков Силы</div>
+  </div>
+  <div class="streak-bar">
+    <div class="streak-item"><div class="streak-num" id="streak-num">0</div><div class="streak-lbl">Серия</div></div>
+    <div class="streak-item"><div class="streak-num" id="best-streak-num">0</div><div class="streak-lbl">Рекорд</div></div>
+    <div class="streak-item"><div class="streak-num" id="total-days-num">0</div><div class="streak-lbl">Всего дней</div></div>
+  </div>
+  <div class="progress-section">
+    <div class="progress-header"><span>Сила дня</span><span id="stat-percent">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+  <div class="detail-section"><div class="detail-title">Сегодня</div><div id="detail-rows"></div></div>
+  <div class="money-total-card">
+    <div class="money-total-label">&#128176; Кредиты заработаны всего</div>
+    <div class="money-total-value" id="money-total">0</div>
+    <div class="money-total-sub">кредитов за все дни</div>
+  </div>
+  <div class="allstats-section">
+    <div class="allstats-title">&#128202; Статистика за всё время</div>
+    <div class="allstats-grid" id="allstats-grid"></div>
+  </div>
+  <div class="quote-card" id="stat-quote-card"><div class="quote-text" id="stat-quote"></div></div>
+  <button class="btn-restart" onclick="restart()">&#8617; НОВЫЙ ДЕНЬ</button>
+</div>
+
+<!-- CALENDAR -->
+<div class="screen hidden" id="cal-screen">
+  <div style="text-align:center;margin-bottom:16px;width:100%;">
+    <div class="label-small">Орден Джедаев</div>
+    <div class="title-main" style="font-size:19px;letter-spacing:2px;">АРХИВ ОРДЕНА</div>
+  </div>
+  <div class="cal-header">
+    <button class="cal-nav" onclick="calPrev()">&#8249;</button>
+    <div class="cal-month" id="cal-month-label"></div>
+    <button class="cal-nav" onclick="calNext()">&#8250;</button>
+  </div>
+  <div class="cal-grid">
+    <div class="cal-weekdays"><div class="cal-wd">Пн</div><div class="cal-wd">Вт</div><div class="cal-wd">Ср</div><div class="cal-wd">Чт</div><div class="cal-wd">Пт</div><div class="cal-wd">Сб</div><div class="cal-wd">Вс</div></div>
+    <div class="cal-days" id="cal-days"></div>
+  </div>
+  <div class="cal-legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#FFD700;"></div>7-8 Легенда</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#4FCEE4;"></div>6 Мастер</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#53C546;"></div>5 Рыцарь</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#FFBE4C;"></div>4 Падаван</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#FF6B35;"></div>2-3</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#E72930;"></div>0-1</div>
+  </div>
+  <div id="cal-detail-area"></div>
+</div>
+
+
+<!-- WHY -->
+<div class="screen hidden" id="why-screen">
+  <div style="text-align:center;margin-bottom:16px;width:100%;">
+    <div class="label-small">Орден Джедаев</div>
+    <div class="title-main" style="font-size:19px;letter-spacing:2px;">МОЙ ПРОТОКОЛ</div>
+  </div>
+
+  <div class="why-hero">
+    <div class="why-hero-icon">&#9876;&#65039;</div>
+    <div class="why-hero-title">КОДЕКС ДИСЦИПЛИНЫ</div>
+    <div class="why-hero-sub">Каждый день. Каждую неделю. Каждый месяц.</div>
+  </div>
+
+  <div class="why-section">
+    <div class="why-period">&#9201;&#65039;&nbsp; Каждый день</div>
+    <div class="why-card">
+      <div class="why-item">
+        <div class="why-dot gold"></div>
+        <div class="why-text">
+          <div class="why-main">Последний приём пищи — не позже 15:00</div>
+          <div class="why-sub">После 15:00 только вода. Интервальное голодание — чистота разума и тела.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot green"></div>
+        <div class="why-text">
+          <div class="why-main">Уход за лицом: умывание + сыворотка + крем</div>
+          <div class="why-sub">Ежедневный ритуал. Ухоженный джедай излучает уверенность.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot"></div>
+        <div class="why-text">
+          <div class="why-main">Курение — только один раз через вапорайзер</div>
+          <div class="why-sub">Не косяк, не бонг. Только вапорайзер — минимальный вред, максимальный контроль.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="why-section">
+    <div class="why-period">&#128197;&nbsp; Каждую неделю</div>
+    <div class="why-card">
+      <div class="why-item">
+        <div class="why-dot green"></div>
+        <div class="why-text">
+          <div class="why-main">Тренировки — 5 раз в неделю</div>
+          <div class="why-sub">Зал 5 дней. Пропуск более 2 дней подряд — дебаф «Скуфость».</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot"></div>
+        <div class="why-text">
+          <div class="why-main">После тренировки — 30–40 мин отдых в машине</div>
+          <div class="why-sub">3–4 раза в неделю. Восстановление, тишина, перезагрузка.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot purple"></div>
+        <div class="why-text">
+          <div class="why-main">Пятница 17:00 — терраса среди людей</div>
+          <div class="why-sub">Выходишь в мир. Социальная Сила не качается дома.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="why-section">
+    <div class="why-period">&#128176;&nbsp; Каждый месяц</div>
+    <div class="why-card">
+      <div class="why-item">
+        <div class="why-dot gold"></div>
+        <div class="why-text">
+          <div class="why-main">Откладывать 1500 евро сразу после зарплаты</div>
+          <div class="why-sub">Сначала — сбережения. Потом — расходы. Финансовая дисциплина джедая.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="why-section">
+    <div class="why-period">&#127807;&nbsp; Зачем правильное питание</div>
+    <div class="why-card">
+      <div class="why-item">
+        <div class="why-dot green"></div>
+        <div class="why-text">
+          <div class="why-main">Еда = топливо, а не удовольствие</div>
+          <div class="why-sub">Мусорная еда = туман в голове, усталость, воспаления. Чистое питание = энергия, острый ум, быстрое восстановление после зала.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot green"></div>
+        <div class="why-text">
+          <div class="why-main">Последний приём в 15:00 — интервальное голодание</div>
+          <div class="why-sub">Тело ночью не тратит ресурсы на переваривание — восстанавливается, жжёт жир, чистит клетки. Просыпаешься лёгким и заряженным.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot green"></div>
+        <div class="why-text">
+          <div class="why-main">Внешность и форма тела</div>
+          <div class="why-sub">Зал без питания = строить дом без кирпичей. 80% результата в теле — это еда. Мышцы растут на кухне, не в зале.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="why-section">
+    <div class="why-period">&#127801;&nbsp; Зачем контактировать с девушками</div>
+    <div class="why-card">
+      <div class="why-item">
+        <div class="why-dot purple"></div>
+        <div class="why-text">
+          <div class="why-main">Любой контакт — на улице, в магазине, в кафе</div>
+          <div class="why-sub">Не нужна цель "познакомиться". Просто заговорить — спросить, прокомментировать, улыбнуться. Мышца смелости качается только в реальных контактах.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot purple"></div>
+        <div class="why-text">
+          <div class="why-main">Страх проходит только через действие</div>
+          <div class="why-sub">Тейт не родился уверенным. Он тренировался каждый день. Каждый разговор — это rep в зале социальной Силы. Без повторений — нет роста.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-dot purple"></div>
+        <div class="why-text">
+          <div class="why-main">Ты уже делаешь всё правильно</div>
+          <div class="why-sub">Зал, уход, питание, уверенность — всё это уже работает на притяжение. Осталось только выйти и открыть рот. Результат — дело практики.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="width:100%;background:linear-gradient(135deg,#080f1a,#0d1a2e);border:1px solid #1e3a5a;border-radius:14px;padding:16px 20px;text-align:center;margin-bottom:8px;">
+    <div style="font-size:13px;color:#445566;line-height:1.8;font-style:italic;">
+      "Дисциплина — это мост между целями и достижениями."
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav hidden" id="main-nav">
+  <button class="nav-btn active" id="nav-check" onclick="navTo('checklist')"><span class="ni">&#9876;&#65039;</span>Отчёт</button>
+  <button class="nav-btn" id="nav-stats" onclick="navTo('stats-screen')"><span class="ni">&#128202;</span>Итоги</button>
+  <button class="nav-btn" id="nav-cal" onclick="navTo('cal-screen')"><span class="ni">&#128197;</span>Архив</button>
+  <button class="nav-btn" id="nav-why" onclick="navTo('why-screen')"><span class="ni">&#128161;</span>Зачем</button>
+</nav>
+
+<script>
+var SK='jedi_v5';
+var MN=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+
+// vape: специальный вопрос с вариантами
+// answers.vape = 'none' | 'vaporizer' | 'joint' | 'bong'
+// score: none=1, vaporizer=1, joint=0, bong=0
+
+var Q=[
+  {id:'work', icon:'&#9876;&#65039;', label:'Работа',            desc:'Служение ордену',           yes:{icon:'&#128176;',title:'+100 кредитов',         text:'Кредиты в казне. Работа — фундамент дисциплины.'}, no:{icon:'&#127761;',title:'Кредитов нет',            text:'Без работы нет ресурсов. Миссия под угрозой.'}},
+  {id:'gym',  icon:'&#127947;&#65039;',label:'Зал',              desc:'Сила тела — сила Силы',     yes:{icon:'&#128170;',title:'+Уверенность',            text:'Тело сильнее — Сила мощнее.'},                     no:{icon:'&#128715;',title:'Пропуск зала',             text:'3 пропуска подряд — дебаф Скуфость.'}},
+  {id:'dutch',icon:'&#127757;',        label:'Нидерландский',    desc:'Знание открывает галактики', yes:{icon:'&#129504;',title:'+Навыки',                 text:'Каждый день — шаг к Нидерландам.'},                 no:{icon:'&#128201;',title:'Прогресс замедляется',    text:'Без практики слова забываются.'}},
+  {id:'food', icon:'&#127807;',        label:'Здоровое питание', desc:'Тело — храм джедая',        yes:{icon:'&#9989;',  title:'+Энергия',                text:'Чистое питание — чистый разум.'},                   no:{icon:'&#127828;',title:'Туман разума',             text:'Тёмная сторона еды затуманивает Силу.'}},
+  {id:'care', icon:'&#10024;',         label:'Уход за собой',    desc:'Внешность — зеркало духа',  yes:{icon:'&#128526;',title:'+Нравишься девочкам',     text:'Ухоженный джедай излучает силу.'},                  no:{icon:'&#128532;',title:'-Привлекательность',      text:'Небрежность во внешнем — небрежность во внутреннем.'}},
+  {id:'money',icon:'&#128184;',        label:'Контроль расходов',desc:'Без импульсивных покупок',  yes:{icon:'&#127974;',title:'+Финансовая дисциплина',  text:'Кредиты сохранены.'},                              no:{icon:'&#128371;&#65039;',title:'Импульсивные траты',text:'Деньги утекли в пустоту.'}},
+  {id:'vape', icon:'&#128168;',        label:'Курение',          desc:'Только вапорайзер или ничего', vape:true},
+  {id:'girl', icon:'&#127801;',        label:'Разговор с девушкой',desc:'ОСОБЫЙ КВЕСТ — 2 очка',   special:true,
+   yes:{icon:'&#127942;',title:'КВЕСТ ВЫПОЛНЕН! +2 очка!',text:'Легендарно. Ты Тейт ордена. Совет восхищён.'},
+   no: {icon:'&#129318;',title:'Квест провален',           text:'А как ты будешь как Тейт — не контактируя с женщинами?'}}
+];
+
+var VAPE_EFFECTS={
+  'none':     {icon:'&#127774;', cls:'vape-good', title:'Чисто! +1 очко',                   text:'Ни одной затяжки. Лёгкие джедая чисты как Сила. Максимальное уважение ордена.'},
+  'vaporizer':{icon:'&#9989;',   cls:'vape-good', title:'Вапорайзер — засчитано +1 очко',   text:'Только вапорайзер. Минимальный вред, максимальная осознанность. Орден одобряет.'},
+  'joint':    {icon:'&#128683;', cls:'vape-bad',  title:'Косяк — очков нет',                text:'Сжигание = смолы, угарный газ, удар по лёгким. Тёмная сторона курения. Джедай выбирает вапорайзер.'},
+  'bong':     {icon:'&#128683;', cls:'vape-bad',  title:'Бонг — очков нет',                 text:'Водяная фильтрация не спасает от смол и горения. Косяк с водой — всё равно косяк. Переходи на вапорайзер.'}
+};
+
+var RANKS=[
+  {min:8,title:'Тейт Ордена',   color:'#FFD700',icon:'&#128081;'},
+  {min:7,title:'Магистр Джедай',color:'#FFD700',icon:'&#127775;'},
+  {min:6,title:'Рыцарь Джедай', color:'#4FCEE4',icon:'&#9876;&#65039;'},
+  {min:5,title:'Падаван',        color:'#53C546',icon:'&#127807;'},
+  {min:3,title:'Инициат',        color:'#FF6B35',icon:'&#128293;'},
+  {min:0,title:'Тёмная Сторона', color:'#E72930',icon:'&#128520;'}
+];
+var QUOTES={8:'"Абсолютное совершенство. Энакин тобой гордился бы."',7:'"Магистр! Один шаг до легенды."',6:'"Отличный день, рыцарь. Сила с тобой."',5:'"Хорошая работа, падаван."',4:'"Неплохо, но джедай не останавливается."',3:'"Тёмная сторона наступает. Завтра — сильнее."',2:'"Сила терпелива. Продолжай."',1:'"Продолжай идти по пути."',0:'"Даже Вейдер начинал как Энакин."'};
+var GQUOTES=['"Тейт ордена! Совет требует автограф."','"Леди-джедай замечены. Орден одобряет."','"Смелость — первый шаг к Силе и к сердцам."'];
+var MAX=8,answers={},calY,calM,selCal=null;
+
+function tkey(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function ls(){try{return JSON.parse(localStorage.getItem(SK))||{};}catch(e){return{};}}
+function ss(d){localStorage.setItem(SK,JSON.stringify(d));}
+function rank(s){return RANKS.find(function(r){return s>=r.min;});}
+function vapeScore(v){return(!v||v==='none'||v==='vaporizer')?1:0;}
+function calcScore(ans){
+  var s=0;
+  Q.forEach(function(q){
+    if(q.vape){s+=vapeScore(ans.vape);}
+    else if(q.special){if(ans[q.id]===true)s+=2;}
+    else{if(ans[q.id]===true)s+=1;}
+  });
+  return s;
+}
+function isAnswered(q,ans){
+  if(q.vape) return ans.vape!==undefined;
+  return ans[q.id]!==undefined;
+}
+function allAnswered(ans){return Q.every(function(q){return isAnswered(q,ans);});}
+
+// stars
+var se=document.getElementById('stars');
+for(var i=0;i<60;i++){var st=document.createElement('div');st.className='star';var sz=i%7===0?3:i%3===0?2:1.5;st.style.cssText='width:'+sz+'px;height:'+sz+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;opacity:'+(0.15+Math.random()*0.4)+';';se.appendChild(st);}
+
+function gymEff(yes){
+  if(yes)return Q[1].yes;
+  var store=ls(),miss=0,d=new Date();
+  for(var i=1;i<=3;i++){var dd=new Date(d);dd.setDate(d.getDate()-i);var k=dd.getFullYear()+'-'+String(dd.getMonth()+1).padStart(2,'0')+'-'+String(dd.getDate()).padStart(2,'0');if(store[k]&&store[k].answers&&store[k].answers.gym===false)miss++;else break;}
+  if(miss>=2)return{icon:'&#128564;',title:'ДЕБАФ: Скуфость!',text:'Зал пропущен '+(miss+1)+' дня подряд. Срочно тренировка.'};
+  return Q[1].no;
+}
+function eff(q,ans){
+  if(q.vape){var v=ans.vape;return VAPE_EFFECTS[v]||VAPE_EFFECTS['none'];}
+  if(q.id==='gym')return gymEff(ans[q.id]);
+  return ans[q.id]?q.yes:q.no;
+}
+
+function vapeToast(v){
+  var e=VAPE_EFFECTS[v]||VAPE_EFFECTS['none'];
+  return '<div class="effect-toast '+e.cls+'"><span style="font-size:16px;margin-right:6px;">'+e.icon+'</span><strong>'+e.title+'</strong><br>'+e.text+'</div>';
+}
+function toast(q,ans){
+  if(q.vape) return vapeToast(ans.vape);
+  var e=eff(q,ans),yes=ans[q.id];
+  var cls=yes?'positive':'negative';
+  if(q.special&&yes)cls='special';
+  if(q.special&&!yes)cls='warning';
+  return '<div class="effect-toast '+cls+'"><span style="font-size:16px;margin-right:6px;">'+e.icon+'</span><strong>'+e.title+'</strong><br>'+e.text+'</div>';
+}
+
+function showChecklist(){
+  var store=ls(),k=tkey();
+  answers=store[k]?(store[k].answers||{}):{};
+  document.getElementById('main-nav').classList.remove('hidden');
+  document.getElementById('checklist').classList.remove('hidden');
+  rqq();rdots();upScore();
+  if(allAnswered(answers))document.getElementById('stats-trigger').classList.remove('hidden');
+}
+
+function rqq(){
+  var c=document.getElementById('questions-container');c.innerHTML='';
+  Q.forEach(function(q){
+    var ia=isAnswered(q,answers);
+    var card=document.createElement('div');
+    var cls='question-card';
+    if(q.special)cls+=' quest-card';
+    if(q.vape)cls+=' vape-card';
+    if(ia){
+      if(q.vape){
+        var v=answers.vape;
+        cls+=(v==='none'||v==='vaporizer')?' answered-yes':' answered-no';
+        cls+=' vape-card';
+      } else {
+        cls+=(answers[q.id]?' answered-yes':' answered-no');
+        if(answers[q.id]&&q.special)cls+=' special';
+      }
+    }
+    card.className=cls;card.id='card-'+q.id;
+
+    var resultIcon='';
+    if(ia){
+      if(q.vape){var v=answers.vape;resultIcon=(v==='none'||v==='vaporizer')?'✅':'❌';}
+      else resultIcon=answers[q.id]?'✅':'❌';
+    }
+
+    var badge='';
+    if(q.special)badge='<span class="q-badge">+2 очка</span>';
+    if(q.vape)badge='<span class="q-badge vape-badge">+1 очко</span>';
+
+    var bodyHTML='';
+    if(!ia&&q.vape){
+      bodyHTML='<div class="vape-selector">'+
+        '<div class="vape-q">Как курил сегодня?</div>'+
+        '<div class="vape-options">'+
+          '<button class="vape-opt good" onclick="ansVape(\'vaporizer\')">&#128168; Вапорайзер<br><span style="font-size:10px;opacity:.7;">+1 очко — одобрено</span></button>'+
+          '<button class="vape-opt good" onclick="ansVape(\'none\')">&#9728;&#65039; Не курил<br><span style="font-size:10px;opacity:.7;">+1 очко — идеально</span></button>'+
+          '<button class="vape-opt bad" onclick="ansVape(\'joint\')">&#128683; Косяк<br><span style="font-size:10px;opacity:.7;">0 очков — вред</span></button>'+
+          '<button class="vape-opt bad" onclick="ansVape(\'bong\')">&#128683; Бонг<br><span style="font-size:10px;opacity:.7;">0 очков — вред</span></button>'+
+          '<button class="vape-opt none" onclick="ansVape(\'none\')">&#10060; Вообще не курил сегодня</button>'+
+        '</div>'+
+      '</div>';
+    } else if(!ia&&!q.vape){
+      bodyHTML='<div class="q-buttons" id="btns-'+q.id+'">'+
+        '<button class="btn-yes" onclick="ans2(\''+q.id+'\',true)">ДА</button>'+
+        '<button class="btn-no" onclick="ans2(\''+q.id+'\',false)">НЕТ</button>'+
+      '</div>';
+    } else {
+      bodyHTML=toast(q,answers);
+    }
+
+    card.innerHTML=
+      '<div class="q-top">'+
+        '<div class="q-icon">'+q.icon+'</div>'+
+        '<div class="q-texts">'+
+          '<div class="q-title">'+q.label+' '+badge+'</div>'+
+          '<div class="q-desc">'+q.desc+'</div>'+
+        '</div>'+
+        '<div class="q-result'+(ia?'':' hidden')+'" id="result-'+q.id+'">'+resultIcon+'</div>'+
+      '</div>'+bodyHTML;
+    c.appendChild(card);
+  });
+}
+
+function rdots(){
+  var d=document.getElementById('dots');d.innerHTML='';
+  Q.forEach(function(q){
+    var dot=document.createElement('div');
+    var cls='dot';
+    if(q.vape){
+      var v=answers.vape;
+      if(v!==undefined){cls+=(v==='none'||v==='vaporizer')?' vape-ok':' vape-bad';}
+    } else {
+      var a=answers[q.id];
+      if(a===true)cls+=q.special?' special-yes':' yes';
+      if(a===false)cls+=' no';
+    }
+    dot.className=cls;dot.id='dot-'+q.id;d.appendChild(dot);
+  });
+}
+
+function ansVape(v){
+  answers.vape=v;
+  var card=document.getElementById('card-vape');
+  card.classList.add('anim');
+  setTimeout(function(){
+    card.classList.remove('anim');
+    card.classList.remove('answered-yes','answered-no');
+    card.classList.add((v==='none'||v==='vaporizer')?'answered-yes':'answered-no');
+    var r=document.getElementById('result-vape');
+    r.textContent=(v==='none'||v==='vaporizer')?'✅':'❌';
+    r.classList.remove('hidden');
+    var sel=card.querySelector('.vape-selector');
+    if(sel){var t=document.createElement('div');t.innerHTML=vapeToast(v);card.replaceChild(t.firstElementChild,sel);}
+    rdots();upScore();chkDone();
+  },250);
+}
+
+function ans2(id,val){
+  var card=document.getElementById('card-'+id);
+  card.classList.add('anim');
+  setTimeout(function(){
+    answers[id]=val;
+    card.classList.remove('anim');
+    var q=Q.find(function(x){return x.id===id;});
+    card.classList.add(val?'answered-yes':'answered-no');
+    if(val&&q.special)card.classList.add('special');
+    var b=document.getElementById('btns-'+id);if(b)b.remove();
+    var r=document.getElementById('result-'+id);r.textContent=val?'✅':'❌';r.classList.remove('hidden');
+    var t=document.createElement('div');t.innerHTML=toast(q,answers);card.appendChild(t.firstElementChild);
+    rdots();upScore();chkDone();
+  },250);
+}
+
+function upScore(){
+  var s=calcScore(answers),rk=rank(s);
+  document.getElementById('score-display').innerHTML=s+' <span class="score-max">/ '+MAX+'</span>';
+  var rd=document.getElementById('rank-display');rd.textContent=rk.title;rd.style.color=rk.color;
+}
+
+function chkDone(){
+  if(allAnswered(answers)){
+    document.getElementById('stats-trigger').classList.remove('hidden');
+    saveDay();
+  }
+}
+
+function saveDay(){
+  var store=ls(),k=tkey(),a={};
+  for(var x in answers)a[x]=answers[x];
+  store[k]={answers:a,score:calcScore(answers),ts:Date.now()};
+  ss(store);
+}
+
+function calcAllStats(store){
+  var days=Object.keys(store).sort(),total=days.length,credits=0;
+  var cnt={};
+  Q.forEach(function(q){cnt[q.id]={yes:0,no:0};});
+  // vape specific
+  cnt.vape={clean:0,vaporizer:0,joint:0,bong:0,total:0};
+  days.forEach(function(k){
+    var e=store[k];if(!e||!e.answers)return;
+    Q.forEach(function(q){
+      if(q.vape){
+        var v=e.answers.vape;cnt.vape.total++;
+        if(v==='none')cnt.vape.clean++;
+        else if(v==='vaporizer')cnt.vape.vaporizer++;
+        else if(v==='joint')cnt.vape.joint++;
+        else if(v==='bong')cnt.vape.bong++;
+      } else {
+        if(e.answers[q.id]===true){cnt[q.id].yes++;if(q.id==='work')credits+=100;}
+        else if(e.answers[q.id]===false)cnt[q.id].no++;
+      }
+    });
+  });
+  return{total:total,credits:credits,cnt:cnt};
+}
+
+function showStats(){
+  var s=calcScore(answers),rk=rank(s),pct=Math.round(s/MAX*100),gd=answers['girl']===true;
+  document.getElementById('stat-icon').textContent=rk.icon;
+  var sr=document.getElementById('stat-rank');sr.textContent=rk.title;sr.style.color=rk.color;
+  document.getElementById('stat-score').innerHTML=s+'<span style="font-size:18px;color:#445566;font-weight:400;"> / '+MAX+'</span>';
+  var rc=document.getElementById('rank-card');rc.style.border='1px solid '+rk.color+'44';rc.style.boxShadow='0 0 40px '+rk.color+'22';
+  document.getElementById('stat-percent').textContent=pct+'%';
+  var fill=document.getElementById('progress-fill');
+  fill.style.background=s>=6?'linear-gradient(90deg,#FFD700,#4FCEE4)':s>=5?'linear-gradient(90deg,#4FCEE4,#53C546)':s>=4?'linear-gradient(90deg,#FFBE4C,#4FCEE4)':'linear-gradient(90deg,#E72930,#FFBE4C)';
+  setTimeout(function(){fill.style.width=pct+'%';},100);
+
+  var dr=document.getElementById('detail-rows');dr.innerHTML='';
+  Q.forEach(function(q){
+    var row=document.createElement('div');row.className='detail-row';
+    var e,pts,yes,resIcon;
+    if(q.vape){
+      var v=answers.vape;e=VAPE_EFFECTS[v]||VAPE_EFFECTS['none'];
+      pts=(v==='none'||v==='vaporizer')?'+1':'+0';
+      yes=(v==='none'||v==='vaporizer');
+      resIcon=yes?'✅':'❌';
+      row.innerHTML='<span class="detail-icon">'+q.icon+'</span><div class="detail-info"><div class="detail-name">'+q.label+'</div><div class="detail-effect" style="color:'+(yes?'#7de875':'#FF6B35')+'">'+e.icon+' '+e.title+'</div></div><span style="font-size:13px;font-weight:700;flex-shrink:0;color:'+(yes?'#53C546':'#FF6B35')+'">'+pts+'</span><span style="font-size:15px;margin-left:4px;">'+resIcon+'</span>';
+    } else {
+      yes=answers[q.id];e=eff(q,answers);
+      pts=yes?(q.special?'+2':'+1'):'+0';resIcon=yes?'✅':'❌';
+      row.innerHTML='<span class="detail-icon">'+q.icon+'</span><div class="detail-info"><div class="detail-name">'+q.label+(q.special?' ⚡':'')+'</div><div class="detail-effect" style="color:'+(yes?(q.special?'#FFD700':'#7de875'):'#f07080')+'">'+e.icon+' '+e.title+'</div></div><span style="font-size:13px;font-weight:700;flex-shrink:0;color:'+(yes?(q.special?'#FFD700':'#53C546'):'#E72930')+'">'+pts+'</span><span style="font-size:15px;margin-left:4px;">'+resIcon+'</span>';
+    }
+    dr.appendChild(row);
+  });
+
+  var store=ls(),st=calcStreaks(store);
+  document.getElementById('streak-num').textContent=st.streak;
+  document.getElementById('best-streak-num').textContent=st.best;
+  document.getElementById('total-days-num').textContent=st.total;
+
+  var as=calcAllStats(store);
+  document.getElementById('money-total').textContent=as.credits.toLocaleString('ru-RU');
+
+  var grid=document.getElementById('allstats-grid');grid.innerHTML='';
+  var qinfo=[
+    {id:'work', icon:'&#9876;&#65039;',  label:'Работа',      yeslabel:'Ходил',      nolabel:'Пропустил'},
+    {id:'gym',  icon:'&#127947;&#65039;',label:'Зал',         yeslabel:'Ходил',      nolabel:'Пропустил'},
+    {id:'dutch',icon:'&#127757;',        label:'Нидерл.',     yeslabel:'Учился',     nolabel:'Пропустил'},
+    {id:'food', icon:'&#127807;',        label:'Питание',     yeslabel:'Правильное', nolabel:'Нарушил'},
+    {id:'care', icon:'&#10024;',         label:'Уход',        yeslabel:'Выполнил',   nolabel:'Пропустил'},
+    {id:'money',icon:'&#128184;',        label:'Расходы',     yeslabel:'Без трат',   nolabel:'Тратил'},
+    {id:'girl', icon:'&#127801;',        label:'Девушка',     yeslabel:'Говорил',    nolabel:'Не говорил'}
+  ];
+  qinfo.forEach(function(qi){
+    var c=as.cnt[qi.id]||{yes:0,no:0};
+    var tot=c.yes+c.no,pct=tot>0?Math.round(c.yes/tot*100):0;
+    var card=document.createElement('div');card.className='astat-card';
+    card.innerHTML='<div class="astat-icon">'+qi.icon+'</div><div class="astat-label">'+qi.label+'</div>'+
+      '<div class="astat-row"><span class="astat-key">'+qi.yeslabel+'</span><span class="astat-val yes-col">'+c.yes+' дн.</span></div>'+
+      '<div class="astat-row"><span class="astat-key">'+qi.nolabel+'</span><span class="astat-val no-col">'+c.no+' дн.</span></div>'+
+      '<div class="astat-row"><span class="astat-key">% выполн.</span><span class="astat-val '+(pct>=70?'cyan-col':pct>=50?'gold-col':'no-col')+'">'+pct+'%</span></div>';
+    grid.appendChild(card);
+  });
+
+  // Vape stats card (full width)
+  var vc=as.cnt.vape,vtot=vc.total||1;
+  var vcard=document.createElement('div');
+  vcard.className='astat-card';
+  vcard.style.gridColumn='span 2';
+  vcard.innerHTML='<div class="astat-icon">&#128168;</div><div class="astat-label">Курение — детальная статистика</div>'+
+    '<div class="astat-row"><span class="astat-key">&#9728;&#65039; Не курил</span><span class="astat-val yes-col">'+vc.clean+' дн. ('+Math.round(vc.clean/vtot*100)+'%)</span></div>'+
+    '<div class="astat-row"><span class="astat-key">&#128168; Вапорайзер</span><span class="astat-val yes-col">'+vc.vaporizer+' дн. ('+Math.round(vc.vaporizer/vtot*100)+'%)</span></div>'+
+    '<div class="astat-row"><span class="astat-key">&#128683; Косяк</span><span class="astat-val orange-col">'+vc.joint+' дн. ('+Math.round(vc.joint/vtot*100)+'%)</span></div>'+
+    '<div class="astat-row"><span class="astat-key">&#128683; Бонг</span><span class="astat-val orange-col">'+vc.bong+' дн. ('+Math.round(vc.bong/vtot*100)+'%)</span></div>'+
+    '<div class="astat-row" style="margin-top:6px;padding-top:6px;border-top:1px solid #1e3a5a;"><span class="astat-key">Дней с вапом/чисто</span><span class="astat-val cyan-col">'+(vc.clean+vc.vaporizer)+' из '+vtot+'</span></div>';
+  grid.appendChild(vcard);
+
+  var qcard=document.getElementById('stat-quote-card'),qtxt=document.getElementById('stat-quote');
+  if(gd){qcard.classList.add('gold');qtxt.classList.add('gold');qtxt.textContent=GQUOTES[Math.floor(Math.random()*GQUOTES.length)];}
+  else{qcard.classList.remove('gold');qtxt.classList.remove('gold');qtxt.textContent=QUOTES[Math.min(s,8)]||QUOTES[0];}
+}
+
+function calcStreaks(store){var keys=Object.keys(store).sort(),total=keys.length;if(!total)return{streak:0,best:0,total:0};var streak=0,best=0,cur=0,d=new Date();for(;;){var k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');if(store[k]){streak++;d.setDate(d.getDate()-1);}else break;}var prev=null;keys.forEach(function(k){if(prev){var diff=(new Date(k)-new Date(prev))/86400000;cur=diff===1?cur+1:1;}else cur=1;if(cur>best)best=cur;prev=k;});return{streak:streak,best:best,total:total};}
+
+function initCal(){var now=new Date();calY=now.getFullYear();calM=now.getMonth();renderCal();}
+function renderCal(){document.getElementById('cal-month-label').textContent=MN[calM]+' '+calY;var store=ls(),de=document.getElementById('cal-days');de.innerHTML='';var fd=new Date(calY,calM,1).getDay(),so=fd===0?6:fd-1,dim=new Date(calY,calM+1,0).getDate(),today=tkey();for(var i=0;i<so;i++){var el=document.createElement('div');el.className='cal-day empty';de.appendChild(el);}for(var d=1;d<=dim;d++){var key=calY+'-'+String(calM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'),entry=store[key],el=document.createElement('div');var cls='cal-day';if(key===today)cls+=' today';if(entry!==undefined)cls+=' has-data score-'+entry.score;if(selCal===key)cls+=' selected';el.className=cls;el.innerHTML=d+(entry!==undefined?'<div class="score-pip"></div>':'');if(entry!==undefined||key===today)el.onclick=(function(k){return function(){selCal=(selCal===k)?null:k;renderCal();};})(key);de.appendChild(el);}renderCalDetail(selCal);}
+function renderCalDetail(key){var area=document.getElementById('cal-detail-area');if(!key){area.innerHTML='';return;}var store=ls(),entry=store[key],parts=key.split('-'),ds=parseInt(parts[2])+' '+MN[parseInt(parts[1])-1]+' '+parts[0];if(!entry){area.innerHTML='<div class="cal-detail"><div class="cal-no-data">Нет данных за этот день</div></div>';return;}var rk=rank(entry.score),rows='';Q.forEach(function(q){var yes,label,eIcon,eTitle;if(q.vape){var v=entry.answers&&entry.answers.vape;var ve=VAPE_EFFECTS[v]||VAPE_EFFECTS['none'];yes=(v==='none'||v==='vaporizer');eIcon=ve.icon;eTitle=ve.title;}else{yes=entry.answers&&entry.answers[q.id];var e=yes?q.yes:q.no;eIcon=e.icon;eTitle=e.title;}rows+='<div class="cal-row"><span style="font-size:15px;">'+q.icon+'</span><span style="flex:1;font-size:12px;color:#aab8c8;">'+q.label+'</span><span style="font-size:10px;color:'+(yes?'#7de875':'#f07080')+';text-align:right;padding-right:8px;">'+eIcon+' '+eTitle+'</span><span>'+(yes?'✅':'❌')+'</span></div>';});area.innerHTML='<div class="cal-detail"><div class="cal-detail-header"><div class="cal-detail-date">'+ds+'</div><div style="font-size:20px;font-weight:900;color:'+rk.color+'">'+rk.icon+' '+entry.score+'/'+MAX+'</div></div>'+rows+'</div>';}
+function calPrev(){calM--;if(calM<0){calM=11;calY--;}renderCal();}
+function calNext(){calM++;if(calM>11){calM=0;calY++;}renderCal();}
+function navTo(id){['checklist','stats-screen','cal-screen','why-screen'].forEach(function(s){document.getElementById(s).classList.add('hidden');});document.getElementById(id).classList.remove('hidden');['nav-check','nav-stats','nav-cal','nav-why'].forEach(function(b){document.getElementById(b).classList.remove('active');});if(id==='checklist')document.getElementById('nav-check').classList.add('active');if(id==='stats-screen'){document.getElementById('nav-stats').classList.add('active');showStats();}if(id==='cal-screen'){document.getElementById('nav-cal').classList.add('active');initCal();}if(id==='why-screen')document.getElementById('nav-why').classList.add('active');}
+function restart(){answers={};['checklist','stats-screen','cal-screen','why-screen'].forEach(function(s){document.getElementById(s).classList.add('hidden');});doStart();}
+
+/* ═══ STREAK ALERTS ═══ */
+var ALERT_TRACKS=[
+  {id:'gym',   icon:'&#127947;&#65039;',label:'Зал',               miss:'пропускаешь зал',               days:3},
+  {id:'work',  icon:'&#9876;&#65039;',  label:'Работа',            miss:'не ходишь на работу',            days:3},
+  {id:'dutch', icon:'&#127757;',        label:'Нидерландский',     miss:'не учишь нидерландский',         days:3},
+  {id:'food',  icon:'&#127807;',        label:'Питание',           miss:'нарушаешь питание',              days:3},
+  {id:'care',  icon:'&#10024;',         label:'Уход за собой',     miss:'не ухаживаешь за собой',         days:3},
+  {id:'money', icon:'&#128184;',        label:'Расходы',           miss:'делаешь импульсивные траты',     days:3},
+  {id:'girl',  icon:'&#127801;',        label:'Девушки',           miss:'не разговариваешь с девушками',  days:3}
+];
+
+function calcMissStreak(store,id){
+  var streak=0,d=new Date();
+  for(var i=1;i<=30;i++){
+    var dd=new Date(d);dd.setDate(d.getDate()-i);
+    var k=dd.getFullYear()+'-'+String(dd.getMonth()+1).padStart(2,'0')+'-'+String(dd.getDate()).padStart(2,'0');
+    if(!store[k])break;
+    var val=store[k].answers&&store[k].answers[id];
+    if(val===false)streak++;else break;
+  }
+  return streak;
+}
+
+function loadConfirmed(){try{return JSON.parse(localStorage.getItem('jedi_confirmed'))||{};}catch(e){return{};}}
+function saveConfirmed(d){localStorage.setItem('jedi_confirmed',JSON.stringify(d));}
+
+function confirmAlert(id){
+  var c=loadConfirmed();
+  c[tkey()+'_'+id]=true;
+  saveConfirmed(c);
+  renderAlerts();
+}
+
+function getActiveAlerts(){
+  var store=ls(),alerts=[],confirmed=loadConfirmed();
+  ALERT_TRACKS.forEach(function(t){
+    var streak=calcMissStreak(store,t.id);
+    if(streak>=t.days&&!confirmed[tkey()+'_'+t.id]){
+      alerts.push({track:t,streak:streak});
+    }
+  });
+  return alerts;
+}
+
+function renderAlerts(){
+  var ex=document.getElementById('alert-block');if(ex)ex.remove();
+  var alerts=getActiveAlerts();if(!alerts.length)return;
+  var block=document.createElement('div');block.id='alert-block';block.style.cssText='width:100%;margin-bottom:14px;';
+  alerts.forEach(function(a){
+    var t=a.track;
+    var card=document.createElement('div');card.className='alert-card';
+    var urgency=a.streak>=7?'&#128308; КРИТИЧНО':a.streak>=5?'&#128992; СЕРЬЁЗНО':'&#9888;&#65039; ТРЕВОГА';
+    var urgColor=a.streak>=7?'#FF2200':a.streak>=5?'#FF6600':'#FF6B35';
+    card.innerHTML=
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'+
+        '<span style="font-size:26px;">'+t.icon+'</span>'+
+        '<div style="flex:1;">'+
+          '<div style="font-size:12px;font-weight:900;color:'+urgColor+';letter-spacing:2px;">'+urgency+' ОРДЕНА</div>'+
+          '<div style="font-size:13px;color:#cc7744;margin-top:3px;">Ты <strong style="color:'+urgColor+';">'+t.miss+'</strong></div>'+
+          '<div style="font-size:22px;font-weight:900;color:'+urgColor+';margin-top:2px;">'+a.streak+' дня подряд</div>'+
+        '</div>'+
+      '</div>'+
+      '<div style="background:rgba(255,100,0,0.07);border:1px solid #6a3a00;border-radius:10px;padding:12px 14px;margin-bottom:12px;">'+
+        '<div style="font-size:13px;color:#FFB830;font-weight:700;margin-bottom:6px;">&#128172;&nbsp;Связаться с Терминалом</div>'+
+        '<div style="font-size:12px;color:#886644;line-height:1.6;">Открой чат и обсуди тему: <em style="color:#FFB830;">'+t.label+'</em>.<br>Попроси мотивацию, объяснение или конкретный план. Джедай не воюет в одиночку.</div>'+
+      '</div>'+
+      '<button onclick="confirmAlert(''+t.id+'')" style="width:100%;background:linear-gradient(135deg,#071a10,#0a2010);border:1px solid #1a5a0a;border-radius:10px;padding:12px;color:#53C546;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:2px;">'+
+        '&#9989;&nbsp;Поговорил с Терминалом'+
+      '</button>';
+    block.appendChild(card);
+  });
+  var qc=document.getElementById('questions-container');
+  if(qc&&qc.parentNode)qc.parentNode.insertBefore(block,qc);
+}
+
+
+
+
+window.addEventListener("load", function(){ doStart(); });
+function doStart(){
+  showChecklist();
+  setTimeout(renderAlerts, 150);
+}
+
+</script>
+</body>
+</html>
+
