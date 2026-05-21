@@ -193,6 +193,17 @@
 <body>
 <div class="stars" id="stars"></div>
 
+<!-- INTRO -->
+<div class="screen" id="intro">
+  <div class="lightsaber"></div>
+  <div class="label-small">Орден Джедаев</div>
+  <div class="title-main">ПРОВЕРКА ДНЯ</div>
+  <div class="subtitle">Протокол самодисциплины</div>
+  <div class="jedi-symbol">&#128262;</div>
+  <div class="quote">"Нет эмоций — есть покой.<br>Нет невежества — есть знание.<br>Нет страсти — есть безмятежность."</div>
+  <button class="btn-primary" onclick="doStart()">НАЧАТЬ ОТЧЁТ</button>
+</div>
+
 <!-- CHECKLIST -->
 <div class="screen hidden" id="checklist">
   <div style="text-align:center;margin-bottom:20px;width:100%;">
@@ -765,7 +776,7 @@ function renderCalDetail(key){var area=document.getElementById('cal-detail-area'
 function calPrev(){calM--;if(calM<0){calM=11;calY--;}renderCal();}
 function calNext(){calM++;if(calM>11){calM=0;calY++;}renderCal();}
 function navTo(id){['checklist','stats-screen','cal-screen','why-screen'].forEach(function(s){document.getElementById(s).classList.add('hidden');});document.getElementById(id).classList.remove('hidden');['nav-check','nav-stats','nav-cal','nav-why'].forEach(function(b){document.getElementById(b).classList.remove('active');});if(id==='checklist')document.getElementById('nav-check').classList.add('active');if(id==='stats-screen'){document.getElementById('nav-stats').classList.add('active');showStats();}if(id==='cal-screen'){document.getElementById('nav-cal').classList.add('active');initCal();}if(id==='why-screen')document.getElementById('nav-why').classList.add('active');}
-function restart(){answers={};['checklist','stats-screen','cal-screen','why-screen'].forEach(function(s){document.getElementById(s).classList.add('hidden');});doStart();}
+function restart(){answers={};document.getElementById('main-nav').classList.add('hidden');['checklist','stats-screen','cal-screen','why-screen'].forEach(function(s){document.getElementById(s).classList.add('hidden');});var intro=document.getElementById('intro');if(intro)intro.classList.remove('hidden');}
 
 /* ═══ STREAK ALERTS ═══ */
 var ALERT_TRACKS=[
@@ -845,8 +856,9 @@ function renderAlerts(){
 
 
 
-window.addEventListener("load", function(){ doStart(); });
 function doStart(){
+  var intro = document.getElementById('intro');
+  if(intro) intro.classList.add('hidden');
   showChecklist();
   setTimeout(renderAlerts, 150);
 }
