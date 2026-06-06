@@ -257,7 +257,7 @@
     <div class="legend-item"><div class="legend-dot" style="background:#E72930;"></div>0</div>
   </div>
 
-  <!-- BACKUP SECTION -->
+  <!-- BACKUP -->
   <div class="backup-section">
     <div class="backup-title">💾 Резервная копия архива</div>
     <div class="backup-btns">
@@ -385,7 +385,7 @@ function buildToast(q,ans) {
 
 function showChecklist() {
   const store=loadStorage(); const key=todayKey();
-  answers=store[key]?(store[key].answers||{}):{};
+  answers=store[key]?(store[key].answers||{}):{};  
   document.getElementById('intro').classList.add('hidden');
   document.getElementById('main-nav').classList.remove('hidden');
   document.getElementById('checklist').classList.remove('hidden');
@@ -582,10 +582,7 @@ function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCal();
 function exportData() {
   const store = loadStorage();
   const keys = Object.keys(store);
-  if (!keys.length) {
-    showBackupMsg('Нет данных для экспорта', false);
-    return;
-  }
+  if (!keys.length) { showBackupMsg('Нет данных для экспорта', false); return; }
   const json = JSON.stringify(store, null, 2);
   const blob = new Blob([json], {type:'application/json'});
   const url = URL.createObjectURL(blob);
@@ -604,7 +601,7 @@ function importData(e) {
   reader.onload = function(ev) {
     try {
       const data = JSON.parse(ev.target.result);
-      if (typeof data !== 'object' || Array.isArray(data)) throw new Error('bad format');
+      if (typeof data !== 'object' || Array.isArray(data)) throw new Error();
       const store = loadStorage();
       const before = Object.keys(store).length;
       Object.assign(store, data);
