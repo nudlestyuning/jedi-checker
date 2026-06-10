@@ -1,642 +1,862 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Орден Джедаев — Проверка Дня</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#07070f; font-family:'Segoe UI',system-ui,-apple-system,sans-serif; color:white; min-height:100vh; overflow-x:hidden; }
-    .stars { position:fixed; inset:0; pointer-events:none; z-index:0; }
-    .star  { position:absolute; border-radius:50%; background:white; }
-    .screen { position:relative; z-index:1; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:32px 20px 80px; max-width:480px; margin:0 auto; }
-    .hidden { display:none !important; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<title>Орден Джедаев</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { background: #07070f; color: #fff; font-family: -apple-system, sans-serif; }
 
-    .nav { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:rgba(7,7,15,0.97); border-top:1px solid #1e3a5a; display:flex; z-index:100; backdrop-filter:blur(12px); }
-    .nav-btn { flex:1; padding:12px 0 16px; background:none; border:none; color:#445566; font-size:10px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px; transition:color .2s; }
-    .nav-btn.active { color:#4FCEE4; }
-    .nav-btn span.ni { font-size:19px; }
+.wrap { max-width: 480px; margin: 0 auto; padding: 28px 16px 90px; }
 
-    .lightsaber { width:3px; height:90px; background:linear-gradient(to bottom,transparent,#4FCEE4,#00BFFF,#4FCEE4,transparent); border-radius:4px; box-shadow:0 0 20px #4FCEE4,0 0 40px #00BFFF55; margin:0 auto 32px; animation:pulse 2s ease-in-out infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 20px #4FCEE4,0 0 40px #00BFFF55;} 50%{opacity:.7;box-shadow:0 0 30px #4FCEE4,0 0 60px #00BFFF88;} }
-    .jedi-symbol { font-size:76px; margin-bottom:24px; filter:drop-shadow(0 0 20px #4FCEE4); animation:float 3s ease-in-out infinite; }
-    @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
-    .label-small { font-size:12px; letter-spacing:6px; color:#4FCEE4; text-transform:uppercase; margin-bottom:10px; opacity:.8; }
-    .title-main  { font-size:28px; font-weight:900; letter-spacing:3px; margin-bottom:8px; }
-    .subtitle    { font-size:13px; color:#6a7f96; letter-spacing:2px; margin-bottom:30px; }
-    .quote       { font-size:14px; color:#8899aa; line-height:1.8; max-width:290px; font-style:italic; margin-bottom:36px; text-align:center; }
-    .btn-primary { background:linear-gradient(135deg,#1a3a5a,#0d2a4a); border:1px solid #4FCEE4; border-radius:12px; padding:16px 48px; color:#4FCEE4; font-size:14px; font-weight:700; letter-spacing:4px; cursor:pointer; text-transform:uppercase; box-shadow:0 0 20px #4FCEE420; transition:all .2s; width:100%; max-width:320px; }
-    .btn-primary:hover { box-shadow:0 0 35px #4FCEE450; transform:translateY(-2px); }
+/* NAV */
+#nav { position: fixed; bottom: 0; left: 0; right: 0; background: #07070f; border-top: 1px solid #1e3a5a; display: none; }
+#nav button { flex: 1; padding: 10px 0 14px; background: none; border: none; color: #445566; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+#nav button .ic { font-size: 20px; }
+#nav button.on { color: #4FCEE4; }
 
-    .score-bar { background:linear-gradient(135deg,#0d1a2e,#1a2a3a); border:1px solid #1e3a5a; border-radius:12px; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:16px; box-shadow:0 0 20px #4FCEE410; }
-    .score-label { font-size:10px; color:#4FCEE4; letter-spacing:3px; text-transform:uppercase; margin-bottom:4px; }
-    .score-value { font-size:24px; font-weight:900; }
-    .score-max   { font-size:13px; color:#445566; font-weight:400; }
-    .rank-label  { font-size:10px; color:#445566; letter-spacing:2px; text-transform:uppercase; text-align:right; margin-bottom:4px; }
-    .rank-title  { font-size:13px; font-weight:700; text-align:right; }
+/* BUTTONS */
+.bigbtn { display: block; width: 100%; max-width: 300px; margin: 0 auto; background: linear-gradient(135deg,#1a3a5a,#0d2a4a); border: 2px solid #4FCEE4; border-radius: 14px; padding: 18px 0; color: #4FCEE4; font-size: 15px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; cursor: pointer; }
+.ybtn { flex: 1; border-radius: 10px; padding: 13px; font-size: 14px; font-weight: 700; cursor: pointer; background: linear-gradient(135deg,#0a2a0a,#0d3a18); border: 1px solid #1a5a1a; color: #53C546; }
+.nbtn { flex: 1; border-radius: 10px; padding: 13px; font-size: 14px; font-weight: 700; cursor: pointer; background: linear-gradient(135deg,#2a0a0a,#3a0d15); border: 1px solid #5a1a1a; color: #E72930; }
+.restbtn { display: block; width: 100%; background: linear-gradient(135deg,#0a1220,#0d1a2e); border: 1px solid #4FCEE4; border-radius: 12px; padding: 14px; color: #4FCEE4; font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; }
+.cfbtn { display: block; width: 100%; background: linear-gradient(135deg,#071a10,#0a2010); border: 1px solid #1a5a0a; border-radius: 8px; padding: 11px; color: #53C546; font-size: 12px; font-weight: 700; cursor: pointer; letter-spacing: 2px; }
 
-    .progress-dots { display:flex; justify-content:center; gap:6px; margin-top:14px; flex-wrap:wrap; }
-    .dot { width:8px; height:8px; border-radius:50%; border:1px solid #334455; background:#0d1a2e; transition:all .3s; }
-    .dot.yes { background:#4FCEE4; border-color:#4FCEE4; box-shadow:0 0 8px #4FCEE4; }
-    .dot.no  { background:#2a1a28; border-color:#5a1a2e; }
-    .dot.special-yes { background:#FFD700; border-color:#FFD700; box-shadow:0 0 10px #FFD700; }
+/* CARDS */
+.card { background: linear-gradient(135deg,#0d1a2e,#111a28); border: 1px solid #1e3a5a; border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; width: 100%; }
+.card.yes { background: linear-gradient(135deg,#0a2a1a,#0d2020); border-color: #1a5a3a; }
+.card.no  { background: linear-gradient(135deg,#1a0a10,#180d14); border-color: #3a1a28; }
+.card.spc { background: linear-gradient(135deg,#0f0e00,#181600); border-color: #4a3a00; }
+.card.spc.yes { background: linear-gradient(135deg,#1a1500,#2a2200); border-color: #6a5200; }
 
-    .questions { display:flex; flex-direction:column; gap:10px; width:100%; }
-    .question-card { border-radius:14px; padding:16px 18px; transition:all .3s; border:1px solid #1e3a5a; background:linear-gradient(135deg,#0d1a2e,#111a28); }
-    .question-card.answered-yes { background:linear-gradient(135deg,#0a2a1a,#0d2020); border-color:#1a5a3a; box-shadow:0 0 15px #53C54610; }
-    .question-card.answered-no  { background:linear-gradient(135deg,#1a0a10,#180d14); border-color:#3a1a28; }
-    .question-card.answered-yes.special { background:linear-gradient(135deg,#1a1500,#2a2200); border-color:#6a5200; box-shadow:0 0 25px #FFD70025; }
-    .question-card.anim { opacity:.4; transform:scale(.97); }
-    .question-card.quest-card { border-color:#4a3a00; background:linear-gradient(135deg,#0f0e00,#181600); }
+.row { display: flex; align-items: center; gap: 10px; }
+.ico { font-size: 20px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; background: #0d1f35; border-radius: 10px; border: 1px solid #1e3a5a; flex-shrink: 0; }
+.yes .ico { background: #0d3a20; border-color: #1a5a3a; }
+.no  .ico { background: #2a0d18; border-color: #5a1a2a; }
+.spc.yes .ico { background: #2a2000; border-color: #6a5200; }
+.qtitle { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.qdesc  { font-size: 11px; color: #445566; }
+.spc .qdesc { color: #7a6a00; }
+.badge  { font-size: 9px; padding: 2px 7px; border-radius: 20px; background: #2a2000; border: 1px solid #6a5200; color: #FFD700; margin-left: 6px; }
+.badge2 { font-size: 9px; padding: 2px 7px; border-radius: 20px; background: #0a2a10; border: 1px solid #2a6a1a; color: #53C546; margin-left: 6px; }
+.qres { font-size: 20px; margin-left: auto; }
 
-    .q-top  { display:flex; align-items:center; gap:12px; }
-    .q-icon { font-size:20px; width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:#0d1f35; border-radius:10px; border:1px solid #1e3a5a; flex-shrink:0; transition:all .3s; }
-    .answered-yes .q-icon { background:#0d3a20; border-color:#1a5a3a; }
-    .answered-no  .q-icon { background:#2a0d18; border-color:#5a1a2a; }
-    .answered-yes.special .q-icon { background:#2a2000; border-color:#6a5200; }
-    .quest-card .q-icon { background:#1a1600; border-color:#4a3a00; }
-    .q-texts { flex:1; }
-    .q-title { font-size:14px; font-weight:700; margin-bottom:2px; }
-    .q-desc  { font-size:11px; color:#445566; }
-    .quest-card .q-desc { color:#7a6a00; }
-    .q-result { font-size:20px; margin-left:auto; }
-    .answered-yes .q-result { filter:drop-shadow(0 0 6px #53C546); }
-    .answered-no  .q-result { filter:drop-shadow(0 0 4px #E72930); }
-    .answered-yes.special .q-result { filter:drop-shadow(0 0 10px #FFD700); }
-    .q-badge { font-size:10px; letter-spacing:2px; padding:3px 8px; border-radius:20px; background:#2a2000; border:1px solid #6a5200; color:#FFD700; text-transform:uppercase; white-space:nowrap; }
+.btnrow { display: flex; gap: 8px; margin-top: 10px; }
+.toast { margin-top: 10px; border-radius: 10px; padding: 11px 14px; font-size: 12px; line-height: 1.6; border: 1px solid; }
+.toast strong { color: #fff; }
+.t-yes  { background: linear-gradient(135deg,#071a10,#0a2518); border-color: #1a5a3a; color: #7de875; }
+.t-no   { background: linear-gradient(135deg,#1a0708,#250a0d); border-color: #5a1a2a; color: #f07080; }
+.t-spc  { background: linear-gradient(135deg,#1a1400,#2a2200); border-color: #6a5200; color: #FFD700; }
+.t-wrn  { background: linear-gradient(135deg,#1a1000,#250f00); border-color: #5a3a00; color: #FFB830; }
+.t-vyes { background: linear-gradient(135deg,#071a05,#0a2010); border-color: #1a5a0a; color: #7de875; }
+.t-vno  { background: linear-gradient(135deg,#1a0a00,#250f00); border-color: #6a3a00; color: #FF6B35; }
 
-    .q-buttons { display:flex; gap:10px; margin-top:12px; }
-    .btn-yes,.btn-no { flex:1; border-radius:10px; padding:10px; font-size:13px; font-weight:700; cursor:pointer; letter-spacing:3px; transition:all .2s; border:1px solid; }
-    .btn-yes { background:linear-gradient(135deg,#0a2a0a,#0d3a18); border-color:#1a5a1a; color:#53C546; }
-    .btn-yes:hover { box-shadow:0 0 18px #53C54640; transform:translateY(-1px); }
-    .btn-no  { background:linear-gradient(135deg,#2a0a0a,#3a0d15); border-color:#5a1a1a; color:#E72930; }
-    .btn-no:hover  { box-shadow:0 0 18px #E7293040; transform:translateY(-1px); }
+/* VAPE */
+.vq { font-size: 12px; color: #8899aa; margin: 10px 0 8px; }
+.vgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.vbtn { border-radius: 10px; padding: 10px 8px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid; text-align: center; line-height: 1.4; }
+.vg { background: linear-gradient(135deg,#0a2a0a,#0d3a18); border-color: #1a5a1a; color: #53C546; }
+.vb { background: linear-gradient(135deg,#2a1500,#3a1a00); border-color: #6a3a00; color: #FF6B35; }
+.vn { background: linear-gradient(135deg,#0a1220,#0d1a2e); border-color: #2a3a5a; color: #4FCEE4; grid-column: span 2; }
 
-    .effect-toast { margin-top:10px; border-radius:10px; padding:12px 14px; font-size:13px; line-height:1.6; border:1px solid; animation:fadeIn .4s ease; }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:translateY(0);} }
-    .effect-toast.positive { background:linear-gradient(135deg,#071a10,#0a2518); border-color:#1a5a3a; color:#7de875; }
-    .effect-toast.negative { background:linear-gradient(135deg,#1a0708,#250a0d); border-color:#5a1a2a; color:#f07080; }
-    .effect-toast.special  { background:linear-gradient(135deg,#1a1400,#2a2200); border-color:#6a5200; color:#FFD700; }
-    .effect-toast.warning  { background:linear-gradient(135deg,#1a1000,#250f00); border-color:#5a3a00; color:#FFB830; }
-    .effect-toast strong { color:white; }
+/* SCORE BAR */
+.scbar { background: linear-gradient(135deg,#0d1a2e,#1a2a3a); border: 1px solid #1e3a5a; border-radius: 12px; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.sc-num { font-size: 22px; font-weight: 900; }
+.sc-lbl { font-size: 9px; color: #4FCEE4; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 3px; }
+.rk-val { font-size: 12px; font-weight: 700; text-align: right; }
+.rk-lbl { font-size: 9px; color: #556677; letter-spacing: 2px; text-transform: uppercase; text-align: right; margin-bottom: 3px; }
 
-    .rank-card { width:100%; background:linear-gradient(135deg,#080810,#0d1a2e); border-radius:20px; padding:26px 24px; text-align:center; margin-bottom:16px; }
-    .rank-icon { font-size:52px; margin-bottom:12px; }
-    .rank-sub  { font-size:11px; letter-spacing:4px; color:#445566; text-transform:uppercase; margin-bottom:6px; }
-    .rank-name { font-size:24px; font-weight:900; letter-spacing:2px; margin-bottom:6px; }
-    .rank-score-big { font-size:48px; font-weight:900; margin-bottom:4px; }
-    .rank-score-sub { font-size:13px; color:#445566; letter-spacing:2px; }
+/* RANK CARD */
+.rkcard { background: linear-gradient(135deg,#080810,#0d1a2e); border-radius: 18px; padding: 24px; text-align: center; margin-bottom: 14px; }
 
-    .progress-section { width:100%; background:#0d1a2e; border:1px solid #1e3a5a; border-radius:14px; padding:16px 20px; margin-bottom:12px; }
-    .progress-header  { display:flex; justify-content:space-between; margin-bottom:10px; }
-    .progress-header span:first-child { font-size:11px; color:#4FCEE4; letter-spacing:3px; text-transform:uppercase; }
-    .progress-header span:last-child  { font-size:14px; font-weight:700; }
-    .progress-track { background:#0a1220; border-radius:6px; height:10px; overflow:hidden; }
-    .progress-fill  { height:100%; border-radius:6px; transition:width 1s ease; }
+/* STREAKS */
+.strow { background: #0d1a2e; border: 1px solid #1e3a5a; border-radius: 12px; padding: 12px 16px; margin-bottom: 12px; display: flex; gap: 8px; }
+.st { text-align: center; flex: 1; }
+.st-n { font-size: 22px; font-weight: 900; color: #4FCEE4; }
+.st-l { font-size: 9px; color: #445566; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
 
-    .streak-bar { width:100%; background:#0d1a2e; border:1px solid #1e3a5a; border-radius:12px; padding:14px 20px; margin-bottom:12px; display:flex; gap:12px; justify-content:center; }
-    .streak-item { text-align:center; }
-    .streak-num  { font-size:24px; font-weight:900; color:#4FCEE4; }
-    .streak-lbl  { font-size:9px; color:#445566; letter-spacing:2px; text-transform:uppercase; margin-top:2px; }
+/* PROGRESS */
+.pbox { background: #0d1a2e; border: 1px solid #1e3a5a; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; }
+.phdr { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px; }
+.phdr span:first-child { color: #4FCEE4; letter-spacing: 2px; text-transform: uppercase; }
+.phdr span:last-child { font-weight: 700; }
+.ptrack { background: #0a1220; border-radius: 6px; height: 9px; overflow: hidden; }
+.pfill  { height: 100%; border-radius: 6px; transition: width 1s; width: 0%; }
 
-    .detail-section { width:100%; background:#0d1a2e; border:1px solid #1e3a5a; border-radius:14px; padding:16px 20px; margin-bottom:12px; }
-    .detail-title   { font-size:11px; letter-spacing:4px; color:#4FCEE4; text-transform:uppercase; margin-bottom:12px; }
-    .detail-row     { display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-bottom:1px solid #0f1e2e; }
-    .detail-row:last-child { border-bottom:none; }
-    .detail-icon { font-size:17px; flex-shrink:0; margin-top:2px; }
-    .detail-info { flex:1; }
-    .detail-name { font-size:13px; color:#aab8c8; margin-bottom:2px; }
-    .detail-effect { font-size:11px; line-height:1.4; }
+/* DETAIL */
+.dbox { background: #0d1a2e; border: 1px solid #1e3a5a; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; }
+.dttl { font-size: 10px; letter-spacing: 4px; color: #4FCEE4; text-transform: uppercase; margin-bottom: 10px; }
+.drow { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #0f1e2e; }
+.drow:last-child { border-bottom: none; }
 
-    .quote-card  { width:100%; background:linear-gradient(135deg,#0a1a0a,#0d1a14); border:1px solid #1a4a2a; border-radius:14px; padding:16px 20px; text-align:center; margin-bottom:16px; }
-    .quote-text  { font-size:14px; color:#aac4aa; line-height:1.8; font-style:italic; }
-    .quote-card.gold { background:linear-gradient(135deg,#1a1400,#200a00); border-color:#6a5200; }
-    .quote-text.gold { color:#FFD700; }
+/* MONEY */
+.mcard { background: linear-gradient(135deg,#071a10,#0a2518); border: 1px solid #1a5a3a; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; text-align: center; }
 
-    .btn-restart { width:100%; background:linear-gradient(135deg,#0a1220,#0d1a2e); border:1px solid #4FCEE4; border-radius:12px; padding:14px; color:#4FCEE4; font-size:13px; font-weight:700; letter-spacing:4px; cursor:pointer; text-transform:uppercase; box-shadow:0 0 15px #4FCEE415; transition:all .2s; }
-    .btn-restart:hover { box-shadow:0 0 30px #4FCEE440; transform:translateY(-2px); }
+/* ALLSTATS */
+.asbox { background: #0d1a2e; border: 1px solid #1e3a5a; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; }
+.asttl { font-size: 10px; letter-spacing: 4px; color: #4FCEE4; text-transform: uppercase; margin-bottom: 12px; }
+.asgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ascard { background: linear-gradient(135deg,#080f1a,#0d1a2e); border: 1px solid #1e3a5a; border-radius: 10px; padding: 10px 12px; }
+.asrow { display: flex; justify-content: space-between; margin-bottom: 3px; }
+.asrow:last-child { margin-bottom: 0; }
+.ask { font-size: 10px; color: #778899; }
+.asv { font-size: 12px; font-weight: 700; }
+.gr { color: #53C546; } .rd { color: #E72930; } .gd { color: #FFD700; } .cy { color: #4FCEE4; } .or { color: #FF6B35; }
 
-    .cal-header   { width:100%; display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
-    .cal-month    { font-size:16px; font-weight:700; letter-spacing:2px; }
-    .cal-nav      { background:none; border:1px solid #1e3a5a; border-radius:8px; width:36px; height:36px; color:#4FCEE4; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
-    .cal-nav:hover{ border-color:#4FCEE4; }
-    .cal-grid     { width:100%; background:#0d1a2e; border:1px solid #1e3a5a; border-radius:16px; padding:14px; margin-bottom:14px; }
-    .cal-weekdays { display:grid; grid-template-columns:repeat(7,1fr); margin-bottom:8px; }
-    .cal-wd       { text-align:center; font-size:10px; letter-spacing:1px; color:#445566; text-transform:uppercase; padding:4px 0; }
-    .cal-days     { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
-    .cal-day      { aspect-ratio:1; border-radius:7px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:12px; font-weight:600; cursor:default; border:1px solid transparent; transition:all .2s; position:relative; }
-    .cal-day.today    { border-color:#4FCEE4; color:#4FCEE4; }
-    .cal-day.has-data { cursor:pointer; }
-    .cal-day.has-data:hover { border-color:#4FCEE480; background:#1a2a3a; }
-    .cal-day .score-pip { width:5px; height:5px; border-radius:50%; position:absolute; bottom:2px; }
-    .cal-day.score-7 .score-pip,.cal-day.score-6 .score-pip { background:#FFD700; box-shadow:0 0 6px #FFD700; }
-    .cal-day.score-5 .score-pip { background:#4FCEE4; }
-    .cal-day.score-4 .score-pip { background:#53C546; }
-    .cal-day.score-3 .score-pip { background:#FFBE4C; }
-    .cal-day.score-2 .score-pip { background:#FF6B35; }
-    .cal-day.score-1 .score-pip,.cal-day.score-0 .score-pip { background:#E72930; }
-    .cal-day.selected { background:#1a3a5a; border-color:#4FCEE4; }
-    .cal-legend   { width:100%; background:#0d1a2e; border:1px solid #1e3a5a; border-radius:12px; padding:12px 16px; margin-bottom:14px; display:flex; flex-wrap:wrap; gap:8px; }
-    .legend-item  { display:flex; align-items:center; gap:5px; font-size:11px; color:#778899; }
-    .legend-dot   { width:7px; height:7px; border-radius:50%; }
-    .cal-detail   { width:100%; background:#0d1a2e; border:1px solid #1e3a5a; border-radius:16px; padding:16px 18px; margin-bottom:12px; animation:fadeIn .3s ease; }
-    .cal-detail-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-    .cal-detail-date   { font-size:14px; font-weight:700; color:#4FCEE4; letter-spacing:1px; }
-    .cal-row           { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid #0f1e2e; }
-    .cal-row:last-child{ border-bottom:none; }
-    .cal-no-data       { text-align:center; color:#334455; font-size:14px; padding:22px 0; font-style:italic; }
+/* QUOTE */
+.qcard { background: linear-gradient(135deg,#0a1a0a,#0d1a14); border: 1px solid #1a4a2a; border-radius: 12px; padding: 14px 18px; text-align: center; margin-bottom: 14px; }
+.qcard.gld { background: linear-gradient(135deg,#1a1400,#200a00); border-color: #6a5200; }
+.qtxt { font-size: 13px; color: #aac4aa; line-height: 1.8; font-style: italic; }
+.qtxt.gld { color: #FFD700; }
 
-    .stats-trigger { width:100%; margin-top:20px; text-align:center; }
-    .stats-trigger p { font-size:13px; color:#4FCEE4; margin-bottom:12px; letter-spacing:1px; }
+/* ALERTS */
+.alcard { background: linear-gradient(135deg,#1a0500,#2a0800); border: 1px solid #8B1A00; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+.albd { background: rgba(255,100,0,0.07); border: 1px solid #6a3a00; border-radius: 8px; padding: 10px 12px; margin: 10px 0; }
 
-    .backup-section { width:100%; background:#0d1a2e; border:1px solid #1e3a5a; border-radius:12px; padding:14px 20px; margin-bottom:14px; }
-    .backup-title { font-size:10px; letter-spacing:3px; color:#445566; text-transform:uppercase; margin-bottom:12px; }
-    .backup-btns  { display:flex; gap:10px; }
-    .btn-backup   { flex:1; border-radius:10px; padding:10px 6px; font-size:11px; font-weight:700; cursor:pointer; letter-spacing:1px; transition:all .2s; border:1px solid; text-transform:uppercase; }
-    .btn-export   { background:linear-gradient(135deg,#0a1a2a,#0d2a3a); border-color:#2a5a7a; color:#4FCEE4; }
-    .btn-export:hover { box-shadow:0 0 15px #4FCEE440; transform:translateY(-1px); }
-    .btn-import   { background:linear-gradient(135deg,#1a1a0a,#2a2a0d); border-color:#5a5a1a; color:#FFBE4C; }
-    .btn-import:hover { box-shadow:0 0 15px #FFBE4C40; transform:translateY(-1px); }
-    .backup-toast { margin-top:10px; border-radius:8px; padding:8px 12px; font-size:12px; border:1px solid; animation:fadeIn .3s ease; }
-    .backup-toast.ok  { background:#071a10; border-color:#1a5a3a; color:#7de875; }
-    .backup-toast.err { background:#1a0708; border-color:#5a1a2a; color:#f07080; }
-  </style>
+/* CALENDAR */
+.calhdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.calnav { background: none; border: 1px solid #1e3a5a; border-radius: 8px; width: 34px; height: 34px; color: #4FCEE4; font-size: 18px; cursor: pointer; }
+.calgrid { background: #0d1a2e; border: 1px solid #1e3a5a; border-radius: 14px; padding: 12px; margin-bottom: 12px; }
+.calwk { display: grid; grid-template-columns: repeat(7,1fr); margin-bottom: 6px; }
+.calwd { text-align: center; font-size: 9px; color: #445566; text-transform: uppercase; padding: 3px 0; }
+.caldays { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; }
+.calday { aspect-ratio: 1; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; border: 1px solid transparent; position: relative; cursor: default; }
+.calday.today { border-color: #4FCEE4; color: #4FCEE4; }
+.calday.has { cursor: pointer; }
+.calday.sel { background: #1a3a5a; border-color: #4FCEE4; }
+.pip { width: 5px; height: 5px; border-radius: 50%; position: absolute; bottom: 2px; }
+.s7 .pip, .s8 .pip { background: #FFD700; box-shadow: 0 0 5px #FFD700; }
+.s6 .pip { background: #4FCEE4; }
+.s5 .pip { background: #53C546; }
+.s4 .pip { background: #FFBE4C; }
+.s3 .pip { background: #FF6B35; }
+.s2 .pip, .s1 .pip, .s0 .pip { background: #E72930; }
+.calleg { background: #0d1a2e; border: 1px solid #1e3a5a; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 7px; }
+.legit { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #778899; }
+.legdot { width: 6px; height: 6px; border-radius: 50%; }
+.caldet { background: #0d1a2e; border: 1px solid #1e3a5a; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+.calrow { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #0f1e2e; }
+.calrow:last-child { border-bottom: none; }
+
+/* WHY */
+.whyhero { background: linear-gradient(135deg,#080810,#0d1a2e); border: 1px solid #2a3a5a; border-radius: 14px; padding: 20px; text-align: center; margin-bottom: 16px; }
+.whyperiod { font-size: 10px; letter-spacing: 5px; color: #4FCEE4; text-transform: uppercase; margin-bottom: 8px; margin-top: 4px; }
+.whycard { background: linear-gradient(135deg,#0d1a2e,#111a28); border: 1px solid #1e3a5a; border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+.whyitem { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-bottom: 1px solid #0f1e2e; }
+.whyitem:last-child { border-bottom: none; }
+.wdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.wdot.c { background: #4FCEE4; box-shadow: 0 0 6px #4FCEE4; }
+.wdot.g { background: #53C546; box-shadow: 0 0 5px #53C546; }
+.wdot.p { background: #AA77FF; box-shadow: 0 0 5px #AA77FF; }
+.wdot.o { background: #FFD700; box-shadow: 0 0 5px #FFD700; }
+.wmain { font-size: 13px; font-weight: 600; color: #fff; line-height: 1.4; margin-bottom: 2px; }
+.wsub  { font-size: 11px; color: #445566; line-height: 1.4; }
+.lbl { font-size: 10px; letter-spacing: 5px; color: #4FCEE4; text-transform: uppercase; margin-bottom: 8px; opacity: .8; }
+.nodata { text-align: center; color: #334455; font-size: 13px; padding: 20px 0; font-style: italic; }
+
+/* BACKUP */
+.bkbox { background: #0d1a2e; border: 1px solid #1e3a5a; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; }
+.bkttl { font-size: 10px; letter-spacing: 3px; color: #445566; text-transform: uppercase; margin-bottom: 12px; }
+.bkrow { display: flex; gap: 10px; }
+.bkbtn { flex: 1; border-radius: 10px; padding: 10px 6px; font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; border: 1px solid; }
+.bk-ex { background: linear-gradient(135deg,#0a1a2a,#0d2a3a); border-color: #2a5a7a; color: #4FCEE4; }
+.bk-im { background: linear-gradient(135deg,#1a1a0a,#2a2a0d); border-color: #5a5a1a; color: #FFBE4C; }
+.bkmsg { margin-top: 10px; border-radius: 8px; padding: 8px 12px; font-size: 12px; border: 1px solid; }
+.bkmsg.ok  { background: #071a10; border-color: #1a5a3a; color: #7de875; }
+.bkmsg.err { background: #1a0708; border-color: #5a1a2a; color: #f07080; }
+</style>
 </head>
 <body>
-<div class="stars" id="stars"></div>
 
 <!-- INTRO -->
-<div class="screen" id="intro">
-  <div class="lightsaber"></div>
-  <div class="label-small">Орден Джедаев</div>
-  <div class="title-main">ПРОВЕРКА ДНЯ</div>
-  <div class="subtitle">Протокол самодисциплины</div>
-  <div class="jedi-symbol">🔆</div>
-  <div class="quote">"Нет эмоций — есть покой.<br>Нет невежества — есть знание.<br>Нет страсти — есть безмятежность."</div>
-  <button class="btn-primary" onclick="showChecklist()">НАЧАТЬ ОТЧЁТ</button>
+<div id="pg-intro" style="display:flex;">
+  <div class="wrap" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
+    <div style="width:3px;height:80px;background:linear-gradient(to bottom,transparent,#4FCEE4,#4FCEE4,transparent);border-radius:4px;box-shadow:0 0 20px #4FCEE4;margin:0 auto 28px;"></div>
+    <div class="lbl">Орден Джедаев</div>
+    <div style="font-size:26px;font-weight:900;letter-spacing:3px;margin-bottom:6px;">ПРОВЕРКА ДНЯ</div>
+    <div style="font-size:12px;color:#6a7f96;letter-spacing:3px;margin-bottom:24px;">Протокол самодисциплины</div>
+    <div style="font-size:70px;margin-bottom:20px;">&#128262;</div>
+    <div style="font-size:13px;color:#778899;line-height:1.8;max-width:280px;font-style:italic;margin-bottom:36px;">"Нет эмоций — есть покой.<br>Нет невежества — есть знание.<br>Нет страсти — есть безмятежность."</div>
+    <button class="bigbtn" id="btn-start">НАЧАТЬ ОТЧЁТ</button>
+  </div>
 </div>
 
 <!-- CHECKLIST -->
-<div class="screen hidden" id="checklist">
-  <div style="text-align:center;margin-bottom:20px;width:100%;">
-    <div class="label-small">Орден Джедаев</div>
-    <div class="title-main" style="font-size:19px;letter-spacing:2px;">ДНЕВНОЙ ОТЧЁТ</div>
-    <div class="progress-dots" id="dots"></div>
-  </div>
-  <div class="score-bar">
-    <div>
-      <div class="score-label">Очки Силы</div>
-      <div class="score-value" id="score-display">0 <span class="score-max">/ 7</span></div>
+<div id="pg-check" style="display:none;">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:16px;">
+      <div class="lbl">Орден Джедаев</div>
+      <div style="font-size:18px;font-weight:900;letter-spacing:2px;">ДНЕВНОЙ ОТЧЁТ</div>
     </div>
-    <div>
-      <div class="rank-label">Ранг</div>
-      <div class="rank-title" id="rank-display" style="color:#FF6B35;">Инициат</div>
+    <div class="scbar">
+      <div><div class="sc-lbl">Очки Силы</div><div class="sc-num" id="sc-num">0 <span style="font-size:13px;color:#445566;">/ 8</span></div></div>
+      <div><div class="rk-lbl">Ранг</div><div class="rk-val" id="rk-val" style="color:#FF6B35;">Инициат</div></div>
     </div>
-  </div>
-  <div class="questions" id="questions-container"></div>
-  <div class="stats-trigger hidden" id="stats-trigger">
-    <p>Отчёт завершён. Сила оценена.</p>
-    <button class="btn-primary" onclick="showStats()">СТАТИСТИКА →</button>
+    <div id="edit-banner" style="display:none;"></div>
+    <div id="alerts-wrap"></div>
+    <div id="q-wrap"></div>
+    <div id="done-wrap" style="display:none;margin-top:16px;text-align:center;">
+      <p style="font-size:13px;color:#4FCEE4;margin-bottom:12px;">Отчёт завершён. Сила оценена.</p>
+      <button class="bigbtn" id="btn-stats">СТАТИСТИКА →</button>
+    </div>
   </div>
 </div>
 
 <!-- STATS -->
-<div class="screen hidden" id="stats-screen">
-  <div style="text-align:center;margin-bottom:20px;width:100%;">
-    <div class="label-small">Орден Джедаев</div>
-    <div class="title-main" style="font-size:19px;letter-spacing:2px;">СТАТИСТИКА ДНЯ</div>
+<div id="pg-stats" style="display:none;">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:14px;">
+      <div class="lbl">Орден Джедаев</div>
+      <div style="font-size:18px;font-weight:900;letter-spacing:2px;">ИТОГИ ДНЯ</div>
+    </div>
+    <div class="rkcard" id="rk-card">
+      <div style="font-size:50px;margin-bottom:10px;" id="rk-ico">&#128293;</div>
+      <div style="font-size:10px;letter-spacing:4px;color:#445566;text-transform:uppercase;margin-bottom:6px;">Ваш ранг сегодня</div>
+      <div style="font-size:22px;font-weight:900;letter-spacing:2px;margin-bottom:6px;" id="rk-nm">Инициат</div>
+      <div style="font-size:44px;font-weight:900;margin-bottom:4px;" id="rk-sc">0</div>
+      <div style="font-size:12px;color:#445566;letter-spacing:2px;">очков Силы</div>
+    </div>
+    <div class="strow">
+      <div class="st"><div class="st-n" id="st-cur">0</div><div class="st-l">Серия</div></div>
+      <div class="st"><div class="st-n" id="st-best">0</div><div class="st-l">Рекорд</div></div>
+      <div class="st"><div class="st-n" id="st-total">0</div><div class="st-l">Всего дней</div></div>
+    </div>
+    <div class="pbox">
+      <div class="phdr"><span>Сила дня</span><span id="p-pct">0%</span></div>
+      <div class="ptrack"><div class="pfill" id="p-fill"></div></div>
+    </div>
+    <div class="dbox"><div class="dttl">Сегодня</div><div id="det-wrap"></div></div>
+    <div class="mcard">
+      <div style="font-size:10px;letter-spacing:4px;color:#4FCEE4;text-transform:uppercase;margin-bottom:6px;">&#128176; Кредиты за всё время</div>
+      <div style="font-size:32px;font-weight:900;color:#FFD700;" id="m-val">0</div>
+      <div style="font-size:11px;color:#445566;margin-top:3px;">кредитов заработано</div>
+    </div>
+    <div class="asbox">
+      <div class="asttl">&#128202; Статистика за всё время</div>
+      <div class="asgrid" id="as-wrap"></div>
+    </div>
+    <div class="qcard" id="q-card2"><div class="qtxt" id="q-txt2"></div></div>
+    <button class="restbtn" id="btn-restart">&#8617; НОВЫЙ ДЕНЬ</button>
   </div>
-  <div class="rank-card" id="rank-card">
-    <div class="rank-icon" id="stat-icon">🔥</div>
-    <div class="rank-sub">Ваш ранг сегодня</div>
-    <div class="rank-name" id="stat-rank">Инициат</div>
-    <div class="rank-score-big" id="stat-score">0</div>
-    <div class="rank-score-sub">очков Силы</div>
-  </div>
-  <div class="streak-bar">
-    <div class="streak-item"><div class="streak-num" id="streak-num">0</div><div class="streak-lbl">Серия</div></div>
-    <div class="streak-item"><div class="streak-num" id="best-streak-num">0</div><div class="streak-lbl">Рекорд</div></div>
-    <div class="streak-item"><div class="streak-num" id="total-days-num">0</div><div class="streak-lbl">Всего дней</div></div>
-  </div>
-  <div class="progress-section">
-    <div class="progress-header"><span>Сила дня</span><span id="stat-percent">0%</span></div>
-    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-  </div>
-  <div class="detail-section">
-    <div class="detail-title">Детали отчёта</div>
-    <div id="detail-rows"></div>
-  </div>
-  <div class="quote-card" id="stat-quote-card"><div class="quote-text" id="stat-quote"></div></div>
-  <button class="btn-restart" onclick="restart()">↩ НОВЫЙ ДЕНЬ</button>
 </div>
 
 <!-- CALENDAR -->
-<div class="screen hidden" id="cal-screen">
-  <div style="text-align:center;margin-bottom:16px;width:100%;">
-    <div class="label-small">Орден Джедаев</div>
-    <div class="title-main" style="font-size:19px;letter-spacing:2px;">АРХИВ ОРДЕНА</div>
-  </div>
-  <div class="cal-header">
-    <button class="cal-nav" onclick="calPrev()">&#8249;</button>
-    <div class="cal-month" id="cal-month-label"></div>
-    <button class="cal-nav" onclick="calNext()">&#8250;</button>
-  </div>
-  <div class="cal-grid">
-    <div class="cal-weekdays">
-      <div class="cal-wd">Пн</div><div class="cal-wd">Вт</div><div class="cal-wd">Ср</div>
-      <div class="cal-wd">Чт</div><div class="cal-wd">Пт</div><div class="cal-wd">Сб</div><div class="cal-wd">Вс</div>
+<div id="pg-cal" style="display:none;">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:14px;">
+      <div class="lbl">Орден Джедаев</div>
+      <div style="font-size:18px;font-weight:900;letter-spacing:2px;">АРХИВ ОРДЕНА</div>
     </div>
-    <div class="cal-days" id="cal-days"></div>
-  </div>
-  <div class="cal-legend">
-    <div class="legend-item"><div class="legend-dot" style="background:#FFD700;box-shadow:0 0 5px #FFD700;"></div>6-7 — Легенда</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#4FCEE4;"></div>5 — Мастер</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#53C546;"></div>4 — Рыцарь</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#FFBE4C;"></div>3 — Падаван</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#FF6B35;"></div>1-2</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#E72930;"></div>0</div>
-  </div>
-
-  <!-- BACKUP -->
-  <div class="backup-section">
-    <div class="backup-title">💾 Резервная копия архива</div>
-    <div class="backup-btns">
-      <button class="btn-backup btn-export" onclick="exportData()">⬇ Скачать данные</button>
-      <button class="btn-backup btn-import" onclick="document.getElementById('import-file').click()">⬆ Загрузить данные</button>
-      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+    <div class="calhdr">
+      <button class="calnav" id="cal-prev">&#8249;</button>
+      <div style="font-size:15px;font-weight:700;letter-spacing:2px;" id="cal-mo"></div>
+      <button class="calnav" id="cal-next">&#8250;</button>
     </div>
-    <div id="backup-msg"></div>
+    <div class="calgrid">
+      <div class="calwk"><div class="calwd">Пн</div><div class="calwd">Вт</div><div class="calwd">Ср</div><div class="calwd">Чт</div><div class="calwd">Пт</div><div class="calwd">Сб</div><div class="calwd">Вс</div></div>
+      <div class="caldays" id="cal-days"></div>
+    </div>
+    <div class="calleg">
+      <div class="legit"><div class="legdot" style="background:#FFD700;"></div>7-8</div>
+      <div class="legit"><div class="legdot" style="background:#4FCEE4;"></div>6</div>
+      <div class="legit"><div class="legdot" style="background:#53C546;"></div>5</div>
+      <div class="legit"><div class="legdot" style="background:#FFBE4C;"></div>4</div>
+      <div class="legit"><div class="legdot" style="background:#FF6B35;"></div>3</div>
+      <div class="legit"><div class="legdot" style="background:#E72930;"></div>0-2</div>
+    </div>
+    <div class="bkbox">
+      <div class="bkttl">&#128190; Резервная копия архива</div>
+      <div class="bkrow">
+        <button class="bkbtn bk-ex" id="bk-export">&#11015; Скачать</button>
+        <button class="bkbtn bk-im" id="bk-import-btn">&#11014; Загрузить</button>
+        <input type="file" id="bk-import" accept=".json" style="display:none">
+      </div>
+      <div id="bk-msg"></div>
+    </div>
+    <div id="cal-det"></div>
   </div>
+</div>
 
-  <div id="cal-detail-area"></div>
+<!-- WHY -->
+<div id="pg-why" style="display:none;">
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:14px;">
+      <div class="lbl">Орден Джедаев</div>
+      <div style="font-size:18px;font-weight:900;letter-spacing:2px;">МОЙ ПРОТОКОЛ</div>
+    </div>
+    <div class="whyhero">
+      <div style="font-size:44px;margin-bottom:10px;">&#9876;&#65039;</div>
+      <div style="font-size:16px;font-weight:900;letter-spacing:3px;margin-bottom:4px;">КОДЕКС ДИСЦИПЛИНЫ</div>
+      <div style="font-size:11px;color:#445566;letter-spacing:2px;">Каждый день. Каждую неделю. Каждый месяц.</div>
+    </div>
+    <div class="whyperiod">&#9201;&#65039; Каждый день</div>
+    <div class="whycard">
+      <div class="whyitem"><div class="wdot o"></div><div><div class="wmain">Последний приём пищи — не позже 15:00</div><div class="wsub">После 15:00 только вода. Интервальное голодание — чистота разума и тела.</div></div></div>
+      <div class="whyitem"><div class="wdot g"></div><div><div class="wmain">Уход за лицом: умывание + сыворотка + крем</div><div class="wsub">Ежедневный ритуал. Ухоженный джедай излучает уверенность.</div></div></div>
+      <div class="whyitem"><div class="wdot c"></div><div><div class="wmain">Курение — только один раз через вапорайзер</div><div class="wsub">Не косяк, не бонг. Минимальный вред, максимальный контроль.</div></div></div>
+    </div>
+    <div class="whyperiod">&#128197; Каждую неделю</div>
+    <div class="whycard">
+      <div class="whyitem"><div class="wdot g"></div><div><div class="wmain">Тренировки — 5 раз в неделю</div><div class="wsub">3 пропуска подряд — дебаф «Скуфость».</div></div></div>
+      <div class="whyitem"><div class="wdot c"></div><div><div class="wmain">После тренировки — 30–40 мин отдых в машине</div><div class="wsub">3–4 раза в неделю. Восстановление и перезагрузка.</div></div></div>
+      <div class="whyitem"><div class="wdot p"></div><div><div class="wmain">Пятница 17:00 — терраса среди людей</div><div class="wsub">Социальная Сила не качается дома.</div></div></div>
+    </div>
+    <div class="whyperiod">&#128176; Каждый месяц</div>
+    <div class="whycard">
+      <div class="whyitem"><div class="wdot o"></div><div><div class="wmain">Откладывать 1500 евро сразу после зарплаты</div><div class="wsub">Сначала сбережения. Потом расходы.</div></div></div>
+    </div>
+    <div class="whyperiod">&#127807; Зачем правильное питание</div>
+    <div class="whycard">
+      <div class="whyitem"><div class="wdot g"></div><div><div class="wmain">Еда = топливо, а не удовольствие</div><div class="wsub">Чистое питание = энергия, острый ум, быстрое восстановление после зала.</div></div></div>
+      <div class="whyitem"><div class="wdot g"></div><div><div class="wmain">80% результата в теле — это еда</div><div class="wsub">Зал без питания = строить дом без кирпичей. Мышцы растут на кухне.</div></div></div>
+    </div>
+    <div class="whyperiod">&#127801; Зачем контактировать с девушками</div>
+    <div class="whycard">
+      <div class="whyitem"><div class="wdot p"></div><div><div class="wmain">Любой контакт — улица, магазин, кафе</div><div class="wsub">Не нужна цель. Просто заговорить. Мышца смелости качается только в реальных контактах.</div></div></div>
+      <div class="whyitem"><div class="wdot p"></div><div><div class="wmain">Страх проходит только через действие</div><div class="wsub">Каждый разговор — rep в зале социальной Силы. Без повторений — нет роста.</div></div></div>
+    </div>
+    <div style="background:linear-gradient(135deg,#080f1a,#0d1a2e);border:1px solid #1e3a5a;border-radius:12px;padding:14px 18px;text-align:center;margin-bottom:8px;">
+      <div style="font-size:12px;color:#445566;line-height:1.8;font-style:italic;">"Дисциплина — это мост между целями и достижениями."</div>
+    </div>
+  </div>
 </div>
 
 <!-- NAV -->
-<nav class="nav hidden" id="main-nav">
-  <button class="nav-btn active" id="nav-check" onclick="navTo('checklist')"><span class="ni">⚔️</span>Отчёт</button>
-  <button class="nav-btn" id="nav-stats" onclick="navTo('stats-screen')"><span class="ni">📊</span>Итог</button>
-  <button class="nav-btn" id="nav-cal"   onclick="navTo('cal-screen')"><span class="ni">📅</span>Архив</button>
-</nav>
+<div id="nav" style="display:none;flex-direction:row;">
+  <button data-pg="pg-check" id="nb0"><span class="ic">&#9876;&#65039;</span>Отчёт</button>
+  <button data-pg="pg-stats" id="nb1"><span class="ic">&#128202;</span>Итоги</button>
+  <button data-pg="pg-cal"   id="nb2"><span class="ic">&#128197;</span>Архив</button>
+  <button data-pg="pg-why"   id="nb3"><span class="ic">&#128161;</span>Зачем</button>
+</div>
 
 <script>
-const STORAGE_KEY = 'jedi_v4';
-const MONTH_NAMES = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+var SK = 'jedi_v7', MX = 8;
+var MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 
-const questions = [
-  { id:'work',  icon:'⚔️', label:'Был на работе',       desc:'Служение ордену продолжается',
-    yes:{ icon:'💰', title:'+100 кредитов получено',           text:'Кредиты в казне. Работа — фундамент дисциплины джедая.' },
-    no: { icon:'🌑', title:'Кредитов нет — +0',                text:'Без работы нет ресурсов. Миссия под угрозой.' } },
-  { id:'gym',   icon:'🏋️', label:'Зал',                  desc:'Сила тела — сила Силы',
-    yes:{ icon:'💪', title:'+Уверенность / +Самочувствие',     text:'Тело сильнее — Сила мощнее. Ты стал лучше вчерашнего себя.' },
-    no: { icon:'🛋️', title:'Пропуск зала',                     text:'Пропуск зафиксирован. 3 пропуска подряд — дебаф «Скуфость».' } },
-  { id:'dutch', icon:'🌍', label:'Нидерландский',         desc:'Знание языков открывает галактики',
-    yes:{ icon:'🧠', title:'+Навыки / +Новые горизонты',       text:'Каждый день практики — шаг ближе к жизни в Нидерландах.' },
-    no: { icon:'📉', title:'Прогресс замедляется',              text:'Без практики слова забываются. Нидерланды ждут — но не вечно.' } },
-  { id:'food',  icon:'🌿', label:'Здоровое питание',      desc:'Тело — храм джедая',
-    yes:{ icon:'✅', title:'+Энергия / +Ясность разума',       text:'Чистое питание — чистый разум. Джедай питается как воин.' },
-    no: { icon:'🍔', title:'-Энергия / Туман разума',           text:'Тёмная сторона еды затуманивает Силу и замедляет тело.' } },
-  { id:'care',  icon:'✨', label:'Уход за собой',          desc:'Внешность — зеркало дисциплины',
-    yes:{ icon:'😎', title:'+Уверенность / Нравишься девочкам', text:'Ухоженный джедай излучает силу. Притяжение — следствие дисциплины.' },
-    no: { icon:'😔', title:'-Привлекательность / -Уверенность', text:'Небрежность во внешнем — небрежность во внутреннем.' } },
-  { id:'money', icon:'💸', label:'Контроль расходов',     desc:'Без импульсивных покупок',
-    yes:{ icon:'🏦', title:'+Финансовая дисциплина',            text:'Кредиты сохранены. Джедай тратит только на необходимое.' },
-    no: { icon:'🕳️', title:'Импульсивные траты зафиксированы', text:'Деньги утекли в пустоту. Тёмная сторона шопинга победила.' } },
-  { id:'girl',  icon:'🌹', label:'Разговор с девушкой',   desc:'⚡ ОСОБЫЙ КВЕСТ — 2 очка Силы', special:true,
-    yes:{ icon:'🏆', title:'КВЕСТ ВЫПОЛНЕН! +2 очка Силы!',    text:'Легендарно. Ты не просто джедай — ты Тейт ордена. Совет восхищён.' },
-    no: { icon:'🤦', title:'Квест провален',                    text:'А как ты будешь как Тейт, любимец женщин — не контактируя с ними?' } },
+var QS = [
+  { id:'work',  ic:'&#9876;&#65039;',   lb:'Работа',            ds:'Служение ордену',
+    yes:{ic:'&#128176;', tt:'+100 кредитов',       tx:'Кредиты в казне. Работа — фундамент дисциплины.'},
+    no: {ic:'&#127761;', tt:'Кредитов нет',         tx:'Без работы нет ресурсов. Миссия под угрозой.'} },
+  { id:'gym',   ic:'&#127947;&#65039;', lb:'Зал',               ds:'Сила тела — сила Силы',
+    yes:{ic:'&#128170;', tt:'+Уверенность',         tx:'Тело сильнее — Сила мощнее. Ты лучше вчерашнего себя.'},
+    no: {ic:'&#128715;', tt:'Пропуск зала',          tx:'3 пропуска подряд — дебаф Скуфость.'} },
+  { id:'dutch', ic:'&#127757;',         lb:'Нидерландский',     ds:'Знание открывает галактики',
+    yes:{ic:'&#129504;', tt:'+Навыки',               tx:'Каждый день — шаг к жизни в Нидерландах.'},
+    no: {ic:'&#128201;', tt:'-Прогресс',              tx:'Без практики слова забываются.'} },
+  { id:'food',  ic:'&#127807;',         lb:'Здоровое питание',  ds:'Тело — храм джедая',
+    yes:{ic:'&#9989;',   tt:'+Энергия / +Ясность',  tx:'Чистое питание — чистый разум. Джедай питается как воин.'},
+    no: {ic:'&#127828;', tt:'-Энергия / Туман',       tx:'Тёмная сторона еды затуманивает Силу.'} },
+  { id:'care',  ic:'&#10024;',          lb:'Уход за собой',     ds:'Внешность — зеркало духа',
+    yes:{ic:'&#128526;', tt:'+Нравишься девочкам',   tx:'Ухоженный джедай излучает силу. Притяжение — следствие дисциплины.'},
+    no: {ic:'&#128532;', tt:'-Привлекательность',     tx:'Небрежность во внешнем — небрежность во внутреннем.'} },
+  { id:'money', ic:'&#128184;',         lb:'Контроль расходов', ds:'Без импульсивных покупок',
+    yes:{ic:'&#127974;', tt:'+Финансовая дисциплина',tx:'Кредиты сохранены. Джедай тратит только на необходимое.'},
+    no: {ic:'&#128371;', tt:'Импульсивные траты',     tx:'Деньги утекли в пустоту. Тёмная сторона шопинга победила.'} },
+  { id:'vape',  ic:'&#128168;',         lb:'Курение',           ds:'Только вапорайзер или ничего', vape:true },
+  { id:'girl',  ic:'&#127801;',         lb:'Разговор с девушкой', ds:'ОСОБЫЙ КВЕСТ — 2 очка',      spc:true,
+    yes:{ic:'&#127942;', tt:'КВЕСТ ВЫПОЛНЕН! +2 очка!', tx:'Легендарно. Ты Тейт ордена. Совет восхищён.'},
+    no: {ic:'&#129318;', tt:'Квест провален',             tx:'А как ты будешь как Тейт — не контактируя с женщинами?'} }
 ];
 
-const ranks = [
-  { min:7, title:'Тейт Ордена',    color:'#FFD700', icon:'👑' },
-  { min:6, title:'Магистр Джедай', color:'#FFD700', icon:'🌟' },
-  { min:5, title:'Рыцарь Джедай',  color:'#4FCEE4', icon:'⚔️' },
-  { min:4, title:'Падаван',         color:'#53C546', icon:'🌿' },
-  { min:2, title:'Инициат',         color:'#FF6B35', icon:'🔥' },
-  { min:0, title:'Тёмная Сторона',  color:'#E72930', icon:'😈' },
-];
-
-const quotes = {
-  7:'"Ты достиг абсолютного совершенства. Энакин тобой гордился бы."',
-  6:'"Магистр! Совет аплодирует. Один шаг до легенды."',
-  5:'"Отличный день, рыцарь. Сила с тобой."',
-  4:'"Хорошая работа, падаван. Продолжай идти по пути."',
-  3:'"Неплохо, но джедай не останавливается на середине."',
-  2:'"Тёмная сторона наступает. Завтра — сильнее."',
-  1:'"Ещё многому предстоит научиться. Сила терпелива."',
-  0:'"Даже Вейдер начинал как Энакин. Завтра — начни сначала."',
+var VAPE = {
+  none:      { ic:'&#9728;&#65039;', cls:'t-vyes', tt:'Не курил — +1 очко',       tx:'Лёгкие чисты как Сила. Максимальное уважение ордена.' },
+  vaporizer: { ic:'&#9989;',        cls:'t-vyes', tt:'Вапорайзер — +1 очко',     tx:'Минимальный вред, максимальная осознанность. Орден одобряет.' },
+  joint:     { ic:'&#128683;',      cls:'t-vno',  tt:'Косяк — 0 очков',          tx:'Сжигание = смолы + вред лёгким. Переходи на вапорайзер.' },
+  bong:      { ic:'&#128683;',      cls:'t-vno',  tt:'Бонг — 0 очков',           tx:'Водяная фильтрация не спасает. Косяк с водой — всё равно косяк.' }
 };
 
-const girlQuotes = [
-  '"Тейт ордена! Совет требует автограф."',
-  '"Леди-джедай замечены. Орден одобряет."',
-  '"Смелость — первый шаг к Силе. И к сердцам."',
+var RANKS = [
+  { min:8, nm:'Тейт Ордена',    cl:'#FFD700', ic:'&#128081;' },
+  { min:7, nm:'Магистр Джедай', cl:'#FFD700', ic:'&#127775;' },
+  { min:6, nm:'Рыцарь Джедай',  cl:'#4FCEE4', ic:'&#9876;&#65039;' },
+  { min:5, nm:'Падаван',         cl:'#53C546', ic:'&#127807;' },
+  { min:3, nm:'Инициат',         cl:'#FF6B35', ic:'&#128293;' },
+  { min:0, nm:'Тёмная Сторона',  cl:'#E72930', ic:'&#128520;' }
 ];
 
-const MAX_SCORE = 7;
-let answers = {};
-let calYear, calMonth, selectedCalDate = null;
+var QUOTES = {
+  8:'"Абсолютное совершенство. Энакин тобой гордился бы."',
+  7:'"Магистр! Совет аплодирует. Один шаг до легенды."',
+  6:'"Отличный день, рыцарь. Сила с тобой."',
+  5:'"Хорошая работа, падаван. Продолжай идти."',
+  4:'"Неплохо, но джедай не останавливается на середине."',
+  3:'"Тёмная сторона наступает. Завтра — сильнее."',
+  2:'"Сила терпелива. Продолжай."',
+  1:'"Продолжай идти по пути."',
+  0:'"Даже Вейдер начинал как Энакин. Завтра — начни сначала."'
+};
+var GQUOTES = ['"Тейт ордена! Совет требует автограф."', '"Леди-джедай замечены. Орден одобряет."', '"Смелость — первый шаг к Силе и к сердцам."'];
 
-function todayKey() {
-  const d = new Date();
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-}
-function loadStorage() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}; } catch(e){ return {}; } }
-function saveStorage(d) { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
-function getRank(s) { return ranks.find(r => s >= r.min); }
-function calcScore(ans) {
-  let s=0;
-  questions.forEach(q=>{ if(ans[q.id]===true) s+=(q.special?2:1); });
+var ALERT_TRACKS = [
+  { id:'gym',   ic:'&#127947;&#65039;', lb:'Зал',           ms:'пропускаешь зал' },
+  { id:'work',  ic:'&#9876;&#65039;',   lb:'Работа',        ms:'не ходишь на работу' },
+  { id:'dutch', ic:'&#127757;',         lb:'Нидерландский', ms:'не учишь нидерландский' },
+  { id:'food',  ic:'&#127807;',         lb:'Питание',       ms:'нарушаешь питание' },
+  { id:'care',  ic:'&#10024;',          lb:'Уход',          ms:'не ухаживаешь за собой' },
+  { id:'money', ic:'&#128184;',         lb:'Расходы',       ms:'делаешь импульсивные траты' },
+  { id:'girl',  ic:'&#127801;',         lb:'Девушки',       ms:'не разговариваешь с девушками' }
+];
+
+var answers = {};
+var calY, calM, selCal = null;
+var editMode = false, editDate = null, editOriginal = null;
+function activeKey() { return editDate || todayKey(); }
+
+function pad(n) { return String(n).padStart(2,'0'); }
+function todayKey() { var d = new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function store()  { try { return JSON.parse(localStorage.getItem(SK)) || {}; } catch(e) { return {}; } }
+function save(d)  { localStorage.setItem(SK, JSON.stringify(d)); }
+function getConf(){ try { return JSON.parse(localStorage.getItem('jcf')) || {}; } catch(e) { return {}; } }
+function setConf(d){ localStorage.setItem('jcf', JSON.stringify(d)); }
+function getRank(s) { for (var i=0; i<RANKS.length; i++) if (s >= RANKS[i].min) return RANKS[i]; return RANKS[RANKS.length-1]; }
+
+function calcScore(a) {
+  var s = 0;
+  for (var i=0; i<QS.length; i++) {
+    var q = QS[i];
+    if (q.vape)      { if (a.vape === 'none' || a.vape === 'vaporizer') s += 1; }
+    else if (q.spc)  { if (a[q.id] === true) s += 2; }
+    else             { if (a[q.id] === true) s += 1; }
+  }
   return s;
 }
 
-// Stars
-const se=document.getElementById('stars');
-for(let i=0;i<60;i++){
-  const s=document.createElement('div'); s.className='star';
-  const sz=i%7===0?3:i%3===0?2:1.5;
-  s.style.cssText='width:'+sz+'px;height:'+sz+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;opacity:'+(0.15+Math.random()*0.4)+';';
-  se.appendChild(s);
-}
+function isAnswered(q, a) { return q.vape ? (a.vape !== undefined) : (a[q.id] !== undefined); }
+function allAnswered(a)   { for (var i=0; i<QS.length; i++) if (!isAnswered(QS[i], a)) return false; return true; }
 
-function getGymEffect(isYes) {
-  if(isYes) return questions[1].yes;
-  const store=loadStorage(); let miss=0; const d=new Date();
-  for(let i=1;i<=3;i++){
-    const dd=new Date(d); dd.setDate(d.getDate()-i);
-    const k=dd.getFullYear()+'-'+String(dd.getMonth()+1).padStart(2,'0')+'-'+String(dd.getDate()).padStart(2,'0');
-    if(store[k]&&store[k].answers&&store[k].answers.gym===false) miss++; else break;
+function getEffect(q, a) {
+  if (q.vape) return VAPE[a.vape] || VAPE['none'];
+  if (q.id === 'gym') {
+    if (a[q.id] === true) return q.yes;
+    if (editMode) return q.no;
+    var st = store(), miss = 0, d = new Date();
+    for (var i=1; i<=3; i++) {
+      var dd = new Date(d); dd.setDate(d.getDate()-i);
+      var k = dd.getFullYear()+'-'+pad(dd.getMonth()+1)+'-'+pad(dd.getDate());
+      if (st[k] && st[k].answers && st[k].answers.gym === false) miss++; else break;
+    }
+    if (miss >= 2) return { ic:'&#128564;', cls:'t-no', tt:'ДЕБАФ: Скуфость!', tx:'Зал пропущен '+(miss+1)+' дня подряд. Срочно тренировка.' };
+    return q.no;
   }
-  if(miss>=2) return {icon:'😴',title:'ДЕБАФ: Скуфость активирована!',text:'Зал пропущен '+(miss+1)+' день подряд. Тело деградирует. Немедленная тренировка.'};
-  return questions[1].no;
+  return a[q.id] ? q.yes : q.no;
 }
 
-function getEffect(q,isYes) {
-  if(q.id==='gym') return getGymEffect(isYes);
-  return isYes?q.yes:q.no;
+function toastClass(q, a) {
+  if (q.vape) return (VAPE[a.vape] || VAPE['none']).cls;
+  var y = a[q.id];
+  if (q.spc) return y ? 't-spc' : 't-wrn';
+  return y ? 't-yes' : 't-no';
 }
 
-function buildToast(q,ans) {
-  const eff=getEffect(q,ans);
-  let cls=ans?'positive':'negative';
-  if(q.special&&ans) cls='special';
-  if(q.special&&!ans) cls='warning';
-  return '<div class="effect-toast '+cls+'"><span style="font-size:16px;margin-right:6px;">'+eff.icon+'</span><strong>'+eff.title+'</strong><br>'+eff.text+'</div>';
+function makeToast(q, a) {
+  var e = getEffect(q, a);
+  return '<div class="toast '+toastClass(q,a)+'"><strong>'+e.ic+' '+e.tt+'</strong><br>'+e.tx+'</div>';
 }
 
-function showChecklist() {
-  const store=loadStorage(); const key=todayKey();
-  answers=store[key]?(store[key].answers||{}):{};  
-  document.getElementById('intro').classList.add('hidden');
-  document.getElementById('main-nav').classList.remove('hidden');
-  document.getElementById('checklist').classList.remove('hidden');
-  renderQuestions(); renderDots(); updateScore();
-  if(Object.keys(answers).length===questions.length)
-    document.getElementById('stats-trigger').classList.remove('hidden');
+var pages = ['pg-intro','pg-check','pg-stats','pg-cal','pg-why'];
+
+function showPage(id) {
+  for (var i=0; i<pages.length; i++) document.getElementById(pages[i]).style.display = 'none';
+  document.getElementById(id).style.display = 'block';
+  var navBtns = document.querySelectorAll('#nav button');
+  for (var j=0; j<navBtns.length; j++) navBtns[j].className = navBtns[j].dataset.pg === id ? 'on' : '';
+  if (id === 'pg-stats') renderStats();
+  if (id === 'pg-cal')   renderCal();
+}
+
+document.getElementById('btn-start').addEventListener('click', function() {
+  var st = store(), k = todayKey();
+  answers = st[k] ? (st[k].answers || {}) : {};
+  document.getElementById('nav').style.display = 'flex';
+  showPage('pg-check');
+  renderQuestions(); updateScore(); renderAlerts();
+  if (allAnswered(answers)) document.getElementById('done-wrap').style.display = 'block';
+});
+
+document.getElementById('btn-stats').addEventListener('click', function() { showPage('pg-stats'); });
+document.getElementById('btn-restart').addEventListener('click', function() {
+  exitEdit(); answers = {};
+  document.getElementById('nav').style.display = 'none';
+  showPage('pg-intro');
+});
+
+document.querySelectorAll('#nav button').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    if (editMode) { exitEdit(); loadToday(); }
+    showPage(this.dataset.pg);
+  });
+});
+
+function exitEdit() { editMode = false; editDate = null; editOriginal = null; document.getElementById('edit-banner').style.display = 'none'; }
+
+function loadToday() {
+  var st = store(), k = todayKey();
+  answers = st[k] ? (st[k].answers || {}) : {};
+  renderQuestions(); updateScore(); renderAlerts();
+  document.getElementById('done-wrap').style.display = allAnswered(answers) ? 'block' : 'none';
+}
+
+function startEdit(key) {
+  var st = store();
+  editMode = true; editDate = key;
+  editOriginal = st[key] ? JSON.parse(JSON.stringify(st[key])) : null;
+  answers = (st[key] && st[key].answers) ? JSON.parse(JSON.stringify(st[key].answers)) : {};
+  selCal = key;
+  document.getElementById('nav').style.display = 'flex';
+  document.getElementById('alerts-wrap').innerHTML = '';
+  document.getElementById('done-wrap').style.display = 'none';
+  showPage('pg-check'); renderEditBanner(); renderQuestions(); updateScore();
+  window.scrollTo(0, 0);
+}
+
+function finishEdit() { var k = editDate; exitEdit(); loadToday(); selCal = k; showPage('pg-cal'); }
+function cancelEdit() {
+  var st = store(), k = editDate;
+  if (editOriginal) st[k] = editOriginal; else delete st[k];
+  save(st); exitEdit(); loadToday(); selCal = k; showPage('pg-cal');
+}
+
+function renderEditBanner() {
+  var b = document.getElementById('edit-banner');
+  var pts = editDate.split('-');
+  var ds = parseInt(pts[2]) + ' ' + MONTHS[parseInt(pts[1]) - 1] + ' ' + pts[0];
+  b.style.display = 'block';
+  b.innerHTML =
+    '<div style="background:linear-gradient(135deg,#1a1400,#2a2200);border:1px solid #6a5200;border-radius:12px;padding:12px 14px;margin-bottom:12px;">' +
+      '<div style="font-size:10px;letter-spacing:3px;color:#FFD700;text-transform:uppercase;margin-bottom:4px;">&#9998; Режим редактирования</div>' +
+      '<div style="font-size:14px;color:#fff;font-weight:700;margin-bottom:2px;">' + ds + '</div>' +
+      '<div style="font-size:11px;color:#9a8a3a;line-height:1.4;">Нажимай кнопки, чтобы перезаписать ответы за этот день.</div>' +
+      '<div style="display:flex;gap:8px;margin-top:10px;">' +
+        '<button id="edit-save" style="flex:1;border-radius:8px;padding:11px;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#0a2a0a,#0d3a18);border:1px solid #1a5a1a;color:#53C546;">&#10003; ГОТОВО</button>' +
+        '<button id="edit-cancel" style="flex:1;border-radius:8px;padding:11px;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#1a0a10,#180d14);border:1px solid #5a1a2a;color:#f07080;">&#10007; ОТМЕНА</button>' +
+      '</div>' +
+    '</div>';
+  document.getElementById('edit-save').addEventListener('click', finishEdit);
+  document.getElementById('edit-cancel').addEventListener('click', cancelEdit);
+}
+
+document.getElementById('cal-prev').addEventListener('click', function() { calM--; if (calM < 0) { calM = 11; calY--; } renderCal(); });
+document.getElementById('cal-next').addEventListener('click', function() { calM++; if (calM > 11) { calM = 0; calY++; } renderCal(); });
+
+function yesNoControls(q, cur) {
+  var has = (cur !== undefined);
+  var yS = !has ? '' : (cur === true ? 'box-shadow:0 0 0 2px #53C546 inset;' : 'opacity:.4;');
+  var nS = !has ? '' : (cur === false ? 'box-shadow:0 0 0 2px #E72930 inset;' : 'opacity:.4;');
+  return '<div class="btnrow">' +
+    '<button class="ybtn" data-qid="' + q.id + '" data-yes="1" style="' + yS + '">ДА</button>' +
+    '<button class="nbtn" data-qid="' + q.id + '" data-yes="0" style="' + nS + '">НЕТ</button>' +
+    '</div>';
+}
+
+function vapeControls(cur) {
+  function vs(val) { return cur === undefined ? '' : (cur === val ? 'box-shadow:0 0 0 2px #4FCEE4 inset;' : 'opacity:.4;'); }
+  return '<div class="vq">Как курил' + (editMode ? ' в этот день' : ' сегодня') + '?</div><div class="vgrid">' +
+    '<button class="vbtn vg" data-v="vaporizer" style="' + vs('vaporizer') + '">&#128168; Вапорайзер<br><span style="font-size:10px;opacity:.7;">+1 очко</span></button>' +
+    '<button class="vbtn vg" data-v="none" style="' + vs('none') + '">&#9728;&#65039; Не курил<br><span style="font-size:10px;opacity:.7;">+1 очко</span></button>' +
+    '<button class="vbtn vb" data-v="joint" style="' + vs('joint') + '">&#128683; Косяк<br><span style="font-size:10px;opacity:.7;">0 очков</span></button>' +
+    '<button class="vbtn vb" data-v="bong" style="' + vs('bong') + '">&#128683; Бонг<br><span style="font-size:10px;opacity:.7;">0 очков</span></button>' +
+    '<button class="vbtn vn" data-v="none" style="' + vs('none') + '">&#10060; Вообще не курил</button>' +
+    '</div>';
+}
+
+function cardClass(q) {
+  var ia = isAnswered(q, answers);
+  var cls = 'card' + (q.spc || q.vape ? ' spc' : '');
+  if (ia) { var y = q.vape ? (answers.vape === 'none' || answers.vape === 'vaporizer') : answers[q.id]; cls += ' ' + (y ? 'yes' : 'no'); }
+  return cls;
+}
+
+function cardInner(q) {
+  var ia = isAnswered(q, answers);
+  var badge = q.spc ? '<span class="badge">+2</span>' : q.vape ? '<span class="badge2">+1</span>' : '';
+  var res = '';
+  if (ia) { var y = q.vape ? (answers.vape === 'none' || answers.vape === 'vaporizer') : answers[q.id]; res = y ? '✅' : '❌'; }
+  var head = '<div class="row"><div class="ico">' + q.ic + '</div><div style="flex:1;"><div class="qtitle">' + q.lb + badge + '</div><div class="qdesc">' + q.ds + '</div></div><div class="qres">' + res + '</div></div>';
+  var body;
+  if (editMode) { body = q.vape ? vapeControls(answers.vape) : yesNoControls(q, answers[q.id]); if (ia) body += makeToast(q, answers); }
+  else if (!ia) { body = q.vape ? vapeControls(undefined) : yesNoControls(q, undefined); }
+  else { body = makeToast(q, answers); }
+  return head + body;
+}
+
+function bindCardButtons(root) {
+  var yn = root.querySelectorAll('[data-qid]');
+  for (var j=0; j<yn.length; j++) yn[j].addEventListener('click', function() { answerQ(this.dataset.qid, this.dataset.yes === '1'); });
+  var vb = root.querySelectorAll('[data-v]');
+  for (var k=0; k<vb.length; k++) vb[k].addEventListener('click', function() { answerVape(this.dataset.v); });
 }
 
 function renderQuestions() {
-  const c=document.getElementById('questions-container'); c.innerHTML='';
-  questions.forEach(q=>{
-    const ans=answers[q.id]; const isAns=ans!==undefined;
-    const card=document.createElement('div');
-    let cls='question-card';
-    if(q.special) cls+=' quest-card';
-    if(isAns) cls+=(ans?' answered-yes':' answered-no');
-    if(isAns&&ans&&q.special) cls+=' special';
-    card.className=cls; card.id='card-'+q.id;
-    card.innerHTML=
-      '<div class="q-top">'+
-        '<div class="q-icon">'+q.icon+'</div>'+
-        '<div class="q-texts">'+
-          '<div class="q-title">'+q.label+(q.special?' <span class="q-badge">⚡ +2 очка</span>':'')+'</div>'+
-          '<div class="q-desc">'+q.desc+'</div>'+
-        '</div>'+
-        '<div class="q-result'+(isAns?'':' hidden')+'" id="result-'+q.id+'">'+(isAns?(ans?'✅':'❌'):'')+'</div>'+
-      '</div>'+
-      (!isAns?'<div class="q-buttons" id="btns-'+q.id+'"><button class="btn-yes" onclick="answer(\''+q.id+'\',true)">ДА</button><button class="btn-no" onclick="answer(\''+q.id+'\',false)">НЕТ</button></div>':'')+
-      (isAns?buildToast(q,ans):'');
-    c.appendChild(card);
-  });
+  var wrap = document.getElementById('q-wrap'); wrap.innerHTML = '';
+  for (var i=0; i<QS.length; i++) {
+    var q = QS[i], div = document.createElement('div');
+    div.className = cardClass(q); div.id = 'qc-' + q.id; div.innerHTML = cardInner(q);
+    wrap.appendChild(div);
+  }
+  bindCardButtons(wrap);
 }
 
-function renderDots() {
-  const d=document.getElementById('dots'); d.innerHTML='';
-  questions.forEach(q=>{
-    const dot=document.createElement('div');
-    const ans=answers[q.id];
-    let cls='dot';
-    if(ans===true) cls+=q.special?' special-yes':' yes';
-    if(ans===false) cls+=' no';
-    dot.className=cls; dot.id='dot-'+q.id; d.appendChild(dot);
-  });
+function refreshCard(id) {
+  var q = null;
+  for (var i=0; i<QS.length; i++) if (QS[i].id === id) { q = QS[i]; break; }
+  if (!q) return;
+  var card = document.getElementById('qc-' + id); if (!card) return;
+  card.className = cardClass(q); card.innerHTML = cardInner(q); bindCardButtons(card);
 }
 
-function answer(id,val) {
-  const card=document.getElementById('card-'+id);
-  card.classList.add('anim');
-  setTimeout(function(){
-    answers[id]=val;
-    card.classList.remove('anim');
-    const q=questions.find(function(x){return x.id===id;});
-    card.classList.add(val?'answered-yes':'answered-no');
-    if(val&&q.special) card.classList.add('special');
-    const btns=document.getElementById('btns-'+id); if(btns) btns.remove();
-    const r=document.getElementById('result-'+id); r.textContent=val?'✅':'❌'; r.classList.remove('hidden');
-    const t=document.createElement('div'); t.innerHTML=buildToast(q,val);
-    card.appendChild(t.firstElementChild);
-    renderDots(); updateScore(); checkAllDone();
-  },250);
-}
+function answerQ(id, val) { answers[id] = val; saveDay(); updateScore(); refreshCard(id); checkDone(); }
+function answerVape(v) { answers.vape = v; saveDay(); updateScore(); refreshCard('vape'); checkDone(); }
 
 function updateScore() {
-  const score=calcScore(answers); const rank=getRank(score);
-  document.getElementById('score-display').innerHTML=score+' <span class="score-max">/ '+MAX_SCORE+'</span>';
-  const rd=document.getElementById('rank-display'); rd.textContent=rank.title; rd.style.color=rank.color;
+  var s = calcScore(answers), rk = getRank(s);
+  document.getElementById('sc-num').innerHTML = s + ' <span style="font-size:13px;color:#445566;">/ ' + MX + '</span>';
+  var rv = document.getElementById('rk-val'); rv.textContent = rk.nm; rv.style.color = rk.cl;
 }
 
-function checkAllDone() {
-  if(Object.keys(answers).length===questions.length){
-    document.getElementById('stats-trigger').classList.remove('hidden');
-    saveTodayToStorage();
+function checkDone() {
+  if (editMode) return;
+  if (allAnswered(answers)) { document.getElementById('done-wrap').style.display = 'block'; saveDay(); }
+}
+
+function saveDay() {
+  var st = store(), k = activeKey(), a = {};
+  for (var x in answers) a[x] = answers[x];
+  st[k] = { answers: a, score: calcScore(answers), ts: Date.now() };
+  save(st);
+}
+
+function calcMissStreak(st, id) {
+  var miss = 0, d = new Date();
+  for (var i=1; i<=30; i++) {
+    var dd = new Date(d); dd.setDate(d.getDate()-i);
+    var k = dd.getFullYear()+'-'+pad(dd.getMonth()+1)+'-'+pad(dd.getDate());
+    if (!st[k]) break;
+    if (st[k].answers && st[k].answers[id] === false) miss++; else break;
+  }
+  return miss;
+}
+
+function renderAlerts() {
+  var wrap = document.getElementById('alerts-wrap'); wrap.innerHTML = '';
+  var st = store(), cf = getConf();
+  for (var i=0; i<ALERT_TRACKS.length; i++) {
+    var t = ALERT_TRACKS[i], miss = calcMissStreak(st, t.id);
+    if (miss < 3) continue;
+    if (cf[todayKey() + '_' + t.id]) continue;
+    var col = miss >= 7 ? '#FF2200' : miss >= 5 ? '#FF6600' : '#FF6B35';
+    var urg = miss >= 7 ? '&#128308; КРИТИЧНО' : miss >= 5 ? '&#128992; СЕРЬЁЗНО' : '&#9888;&#65039; ТРЕВОГА';
+    var card = document.createElement('div'); card.className = 'alcard';
+    card.innerHTML =
+      '<div class="row" style="gap:10px;margin-bottom:10px;"><div style="font-size:24px;">' + t.ic + '</div>' +
+      '<div><div style="font-size:12px;font-weight:900;color:' + col + ';">' + urg + '</div>' +
+      '<div style="font-size:12px;color:#cc7744;margin-top:2px;">Ты <strong style="color:' + col + ';">' + t.ms + '</strong> уже <strong style="color:' + col + ';">' + miss + ' дня подряд</strong></div></div></div>' +
+      '<div class="albd"><div style="font-size:12px;color:#FFB830;font-weight:700;margin-bottom:4px;">&#128172; Связаться с Терминалом</div>' +
+      '<div style="font-size:11px;color:#886644;line-height:1.5;">Открой чат и обсуди тему: <em style="color:#FFB830;">' + t.lb + '</em>. Попроси мотивацию или план.</div></div>' +
+      '<button class="cfbtn" data-aid="' + t.id + '">&#9989; Поговорил с Терминалом</button>';
+    wrap.appendChild(card);
+  }
+  var cfBtns = wrap.querySelectorAll('[data-aid]');
+  for (var j=0; j<cfBtns.length; j++) {
+    cfBtns[j].addEventListener('click', function() {
+      var cf = getConf(); cf[todayKey() + '_' + this.dataset.aid] = true; setConf(cf); renderAlerts();
+    });
   }
 }
 
-function saveTodayToStorage() {
-  const store=loadStorage(); const key=todayKey();
-  const ans={}; for(const k in answers) ans[k]=answers[k];
-  store[key]={answers:ans,score:calcScore(answers),ts:Date.now()};
-  saveStorage(store);
-}
-
-function showStats() {
-  const score=calcScore(answers); const rank=getRank(score);
-  const percent=Math.round(score/MAX_SCORE*100);
-  const girlDone=answers['girl']===true;
-  document.getElementById('stat-icon').textContent=rank.icon;
-  const sr=document.getElementById('stat-rank'); sr.textContent=rank.title; sr.style.color=rank.color;
-  document.getElementById('stat-score').innerHTML=score+'<span style="font-size:18px;color:#445566;font-weight:400;"> / '+MAX_SCORE+'</span>';
-  const rc=document.getElementById('rank-card');
-  rc.style.border='1px solid '+rank.color+'44'; rc.style.boxShadow='0 0 40px '+rank.color+'22';
-  document.getElementById('stat-percent').textContent=percent+'%';
-  const fill=document.getElementById('progress-fill');
-  fill.style.background=score>=5?'linear-gradient(90deg,#FFD700,#4FCEE4)':score>=4?'linear-gradient(90deg,#4FCEE4,#53C546)':score>=3?'linear-gradient(90deg,#FFBE4C,#4FCEE4)':'linear-gradient(90deg,#E72930,#FFBE4C)';
-  setTimeout(function(){fill.style.width=percent+'%';},100);
-  const dr=document.getElementById('detail-rows'); dr.innerHTML='';
-  questions.forEach(function(q){
-    const yes=answers[q.id]; const eff=getEffect(q,yes);
-    const pts=yes?(q.special?'+2':'+1'):'+0';
-    const row=document.createElement('div'); row.className='detail-row';
-    row.innerHTML='<span class="detail-icon">'+q.icon+'</span>'+
-      '<div class="detail-info"><div class="detail-name">'+q.label+(q.special?' ⚡':'')+'</div>'+
-      '<div class="detail-effect" style="color:'+(yes?(q.special?'#FFD700':'#7de875'):'#f07080')+'">'+eff.icon+' '+eff.title+'</div></div>'+
-      '<span style="font-size:13px;font-weight:700;flex-shrink:0;color:'+(yes?(q.special?'#FFD700':'#53C546'):'#E72930')+'">'+pts+'</span>'+
-      '<span style="font-size:15px;flex-shrink:0;margin-left:4px;">'+(yes?'✅':'❌')+'</span>';
-    dr.appendChild(row);
-  });
-  const qcard=document.getElementById('stat-quote-card');
-  const qtxt=document.getElementById('stat-quote');
-  if(girlDone){
-    qcard.classList.add('gold'); qtxt.classList.add('gold');
-    qtxt.textContent=girlQuotes[Math.floor(Math.random()*girlQuotes.length)];
-  } else {
-    qcard.classList.remove('gold'); qtxt.classList.remove('gold');
-    qtxt.textContent=quotes[Math.min(score,7)]||quotes[0];
+function renderStats() {
+  var s = calcScore(answers), rk = getRank(s), pct = Math.round(s / MX * 100);
+  document.getElementById('rk-ico').innerHTML = rk.ic;
+  var rknm = document.getElementById('rk-nm'); rknm.textContent = rk.nm; rknm.style.color = rk.cl;
+  document.getElementById('rk-sc').innerHTML = s + '<span style="font-size:18px;color:#445566;font-weight:400;"> / ' + MX + '</span>';
+  var rc = document.getElementById('rk-card'); rc.style.border = '1px solid ' + rk.cl + '44'; rc.style.boxShadow = '0 0 30px ' + rk.cl + '22';
+  document.getElementById('p-pct').textContent = pct + '%';
+  var pf = document.getElementById('p-fill');
+  pf.style.background = s >= 6 ? 'linear-gradient(90deg,#FFD700,#4FCEE4)' : s >= 5 ? 'linear-gradient(90deg,#4FCEE4,#53C546)' : s >= 3 ? 'linear-gradient(90deg,#FFBE4C,#4FCEE4)' : 'linear-gradient(90deg,#E72930,#FFBE4C)';
+  setTimeout(function() { pf.style.width = pct + '%'; }, 100);
+  var dw = document.getElementById('det-wrap'); dw.innerHTML = '';
+  for (var i=0; i<QS.length; i++) {
+    var q = QS[i], e = getEffect(q, answers);
+    var y = q.vape ? (answers.vape === 'none' || answers.vape === 'vaporizer') : answers[q.id];
+    var pts = y ? (q.spc ? '+2' : '+1') : '+0';
+    var row = document.createElement('div'); row.className = 'drow';
+    row.innerHTML = '<span style="font-size:16px;flex-shrink:0;">' + q.ic + '</span>' +
+      '<div style="flex:1;"><div style="font-size:12px;color:#aab8c8;margin-bottom:2px;">' + q.lb + (q.spc ? ' ⚡' : '') + '</div>' +
+      '<div style="font-size:11px;color:' + (y ? (q.spc ? '#FFD700' : '#7de875') : '#f07080') + ';">' + e.ic + ' ' + e.tt + '</div></div>' +
+      '<span style="font-size:12px;font-weight:700;color:' + (y ? (q.spc ? '#FFD700' : '#53C546') : '#E72930') + ';">' + pts + '</span>' +
+      '<span style="font-size:15px;margin-left:6px;">' + (y ? '✅' : '❌') + '</span>';
+    dw.appendChild(row);
   }
-  const store=loadStorage(); const st=calcStreaks(store);
-  document.getElementById('streak-num').textContent=st.streak;
-  document.getElementById('best-streak-num').textContent=st.best;
-  document.getElementById('total-days-num').textContent=st.total;
-}
-
-function calcStreaks(store) {
-  const keys=Object.keys(store).sort(); const total=keys.length;
-  if(!total) return {streak:0,best:0,total:0};
-  let streak=0,best=0,cur=0;
-  const d=new Date();
-  for(;;){
-    const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-    if(store[k]){streak++;d.setDate(d.getDate()-1);}else break;
+  var st = store(), sk = calcStreaks(st);
+  document.getElementById('st-cur').textContent = sk.streak;
+  document.getElementById('st-best').textContent = sk.best;
+  document.getElementById('st-total').textContent = sk.total;
+  var as = calcAllStats(st);
+  document.getElementById('m-val').textContent = as.credits.toLocaleString('ru-RU');
+  var g = document.getElementById('as-wrap'); g.innerHTML = '';
+  var qinfo = [
+    {id:'work',  ic:'&#9876;&#65039;',   lb:'Работа',   yl:'Ходил',       nl:'Пропустил'},
+    {id:'gym',   ic:'&#127947;&#65039;', lb:'Зал',      yl:'Ходил',       nl:'Пропустил'},
+    {id:'dutch', ic:'&#127757;',         lb:'Нидерл.',  yl:'Учился',      nl:'Пропустил'},
+    {id:'food',  ic:'&#127807;',         lb:'Питание',  yl:'Правильное',  nl:'Нарушил'},
+    {id:'care',  ic:'&#10024;',          lb:'Уход',     yl:'Выполнил',    nl:'Пропустил'},
+    {id:'money', ic:'&#128184;',         lb:'Расходы',  yl:'Без трат',    nl:'Тратил'},
+    {id:'girl',  ic:'&#127801;',         lb:'Девушка',  yl:'Говорил',     nl:'Не говорил'}
+  ];
+  for (var j=0; j<qinfo.length; j++) {
+    var qi = qinfo[j], c = as.cnt[qi.id] || {y:0,n:0};
+    var tot = c.y + c.n, pc = tot > 0 ? Math.round(c.y / tot * 100) : 0;
+    var card = document.createElement('div'); card.className = 'ascard';
+    card.innerHTML = '<div style="font-size:16px;margin-bottom:4px;">' + qi.ic + '</div>' +
+      '<div style="font-size:9px;color:#445566;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;">' + qi.lb + '</div>' +
+      '<div class="asrow"><span class="ask">' + qi.yl + '</span><span class="asv gr">' + c.y + ' дн.</span></div>' +
+      '<div class="asrow"><span class="ask">' + qi.nl + '</span><span class="asv rd">' + c.n + ' дн.</span></div>' +
+      '<div class="asrow"><span class="ask">%</span><span class="asv ' + (pc >= 70 ? 'cy' : pc >= 50 ? 'gd' : 'rd') + '">' + pc + '%</span></div>';
+    g.appendChild(card);
   }
-  let prev=null;
-  keys.forEach(function(k){
-    if(prev){const diff=(new Date(k)-new Date(prev))/86400000;cur=diff===1?cur+1:1;}else cur=1;
-    if(cur>best)best=cur; prev=k;
-  });
-  return {streak:streak,best:best,total:total};
+  var vc = as.vc, vt = vc.total || 1;
+  var vcard = document.createElement('div'); vcard.className = 'ascard'; vcard.style.gridColumn = 'span 2';
+  vcard.innerHTML = '<div style="font-size:16px;margin-bottom:4px;">&#128168;</div>' +
+    '<div style="font-size:9px;color:#445566;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;">Курение</div>' +
+    '<div class="asrow"><span class="ask">&#9728; Не курил</span><span class="asv gr">' + vc.clean + ' дн. (' + Math.round(vc.clean/vt*100) + '%)</span></div>' +
+    '<div class="asrow"><span class="ask">&#128168; Вапорайзер</span><span class="asv gr">' + vc.vap + ' дн. (' + Math.round(vc.vap/vt*100) + '%)</span></div>' +
+    '<div class="asrow"><span class="ask">&#128683; Косяк/Бонг</span><span class="asv or">' + (vc.joint+vc.bong) + ' дн. (' + Math.round((vc.joint+vc.bong)/vt*100) + '%)</span></div>' +
+    '<div class="asrow" style="border-top:1px solid #1e3a5a;margin-top:4px;padding-top:4px;"><span class="ask">Чисто+вап</span><span class="asv cy">' + (vc.clean+vc.vap) + ' из ' + vt + '</span></div>';
+  g.appendChild(vcard);
+  var qc = document.getElementById('q-card2'), qt = document.getElementById('q-txt2');
+  if (answers.girl === true) { qc.classList.add('gld'); qt.classList.add('gld'); qt.textContent = GQUOTES[Math.floor(Math.random() * GQUOTES.length)]; }
+  else { qc.classList.remove('gld'); qt.classList.remove('gld'); qt.textContent = QUOTES[Math.min(s, 8)] || QUOTES[0]; }
 }
 
-function initCal(){ const now=new Date(); calYear=now.getFullYear(); calMonth=now.getMonth(); renderCal(); }
-
-function renderCal(){
-  document.getElementById('cal-month-label').textContent=MONTH_NAMES[calMonth]+' '+calYear;
-  const store=loadStorage(); const daysEl=document.getElementById('cal-days'); daysEl.innerHTML='';
-  const firstDay=new Date(calYear,calMonth,1).getDay();
-  const startOffset=firstDay===0?6:firstDay-1;
-  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
-  const today=todayKey();
-  for(let i=0;i<startOffset;i++){const el=document.createElement('div');el.className='cal-day empty';daysEl.appendChild(el);}
-  for(let d=1;d<=daysInMonth;d++){
-    const key=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    const entry=store[key]; const el=document.createElement('div');
-    let cls='cal-day';
-    if(key===today) cls+=' today';
-    if(entry!==undefined) cls+=' has-data score-'+entry.score;
-    if(selectedCalDate===key) cls+=' selected';
-    el.className=cls;
-    el.innerHTML=d+(entry!==undefined?'<div class="score-pip"></div>':'');
-    if(entry!==undefined||key===today) el.onclick=(function(k){return function(){selectCalDay(k);};})(key);
-    daysEl.appendChild(el);
+function calcStreaks(st) {
+  var keys = Object.keys(st).sort(), total = keys.length;
+  if (!total) return { streak:0, best:0, total:0 };
+  var streak = 0, best = 0, cur = 0, d = new Date();
+  for (;;) {
+    var k = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+    if (st[k]) { streak++; d.setDate(d.getDate()-1); } else break;
   }
-  renderCalDetail(selectedCalDate);
+  var prev = null;
+  for (var i=0; i<keys.length; i++) {
+    var kk = keys[i];
+    if (prev) { var diff = (new Date(kk) - new Date(prev)) / 86400000; cur = diff === 1 ? cur+1 : 1; } else cur = 1;
+    if (cur > best) best = cur;
+    prev = kk;
+  }
+  return { streak:streak, best:best, total:total };
 }
 
-function selectCalDay(key){ selectedCalDate=(selectedCalDate===key)?null:key; renderCal(); }
-
-function renderCalDetail(key){
-  const area=document.getElementById('cal-detail-area');
-  if(!key){area.innerHTML='';return;}
-  const store=loadStorage(); const entry=store[key];
-  const parts=key.split('-');
-  const dateStr=parseInt(parts[2])+' '+MONTH_NAMES[parseInt(parts[1])-1]+' '+parts[0];
-  if(!entry){area.innerHTML='<div class="cal-detail"><div class="cal-no-data">Нет данных за этот день</div></div>';return;}
-  const rank=getRank(entry.score);
-  let rows='';
-  questions.forEach(function(q){
-    const yes=entry.answers&&entry.answers[q.id];
-    const eff=yes?q.yes:q.no;
-    rows+='<div class="cal-row">'+
-      '<span style="font-size:15px;">'+q.icon+'</span>'+
-      '<span style="flex:1;font-size:12px;color:#aab8c8;">'+q.label+'</span>'+
-      '<span style="font-size:10px;color:'+(yes?(q.special?'#FFD700':'#7de875'):'#f07080')+';text-align:right;padding-right:8px;">'+eff.icon+' '+eff.title+'</span>'+
-      '<span>'+(yes?'✅':'❌')+'</span></div>';
-  });
-  area.innerHTML='<div class="cal-detail"><div class="cal-detail-header">'+
-    '<div class="cal-detail-date">'+dateStr+'</div>'+
-    '<div style="font-size:20px;font-weight:900;color:'+rank.color+'">'+rank.icon+' '+entry.score+'/'+MAX_SCORE+'</div>'+
-    '</div>'+rows+'</div>';
+function calcAllStats(st) {
+  var keys = Object.keys(st), credits = 0, cnt = {};
+  for (var i=0; i<QS.length; i++) cnt[QS[i].id] = {y:0, n:0};
+  var vc = { clean:0, vap:0, joint:0, bong:0, total:0 };
+  for (var j=0; j<keys.length; j++) {
+    var e = st[keys[j]]; if (!e || !e.answers) continue;
+    for (var k2=0; k2<QS.length; k2++) {
+      var q = QS[k2];
+      if (q.vape) { var v = e.answers.vape; vc.total++; if (v === 'none') vc.clean++; else if (v === 'vaporizer') vc.vap++; else if (v === 'joint') vc.joint++; else if (v === 'bong') vc.bong++; }
+      else { if (e.answers[q.id] === true) { cnt[q.id].y++; if (q.id === 'work') credits += 100; } if (e.answers[q.id] === false) cnt[q.id].n++; }
+    }
+  }
+  return { credits:credits, cnt:cnt, vc:vc };
 }
 
-function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCal();}
-function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCal();}
+function initCal() { var n = new Date(); calY = n.getFullYear(); calM = n.getMonth(); }
 
-function exportData() {
-  const store = loadStorage();
-  const keys = Object.keys(store);
-  if (!keys.length) { showBackupMsg('Нет данных для экспорта', false); return; }
-  const json = JSON.stringify(store, null, 2);
-  const blob = new Blob([json], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'jedi-archive-' + todayKey() + '.json';
-  a.click();
-  URL.revokeObjectURL(url);
-  showBackupMsg('Архив скачан (' + keys.length + ' дней)', true);
+function renderCal() {
+  if (calY === undefined) initCal();
+  document.getElementById('cal-mo').textContent = MONTHS[calM] + ' ' + calY;
+  var st = store(), wrap = document.getElementById('cal-days');
+  wrap.innerHTML = '';
+  var fd = new Date(calY, calM, 1).getDay(), offset = fd === 0 ? 6 : fd - 1;
+  var dim = new Date(calY, calM+1, 0).getDate(), today = todayKey();
+  for (var i=0; i<offset; i++) { var e = document.createElement('div'); e.className = 'calday'; wrap.appendChild(e); }
+  for (var d=1; d<=dim; d++) {
+    var key = calY+'-'+pad(calM+1)+'-'+pad(d), entry = st[key], el = document.createElement('div');
+    var cls = 'calday has' + (key === today ? ' today' : '') + (entry ? ' s'+entry.score : '') + (selCal === key ? ' sel' : '');
+    el.className = cls;
+    el.innerHTML = d + (entry ? '<div class="pip"></div>' : '');
+    el.addEventListener('click', (function(k) { return function() { selCal = selCal === k ? null : k; renderCal(); }; })(key));
+    wrap.appendChild(el);
+  }
+  renderCalDetail(selCal);
 }
 
-function importData(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
+function renderCalDetail(key) {
+  var wrap = document.getElementById('cal-det'); wrap.innerHTML = '';
+  if (!key) return;
+  var st = store(), entry = st[key];
+  var pts = key.split('-'), ds = parseInt(pts[2]) + ' ' + MONTHS[parseInt(pts[1])-1] + ' ' + pts[0];
+  if (!entry) {
+    wrap.innerHTML = '<div class="caldet"><div class="nodata">Нет данных за этот день</div>' +
+      '<button class="restbtn" data-editkey="' + key + '">&#9998; Заполнить день</button></div>';
+    var fb = wrap.querySelector('[data-editkey]');
+    if (fb) fb.addEventListener('click', function() { startEdit(this.dataset.editkey); });
+    return;
+  }
+  var rk = getRank(entry.score), rows = '';
+  for (var i=0; i<QS.length; i++) {
+    var q = QS[i], y, ei, et;
+    if (q.vape) {
+      var v = entry.answers && entry.answers.vape, ve = VAPE[v] || VAPE['none'];
+      y = v === 'none' || v === 'vaporizer'; ei = ve.ic; et = ve.tt;
+    } else {
+      y = entry.answers && entry.answers[q.id]; var ef = y ? q.yes : q.no; ei = ef.ic; et = ef.tt;
+    }
+    rows += '<div class="calrow"><span style="font-size:14px;">' + q.ic + '</span>' +
+      '<span style="flex:1;font-size:11px;color:#aab8c8;">' + q.lb + '</span>' +
+      '<span style="font-size:10px;color:' + (y ? '#7de875' : '#f07080') + ';text-align:right;padding-right:6px;">' + ei + ' ' + et + '</span>' +
+      '<span>' + (y ? '✅' : '❌') + '</span></div>';
+  }
+  wrap.innerHTML = '<div class="caldet"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">' +
+    '<div style="font-size:13px;font-weight:700;color:#4FCEE4;">' + ds + '</div>' +
+    '<div style="font-size:18px;font-weight:900;color:' + rk.cl + ';">' + rk.ic + ' ' + entry.score + '/' + MX + '</div>' +
+    '</div>' + rows +
+    '<button class="restbtn" data-editkey="' + key + '" style="margin-top:12px;">&#9998; Редактировать день</button></div>';
+  var eb = wrap.querySelector('[data-editkey]');
+  if (eb) eb.addEventListener('click', function() { startEdit(this.dataset.editkey); });
+}
+
+// BACKUP
+document.getElementById('bk-export').addEventListener('click', function() {
+  var st = store(), keys = Object.keys(st);
+  if (!keys.length) { showBkMsg('Нет данных для экспорта', false); return; }
+  var blob = new Blob([JSON.stringify(st, null, 2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'jedi-archive-' + todayKey() + '.json';
+  a.click(); URL.revokeObjectURL(url);
+  showBkMsg('Архив скачан (' + keys.length + ' дней)', true);
+});
+
+document.getElementById('bk-import-btn').addEventListener('click', function() {
+  document.getElementById('bk-import').click();
+});
+
+document.getElementById('bk-import').addEventListener('change', function(e) {
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
   reader.onload = function(ev) {
     try {
-      const data = JSON.parse(ev.target.result);
+      var data = JSON.parse(ev.target.result);
       if (typeof data !== 'object' || Array.isArray(data)) throw new Error();
-      const store = loadStorage();
-      const before = Object.keys(store).length;
-      Object.assign(store, data);
-      saveStorage(store);
+      var st = store(), before = Object.keys(st).length;
+      Object.assign(st, data); save(st);
       e.target.value = '';
+      var added = Object.keys(st).length - before;
+      showBkMsg('Загружено! Дней: ' + Object.keys(st).length + (added > 0 ? ' (+' + added + ' новых)' : ''), true);
       renderCal();
-      const added = Object.keys(store).length - before;
-      showBackupMsg('Загружено! Всего дней: ' + Object.keys(store).length + (added > 0 ? ' (+' + added + ' новых)' : ''), true);
-    } catch(err) {
-      showBackupMsg('Ошибка: неверный формат файла', false);
-    }
+    } catch(err) { showBkMsg('Ошибка: неверный формат файла', false); }
   };
   reader.readAsText(file);
-}
+});
 
-function showBackupMsg(text, ok) {
-  const el = document.getElementById('backup-msg');
-  el.innerHTML = '<div class="backup-toast ' + (ok ? 'ok' : 'err') + '">' + (ok ? '✅' : '❌') + ' ' + text + '</div>';
-  setTimeout(function(){ el.innerHTML = ''; }, 4000);
-}
-
-function navTo(id){
-  ['checklist','stats-screen','cal-screen'].forEach(function(s){document.getElementById(s).classList.add('hidden');});
-  document.getElementById(id).classList.remove('hidden');
-  ['nav-check','nav-stats','nav-cal'].forEach(function(b){document.getElementById(b).classList.remove('active');});
-  if(id==='checklist')    document.getElementById('nav-check').classList.add('active');
-  if(id==='stats-screen'){document.getElementById('nav-stats').classList.add('active'); showStats();}
-  if(id==='cal-screen')  {document.getElementById('nav-cal').classList.add('active');   initCal();}
-}
-
-function restart(){
-  answers={};
-  document.getElementById('main-nav').classList.add('hidden');
-  ['checklist','stats-screen','cal-screen'].forEach(function(s){document.getElementById(s).classList.add('hidden');});
-  document.getElementById('intro').classList.remove('hidden');
+function showBkMsg(txt, ok) {
+  var el = document.getElementById('bk-msg');
+  el.innerHTML = '<div class="bkmsg ' + (ok ? 'ok' : 'err') + '">' + (ok ? '✅' : '❌') + ' ' + txt + '</div>';
+  setTimeout(function() { el.innerHTML = ''; }, 4000);
 }
 </script>
 </body>
