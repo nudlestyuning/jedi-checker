@@ -156,8 +156,6 @@ html, body { background: #07070f; color: #fff; font-family: -apple-system, sans-
 .wsub  { font-size: 11px; color: #445566; line-height: 1.4; }
 .lbl { font-size: 10px; letter-spacing: 5px; color: #4FCEE4; text-transform: uppercase; margin-bottom: 8px; opacity: .8; }
 .nodata { text-align: center; color: #334455; font-size: 13px; padding: 20px 0; font-style: italic; }
-
-/* BACKUP */
 .bkbox { background: #0d1a2e; border: 1px solid #1e3a5a; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; }
 .bkttl { font-size: 10px; letter-spacing: 3px; color: #445566; text-transform: uppercase; margin-bottom: 12px; }
 .bkrow { display: flex; gap: 10px; }
@@ -171,7 +169,7 @@ html, body { background: #07070f; color: #fff; font-family: -apple-system, sans-
 </head>
 <body>
 
-<!-- INTRO -->
+<!-- ════ INTRO ════ -->
 <div id="pg-intro" style="display:flex;">
   <div class="wrap" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
     <div style="width:3px;height:80px;background:linear-gradient(to bottom,transparent,#4FCEE4,#4FCEE4,transparent);border-radius:4px;box-shadow:0 0 20px #4FCEE4;margin:0 auto 28px;"></div>
@@ -184,7 +182,7 @@ html, body { background: #07070f; color: #fff; font-family: -apple-system, sans-
   </div>
 </div>
 
-<!-- CHECKLIST -->
+<!-- ════ CHECKLIST ════ -->
 <div id="pg-check" style="display:none;">
   <div class="wrap">
     <div style="text-align:center;margin-bottom:16px;">
@@ -205,7 +203,7 @@ html, body { background: #07070f; color: #fff; font-family: -apple-system, sans-
   </div>
 </div>
 
-<!-- STATS -->
+<!-- ════ STATS ════ -->
 <div id="pg-stats" style="display:none;">
   <div class="wrap">
     <div style="text-align:center;margin-bottom:14px;">
@@ -243,7 +241,7 @@ html, body { background: #07070f; color: #fff; font-family: -apple-system, sans-
   </div>
 </div>
 
-<!-- CALENDAR -->
+<!-- ════ CALENDAR ════ -->
 <div id="pg-cal" style="display:none;">
   <div class="wrap">
     <div style="text-align:center;margin-bottom:14px;">
@@ -268,10 +266,10 @@ html, body { background: #07070f; color: #fff; font-family: -apple-system, sans-
       <div class="legit"><div class="legdot" style="background:#E72930;"></div>0-2</div>
     </div>
     <div class="bkbox">
-      <div class="bkttl">&#128190; Резервная копия архива</div>
+      <div class="bkttl">💾 Резервная копия архива</div>
       <div class="bkrow">
-        <button class="bkbtn bk-ex" id="bk-export">&#11015; Скачать</button>
-        <button class="bkbtn bk-im" id="bk-import-btn">&#11014; Загрузить</button>
+        <button class="bkbtn bk-ex" id="bk-export">⬇ Скачать</button>
+        <button class="bkbtn bk-im" id="bk-import-btn">⬆ Загрузить</button>
         <input type="file" id="bk-import" accept=".json" style="display:none">
       </div>
       <div id="bk-msg"></div>
@@ -280,7 +278,7 @@ html, body { background: #07070f; color: #fff; font-family: -apple-system, sans-
   </div>
 </div>
 
-<!-- WHY -->
+<!-- ════ WHY ════ -->
 <div id="pg-why" style="display:none;">
   <div class="wrap">
     <div style="text-align:center;margin-bottom:14px;">
@@ -292,39 +290,45 @@ html, body { background: #07070f; color: #fff; font-family: -apple-system, sans-
       <div style="font-size:16px;font-weight:900;letter-spacing:3px;margin-bottom:4px;">КОДЕКС ДИСЦИПЛИНЫ</div>
       <div style="font-size:11px;color:#445566;letter-spacing:2px;">Каждый день. Каждую неделю. Каждый месяц.</div>
     </div>
+
     <div class="whyperiod">&#9201;&#65039; Каждый день</div>
     <div class="whycard">
       <div class="whyitem"><div class="wdot o"></div><div><div class="wmain">Последний приём пищи — не позже 15:00</div><div class="wsub">После 15:00 только вода. Интервальное голодание — чистота разума и тела.</div></div></div>
       <div class="whyitem"><div class="wdot g"></div><div><div class="wmain">Уход за лицом: умывание + сыворотка + крем</div><div class="wsub">Ежедневный ритуал. Ухоженный джедай излучает уверенность.</div></div></div>
       <div class="whyitem"><div class="wdot c"></div><div><div class="wmain">Курение — только один раз через вапорайзер</div><div class="wsub">Не косяк, не бонг. Минимальный вред, максимальный контроль.</div></div></div>
     </div>
+
     <div class="whyperiod">&#128197; Каждую неделю</div>
     <div class="whycard">
       <div class="whyitem"><div class="wdot g"></div><div><div class="wmain">Тренировки — 5 раз в неделю</div><div class="wsub">3 пропуска подряд — дебаф «Скуфость».</div></div></div>
       <div class="whyitem"><div class="wdot c"></div><div><div class="wmain">После тренировки — 30–40 мин отдых в машине</div><div class="wsub">3–4 раза в неделю. Восстановление и перезагрузка.</div></div></div>
       <div class="whyitem"><div class="wdot p"></div><div><div class="wmain">Пятница 17:00 — терраса среди людей</div><div class="wsub">Социальная Сила не качается дома.</div></div></div>
     </div>
+
     <div class="whyperiod">&#128176; Каждый месяц</div>
     <div class="whycard">
       <div class="whyitem"><div class="wdot o"></div><div><div class="wmain">Откладывать 1500 евро сразу после зарплаты</div><div class="wsub">Сначала сбережения. Потом расходы.</div></div></div>
     </div>
+
     <div class="whyperiod">&#127807; Зачем правильное питание</div>
     <div class="whycard">
       <div class="whyitem"><div class="wdot g"></div><div><div class="wmain">Еда = топливо, а не удовольствие</div><div class="wsub">Чистое питание = энергия, острый ум, быстрое восстановление после зала.</div></div></div>
       <div class="whyitem"><div class="wdot g"></div><div><div class="wmain">80% результата в теле — это еда</div><div class="wsub">Зал без питания = строить дом без кирпичей. Мышцы растут на кухне.</div></div></div>
     </div>
+
     <div class="whyperiod">&#127801; Зачем контактировать с девушками</div>
     <div class="whycard">
       <div class="whyitem"><div class="wdot p"></div><div><div class="wmain">Любой контакт — улица, магазин, кафе</div><div class="wsub">Не нужна цель. Просто заговорить. Мышца смелости качается только в реальных контактах.</div></div></div>
       <div class="whyitem"><div class="wdot p"></div><div><div class="wmain">Страх проходит только через действие</div><div class="wsub">Каждый разговор — rep в зале социальной Силы. Без повторений — нет роста.</div></div></div>
     </div>
+
     <div style="background:linear-gradient(135deg,#080f1a,#0d1a2e);border:1px solid #1e3a5a;border-radius:12px;padding:14px 18px;text-align:center;margin-bottom:8px;">
       <div style="font-size:12px;color:#445566;line-height:1.8;font-style:italic;">"Дисциплина — это мост между целями и достижениями."</div>
     </div>
   </div>
 </div>
 
-<!-- NAV -->
+<!-- ════ NAV ════ -->
 <div id="nav" style="display:none;flex-direction:row;">
   <button data-pg="pg-check" id="nb0"><span class="ic">&#9876;&#65039;</span>Отчёт</button>
   <button data-pg="pg-stats" id="nb1"><span class="ic">&#128202;</span>Итоги</button>
@@ -333,6 +337,7 @@ html, body { background: #07070f; color: #fff; font-family: -apple-system, sans-
 </div>
 
 <script>
+// ── DATA ──
 var SK = 'jedi_v7', MX = 8;
 var MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 
@@ -400,17 +405,20 @@ var ALERT_TRACKS = [
   { id:'girl',  ic:'&#127801;',         lb:'Девушки',       ms:'не разговариваешь с девушками' }
 ];
 
+// ── STATE ──
 var answers = {};
 var calY, calM, selCal = null;
 var editMode = false, editDate = null, editOriginal = null;
 function activeKey() { return editDate || todayKey(); }
 
+// ── UTILS ──
 function pad(n) { return String(n).padStart(2,'0'); }
 function todayKey() { var d = new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
 function store()  { try { return JSON.parse(localStorage.getItem(SK)) || {}; } catch(e) { return {}; } }
 function save(d)  { localStorage.setItem(SK, JSON.stringify(d)); }
 function getConf(){ try { return JSON.parse(localStorage.getItem('jcf')) || {}; } catch(e) { return {}; } }
 function setConf(d){ localStorage.setItem('jcf', JSON.stringify(d)); }
+
 function getRank(s) { for (var i=0; i<RANKS.length; i++) if (s >= RANKS[i].min) return RANKS[i]; return RANKS[RANKS.length-1]; }
 
 function calcScore(a) {
@@ -456,29 +464,42 @@ function makeToast(q, a) {
   return '<div class="toast '+toastClass(q,a)+'"><strong>'+e.ic+' '+e.tt+'</strong><br>'+e.tx+'</div>';
 }
 
+// ── NAVIGATION ──
 var pages = ['pg-intro','pg-check','pg-stats','pg-cal','pg-why'];
 
 function showPage(id) {
-  for (var i=0; i<pages.length; i++) document.getElementById(pages[i]).style.display = 'none';
+  for (var i=0; i<pages.length; i++) {
+    document.getElementById(pages[i]).style.display = 'none';
+  }
   document.getElementById(id).style.display = 'block';
+
+  // Nav
   var navBtns = document.querySelectorAll('#nav button');
-  for (var j=0; j<navBtns.length; j++) navBtns[j].className = navBtns[j].dataset.pg === id ? 'on' : '';
+  for (var j=0; j<navBtns.length; j++) {
+    navBtns[j].className = navBtns[j].dataset.pg === id ? 'on' : '';
+  }
+
   if (id === 'pg-stats') renderStats();
   if (id === 'pg-cal')   renderCal();
 }
 
+// ── INIT ──
 document.getElementById('btn-start').addEventListener('click', function() {
   var st = store(), k = todayKey();
   answers = st[k] ? (st[k].answers || {}) : {};
   document.getElementById('nav').style.display = 'flex';
   showPage('pg-check');
-  renderQuestions(); updateScore(); renderAlerts();
+  renderQuestions();
+  updateScore();
+  renderAlerts();
   if (allAnswered(answers)) document.getElementById('done-wrap').style.display = 'block';
 });
 
 document.getElementById('btn-stats').addEventListener('click', function() { showPage('pg-stats'); });
+
 document.getElementById('btn-restart').addEventListener('click', function() {
-  exitEdit(); answers = {};
+  exitEdit();
+  answers = {};
   document.getElementById('nav').style.display = 'none';
   showPage('pg-intro');
 });
@@ -490,33 +511,52 @@ document.querySelectorAll('#nav button').forEach(function(btn) {
   });
 });
 
-function exitEdit() { editMode = false; editDate = null; editOriginal = null; document.getElementById('edit-banner').style.display = 'none'; }
+// ── EDIT FLOW ──
+function exitEdit() {
+  editMode = false; editDate = null; editOriginal = null;
+  document.getElementById('edit-banner').style.display = 'none';
+}
 
 function loadToday() {
   var st = store(), k = todayKey();
   answers = st[k] ? (st[k].answers || {}) : {};
-  renderQuestions(); updateScore(); renderAlerts();
+  renderQuestions();
+  updateScore();
+  renderAlerts();
   document.getElementById('done-wrap').style.display = allAnswered(answers) ? 'block' : 'none';
 }
 
 function startEdit(key) {
   var st = store();
-  editMode = true; editDate = key;
+  editMode = true;
+  editDate = key;
   editOriginal = st[key] ? JSON.parse(JSON.stringify(st[key])) : null;
   answers = (st[key] && st[key].answers) ? JSON.parse(JSON.stringify(st[key].answers)) : {};
   selCal = key;
   document.getElementById('nav').style.display = 'flex';
   document.getElementById('alerts-wrap').innerHTML = '';
   document.getElementById('done-wrap').style.display = 'none';
-  showPage('pg-check'); renderEditBanner(); renderQuestions(); updateScore();
+  showPage('pg-check');
+  renderEditBanner();
+  renderQuestions();
+  updateScore();
   window.scrollTo(0, 0);
 }
 
-function finishEdit() { var k = editDate; exitEdit(); loadToday(); selCal = k; showPage('pg-cal'); }
+function finishEdit() {
+  var k = editDate;
+  exitEdit(); loadToday();
+  selCal = k;
+  showPage('pg-cal');
+}
+
 function cancelEdit() {
   var st = store(), k = editDate;
   if (editOriginal) st[k] = editOriginal; else delete st[k];
-  save(st); exitEdit(); loadToday(); selCal = k; showPage('pg-cal');
+  save(st);
+  exitEdit(); loadToday();
+  selCal = k;
+  showPage('pg-cal');
 }
 
 function renderEditBanner() {
@@ -528,10 +568,10 @@ function renderEditBanner() {
     '<div style="background:linear-gradient(135deg,#1a1400,#2a2200);border:1px solid #6a5200;border-radius:12px;padding:12px 14px;margin-bottom:12px;">' +
       '<div style="font-size:10px;letter-spacing:3px;color:#FFD700;text-transform:uppercase;margin-bottom:4px;">&#9998; Режим редактирования</div>' +
       '<div style="font-size:14px;color:#fff;font-weight:700;margin-bottom:2px;">' + ds + '</div>' +
-      '<div style="font-size:11px;color:#9a8a3a;line-height:1.4;">Нажимай кнопки, чтобы перезаписать ответы за этот день.</div>' +
+      '<div style="font-size:11px;color:#9a8a3a;line-height:1.4;">Нажимай кнопки, чтобы перезаписать ответы за этот день. Текущий выбор подсвечен.</div>' +
       '<div style="display:flex;gap:8px;margin-top:10px;">' +
-        '<button id="edit-save" style="flex:1;border-radius:8px;padding:11px;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#0a2a0a,#0d3a18);border:1px solid #1a5a1a;color:#53C546;">&#10003; ГОТОВО</button>' +
-        '<button id="edit-cancel" style="flex:1;border-radius:8px;padding:11px;font-size:12px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#1a0a10,#180d14);border:1px solid #5a1a2a;color:#f07080;">&#10007; ОТМЕНА</button>' +
+        '<button id="edit-save" style="flex:1;border-radius:8px;padding:11px;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;background:linear-gradient(135deg,#0a2a0a,#0d3a18);border:1px solid #1a5a1a;color:#53C546;">&#10003; ГОТОВО</button>' +
+        '<button id="edit-cancel" style="flex:1;border-radius:8px;padding:11px;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;background:linear-gradient(135deg,#1a0a10,#180d14);border:1px solid #5a1a2a;color:#f07080;">&#10007; ОТМЕНА</button>' +
       '</div>' +
     '</div>';
   document.getElementById('edit-save').addEventListener('click', finishEdit);
@@ -541,6 +581,7 @@ function renderEditBanner() {
 document.getElementById('cal-prev').addEventListener('click', function() { calM--; if (calM < 0) { calM = 11; calY--; } renderCal(); });
 document.getElementById('cal-next').addEventListener('click', function() { calM++; if (calM > 11) { calM = 0; calY++; } renderCal(); });
 
+// ── RENDER QUESTIONS ──
 function yesNoControls(q, cur) {
   var has = (cur !== undefined);
   var yS = !has ? '' : (cur === true ? 'box-shadow:0 0 0 2px #53C546 inset;' : 'opacity:.4;');
@@ -565,7 +606,10 @@ function vapeControls(cur) {
 function cardClass(q) {
   var ia = isAnswered(q, answers);
   var cls = 'card' + (q.spc || q.vape ? ' spc' : '');
-  if (ia) { var y = q.vape ? (answers.vape === 'none' || answers.vape === 'vaporizer') : answers[q.id]; cls += ' ' + (y ? 'yes' : 'no'); }
+  if (ia) {
+    var y = q.vape ? (answers.vape === 'none' || answers.vape === 'vaporizer') : answers[q.id];
+    cls += ' ' + (y ? 'yes' : 'no');
+  }
   return cls;
 }
 
@@ -573,27 +617,48 @@ function cardInner(q) {
   var ia = isAnswered(q, answers);
   var badge = q.spc ? '<span class="badge">+2</span>' : q.vape ? '<span class="badge2">+1</span>' : '';
   var res = '';
-  if (ia) { var y = q.vape ? (answers.vape === 'none' || answers.vape === 'vaporizer') : answers[q.id]; res = y ? '✅' : '❌'; }
-  var head = '<div class="row"><div class="ico">' + q.ic + '</div><div style="flex:1;"><div class="qtitle">' + q.lb + badge + '</div><div class="qdesc">' + q.ds + '</div></div><div class="qres">' + res + '</div></div>';
+  if (ia) {
+    var y = q.vape ? (answers.vape === 'none' || answers.vape === 'vaporizer') : answers[q.id];
+    res = y ? '✅' : '❌';
+  }
+  var head =
+    '<div class="row">' +
+      '<div class="ico">' + q.ic + '</div>' +
+      '<div style="flex:1;"><div class="qtitle">' + q.lb + badge + '</div><div class="qdesc">' + q.ds + '</div></div>' +
+      '<div class="qres">' + res + '</div>' +
+    '</div>';
   var body;
-  if (editMode) { body = q.vape ? vapeControls(answers.vape) : yesNoControls(q, answers[q.id]); if (ia) body += makeToast(q, answers); }
-  else if (!ia) { body = q.vape ? vapeControls(undefined) : yesNoControls(q, undefined); }
-  else { body = makeToast(q, answers); }
+  if (editMode) {
+    body = q.vape ? vapeControls(answers.vape) : yesNoControls(q, answers[q.id]);
+    if (ia) body += makeToast(q, answers);
+  } else if (!ia) {
+    body = q.vape ? vapeControls(undefined) : yesNoControls(q, undefined);
+  } else {
+    body = makeToast(q, answers);
+  }
   return head + body;
 }
 
 function bindCardButtons(root) {
   var yn = root.querySelectorAll('[data-qid]');
-  for (var j=0; j<yn.length; j++) yn[j].addEventListener('click', function() { answerQ(this.dataset.qid, this.dataset.yes === '1'); });
+  for (var j=0; j<yn.length; j++) {
+    yn[j].addEventListener('click', function() { answerQ(this.dataset.qid, this.dataset.yes === '1'); });
+  }
   var vb = root.querySelectorAll('[data-v]');
-  for (var k=0; k<vb.length; k++) vb[k].addEventListener('click', function() { answerVape(this.dataset.v); });
+  for (var k=0; k<vb.length; k++) {
+    vb[k].addEventListener('click', function() { answerVape(this.dataset.v); });
+  }
 }
 
 function renderQuestions() {
-  var wrap = document.getElementById('q-wrap'); wrap.innerHTML = '';
+  var wrap = document.getElementById('q-wrap');
+  wrap.innerHTML = '';
   for (var i=0; i<QS.length; i++) {
-    var q = QS[i], div = document.createElement('div');
-    div.className = cardClass(q); div.id = 'qc-' + q.id; div.innerHTML = cardInner(q);
+    var q = QS[i];
+    var div = document.createElement('div');
+    div.className = cardClass(q);
+    div.id = 'qc-' + q.id;
+    div.innerHTML = cardInner(q);
     wrap.appendChild(div);
   }
   bindCardButtons(wrap);
@@ -603,22 +668,43 @@ function refreshCard(id) {
   var q = null;
   for (var i=0; i<QS.length; i++) if (QS[i].id === id) { q = QS[i]; break; }
   if (!q) return;
-  var card = document.getElementById('qc-' + id); if (!card) return;
-  card.className = cardClass(q); card.innerHTML = cardInner(q); bindCardButtons(card);
+  var card = document.getElementById('qc-' + id);
+  if (!card) return;
+  card.className = cardClass(q);
+  card.innerHTML = cardInner(q);
+  bindCardButtons(card);
 }
 
-function answerQ(id, val) { answers[id] = val; saveDay(); updateScore(); refreshCard(id); checkDone(); }
-function answerVape(v) { answers.vape = v; saveDay(); updateScore(); refreshCard('vape'); checkDone(); }
+function answerQ(id, val) {
+  answers[id] = val;
+  saveDay();
+  updateScore();
+  refreshCard(id);
+  checkDone();
+}
+
+function answerVape(v) {
+  answers.vape = v;
+  saveDay();
+  updateScore();
+  refreshCard('vape');
+  checkDone();
+}
 
 function updateScore() {
   var s = calcScore(answers), rk = getRank(s);
   document.getElementById('sc-num').innerHTML = s + ' <span style="font-size:13px;color:#445566;">/ ' + MX + '</span>';
-  var rv = document.getElementById('rk-val'); rv.textContent = rk.nm; rv.style.color = rk.cl;
+  var rv = document.getElementById('rk-val');
+  rv.textContent = rk.nm;
+  rv.style.color = rk.cl;
 }
 
 function checkDone() {
   if (editMode) return;
-  if (allAnswered(answers)) { document.getElementById('done-wrap').style.display = 'block'; saveDay(); }
+  if (allAnswered(answers)) {
+    document.getElementById('done-wrap').style.display = 'block';
+    saveDay();
+  }
 }
 
 function saveDay() {
@@ -628,6 +714,7 @@ function saveDay() {
   save(st);
 }
 
+// ── ALERTS ──
 function calcMissStreak(st, id) {
   var miss = 0, d = new Date();
   for (var i=1; i<=30; i++) {
@@ -640,32 +727,43 @@ function calcMissStreak(st, id) {
 }
 
 function renderAlerts() {
-  var wrap = document.getElementById('alerts-wrap'); wrap.innerHTML = '';
+  var wrap = document.getElementById('alerts-wrap');
+  wrap.innerHTML = '';
   var st = store(), cf = getConf();
   for (var i=0; i<ALERT_TRACKS.length; i++) {
-    var t = ALERT_TRACKS[i], miss = calcMissStreak(st, t.id);
+    var t = ALERT_TRACKS[i];
+    var miss = calcMissStreak(st, t.id);
     if (miss < 3) continue;
     if (cf[todayKey() + '_' + t.id]) continue;
     var col = miss >= 7 ? '#FF2200' : miss >= 5 ? '#FF6600' : '#FF6B35';
     var urg = miss >= 7 ? '&#128308; КРИТИЧНО' : miss >= 5 ? '&#128992; СЕРЬЁЗНО' : '&#9888;&#65039; ТРЕВОГА';
-    var card = document.createElement('div'); card.className = 'alcard';
+    var card = document.createElement('div');
+    card.className = 'alcard';
     card.innerHTML =
-      '<div class="row" style="gap:10px;margin-bottom:10px;"><div style="font-size:24px;">' + t.ic + '</div>' +
-      '<div><div style="font-size:12px;font-weight:900;color:' + col + ';">' + urg + '</div>' +
-      '<div style="font-size:12px;color:#cc7744;margin-top:2px;">Ты <strong style="color:' + col + ';">' + t.ms + '</strong> уже <strong style="color:' + col + ';">' + miss + ' дня подряд</strong></div></div></div>' +
-      '<div class="albd"><div style="font-size:12px;color:#FFB830;font-weight:700;margin-bottom:4px;">&#128172; Связаться с Терминалом</div>' +
-      '<div style="font-size:11px;color:#886644;line-height:1.5;">Открой чат и обсуди тему: <em style="color:#FFB830;">' + t.lb + '</em>. Попроси мотивацию или план.</div></div>' +
+      '<div class="row" style="gap:10px;margin-bottom:10px;">' +
+        '<div style="font-size:24px;">' + t.ic + '</div>' +
+        '<div><div style="font-size:12px;font-weight:900;letter-spacing:1px;color:' + col + ';">' + urg + '</div>' +
+        '<div style="font-size:12px;color:#cc7744;margin-top:2px;">Ты <strong style="color:' + col + ';">' + t.ms + '</strong> уже <strong style="color:' + col + ';">' + miss + ' дня подряд</strong></div></div>' +
+      '</div>' +
+      '<div class="albd">' +
+        '<div style="font-size:12px;color:#FFB830;font-weight:700;margin-bottom:4px;">&#128172; Связаться с Терминалом</div>' +
+        '<div style="font-size:11px;color:#886644;line-height:1.5;">Открой чат и обсуди тему: <em style="color:#FFB830;">' + t.lb + '</em>. Попроси мотивацию или план.</div>' +
+      '</div>' +
       '<button class="cfbtn" data-aid="' + t.id + '">&#9989; Поговорил с Терминалом</button>';
     wrap.appendChild(card);
   }
   var cfBtns = wrap.querySelectorAll('[data-aid]');
   for (var j=0; j<cfBtns.length; j++) {
     cfBtns[j].addEventListener('click', function() {
-      var cf = getConf(); cf[todayKey() + '_' + this.dataset.aid] = true; setConf(cf); renderAlerts();
+      var cf = getConf();
+      cf[todayKey() + '_' + this.dataset.aid] = true;
+      setConf(cf);
+      renderAlerts();
     });
   }
 }
 
+// ── STATS ──
 function renderStats() {
   var s = calcScore(answers), rk = getRank(s), pct = Math.round(s / MX * 100);
   document.getElementById('rk-ico').innerHTML = rk.ic;
@@ -676,25 +774,30 @@ function renderStats() {
   var pf = document.getElementById('p-fill');
   pf.style.background = s >= 6 ? 'linear-gradient(90deg,#FFD700,#4FCEE4)' : s >= 5 ? 'linear-gradient(90deg,#4FCEE4,#53C546)' : s >= 3 ? 'linear-gradient(90deg,#FFBE4C,#4FCEE4)' : 'linear-gradient(90deg,#E72930,#FFBE4C)';
   setTimeout(function() { pf.style.width = pct + '%'; }, 100);
+
   var dw = document.getElementById('det-wrap'); dw.innerHTML = '';
   for (var i=0; i<QS.length; i++) {
     var q = QS[i], e = getEffect(q, answers);
     var y = q.vape ? (answers.vape === 'none' || answers.vape === 'vaporizer') : answers[q.id];
     var pts = y ? (q.spc ? '+2' : '+1') : '+0';
     var row = document.createElement('div'); row.className = 'drow';
-    row.innerHTML = '<span style="font-size:16px;flex-shrink:0;">' + q.ic + '</span>' +
+    row.innerHTML =
+      '<span style="font-size:16px;flex-shrink:0;">' + q.ic + '</span>' +
       '<div style="flex:1;"><div style="font-size:12px;color:#aab8c8;margin-bottom:2px;">' + q.lb + (q.spc ? ' ⚡' : '') + '</div>' +
       '<div style="font-size:11px;color:' + (y ? (q.spc ? '#FFD700' : '#7de875') : '#f07080') + ';">' + e.ic + ' ' + e.tt + '</div></div>' +
       '<span style="font-size:12px;font-weight:700;color:' + (y ? (q.spc ? '#FFD700' : '#53C546') : '#E72930') + ';">' + pts + '</span>' +
       '<span style="font-size:15px;margin-left:6px;">' + (y ? '✅' : '❌') + '</span>';
     dw.appendChild(row);
   }
+
   var st = store(), sk = calcStreaks(st);
   document.getElementById('st-cur').textContent = sk.streak;
   document.getElementById('st-best').textContent = sk.best;
   document.getElementById('st-total').textContent = sk.total;
+
   var as = calcAllStats(st);
   document.getElementById('m-val').textContent = as.credits.toLocaleString('ru-RU');
+
   var g = document.getElementById('as-wrap'); g.innerHTML = '';
   var qinfo = [
     {id:'work',  ic:'&#9876;&#65039;',   lb:'Работа',   yl:'Ходил',       nl:'Пропустил'},
@@ -709,7 +812,8 @@ function renderStats() {
     var qi = qinfo[j], c = as.cnt[qi.id] || {y:0,n:0};
     var tot = c.y + c.n, pc = tot > 0 ? Math.round(c.y / tot * 100) : 0;
     var card = document.createElement('div'); card.className = 'ascard';
-    card.innerHTML = '<div style="font-size:16px;margin-bottom:4px;">' + qi.ic + '</div>' +
+    card.innerHTML =
+      '<div style="font-size:16px;margin-bottom:4px;">' + qi.ic + '</div>' +
       '<div style="font-size:9px;color:#445566;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;">' + qi.lb + '</div>' +
       '<div class="asrow"><span class="ask">' + qi.yl + '</span><span class="asv gr">' + c.y + ' дн.</span></div>' +
       '<div class="asrow"><span class="ask">' + qi.nl + '</span><span class="asv rd">' + c.n + ' дн.</span></div>' +
@@ -718,16 +822,23 @@ function renderStats() {
   }
   var vc = as.vc, vt = vc.total || 1;
   var vcard = document.createElement('div'); vcard.className = 'ascard'; vcard.style.gridColumn = 'span 2';
-  vcard.innerHTML = '<div style="font-size:16px;margin-bottom:4px;">&#128168;</div>' +
+  vcard.innerHTML =
+    '<div style="font-size:16px;margin-bottom:4px;">&#128168;</div>' +
     '<div style="font-size:9px;color:#445566;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;">Курение</div>' +
     '<div class="asrow"><span class="ask">&#9728; Не курил</span><span class="asv gr">' + vc.clean + ' дн. (' + Math.round(vc.clean/vt*100) + '%)</span></div>' +
     '<div class="asrow"><span class="ask">&#128168; Вапорайзер</span><span class="asv gr">' + vc.vap + ' дн. (' + Math.round(vc.vap/vt*100) + '%)</span></div>' +
     '<div class="asrow"><span class="ask">&#128683; Косяк/Бонг</span><span class="asv or">' + (vc.joint+vc.bong) + ' дн. (' + Math.round((vc.joint+vc.bong)/vt*100) + '%)</span></div>' +
     '<div class="asrow" style="border-top:1px solid #1e3a5a;margin-top:4px;padding-top:4px;"><span class="ask">Чисто+вап</span><span class="asv cy">' + (vc.clean+vc.vap) + ' из ' + vt + '</span></div>';
   g.appendChild(vcard);
+
   var qc = document.getElementById('q-card2'), qt = document.getElementById('q-txt2');
-  if (answers.girl === true) { qc.classList.add('gld'); qt.classList.add('gld'); qt.textContent = GQUOTES[Math.floor(Math.random() * GQUOTES.length)]; }
-  else { qc.classList.remove('gld'); qt.classList.remove('gld'); qt.textContent = QUOTES[Math.min(s, 8)] || QUOTES[0]; }
+  if (answers.girl === true) {
+    qc.classList.add('gld'); qt.classList.add('gld');
+    qt.textContent = GQUOTES[Math.floor(Math.random() * GQUOTES.length)];
+  } else {
+    qc.classList.remove('gld'); qt.classList.remove('gld');
+    qt.textContent = QUOTES[Math.min(s, 8)] || QUOTES[0];
+  }
 }
 
 function calcStreaks(st) {
@@ -756,13 +867,19 @@ function calcAllStats(st) {
     var e = st[keys[j]]; if (!e || !e.answers) continue;
     for (var k2=0; k2<QS.length; k2++) {
       var q = QS[k2];
-      if (q.vape) { var v = e.answers.vape; vc.total++; if (v === 'none') vc.clean++; else if (v === 'vaporizer') vc.vap++; else if (v === 'joint') vc.joint++; else if (v === 'bong') vc.bong++; }
-      else { if (e.answers[q.id] === true) { cnt[q.id].y++; if (q.id === 'work') credits += 100; } if (e.answers[q.id] === false) cnt[q.id].n++; }
+      if (q.vape) {
+        var v = e.answers.vape; vc.total++;
+        if (v === 'none') vc.clean++; else if (v === 'vaporizer') vc.vap++; else if (v === 'joint') vc.joint++; else if (v === 'bong') vc.bong++;
+      } else {
+        if (e.answers[q.id] === true)  { cnt[q.id].y++; if (q.id === 'work') credits += 100; }
+        if (e.answers[q.id] === false) { cnt[q.id].n++; }
+      }
     }
   }
   return { credits:credits, cnt:cnt, vc:vc };
 }
 
+// ── CALENDAR ──
 function initCal() { var n = new Date(); calY = n.getFullYear(); calM = n.getMonth(); }
 
 function renderCal() {
@@ -814,12 +931,13 @@ function renderCalDetail(key) {
     '<div style="font-size:13px;font-weight:700;color:#4FCEE4;">' + ds + '</div>' +
     '<div style="font-size:18px;font-weight:900;color:' + rk.cl + ';">' + rk.ic + ' ' + entry.score + '/' + MX + '</div>' +
     '</div>' + rows +
-    '<button class="restbtn" data-editkey="' + key + '" style="margin-top:12px;">&#9998; Редактировать день</button></div>';
+    '<button class="restbtn" data-editkey="' + key + '" style="margin-top:12px;">&#9998; Редактировать день</button>' +
+    '</div>';
   var eb = wrap.querySelector('[data-editkey]');
   if (eb) eb.addEventListener('click', function() { startEdit(this.dataset.editkey); });
 }
 
-// BACKUP
+// ── BACKUP ──
 document.getElementById('bk-export').addEventListener('click', function() {
   var st = store(), keys = Object.keys(st);
   if (!keys.length) { showBkMsg('Нет данных для экспорта', false); return; }
@@ -830,11 +948,9 @@ document.getElementById('bk-export').addEventListener('click', function() {
   a.click(); URL.revokeObjectURL(url);
   showBkMsg('Архив скачан (' + keys.length + ' дней)', true);
 });
-
 document.getElementById('bk-import-btn').addEventListener('click', function() {
   document.getElementById('bk-import').click();
 });
-
 document.getElementById('bk-import').addEventListener('change', function(e) {
   var file = e.target.files[0]; if (!file) return;
   var reader = new FileReader();
@@ -852,7 +968,6 @@ document.getElementById('bk-import').addEventListener('change', function(e) {
   };
   reader.readAsText(file);
 });
-
 function showBkMsg(txt, ok) {
   var el = document.getElementById('bk-msg');
   el.innerHTML = '<div class="bkmsg ' + (ok ? 'ok' : 'err') + '">' + (ok ? '✅' : '❌') + ' ' + txt + '</div>';
