@@ -193,6 +193,7 @@ html, body { background: #07070f; color: #fff; font-family: -apple-system, sans-
     <div id="q-wrap"></div>
     <div id="done-wrap" style="display:none;margin-top:16px;text-align:center;">
       <p style="font-size:13px;color:#2BE84F;margin-bottom:12px;">Отчёт завершён. Сила оценена.</p>
+      <button class="bigbtn" id="btn-day-summary" style="margin-bottom:10px;">&#127916; СМОТРЕТЬ ИТОГ ДНЯ</button>
       <button class="bigbtn" id="btn-stats">СТАТИСТИКА →</button>
     </div>
   </div>
@@ -491,6 +492,45 @@ function checkWinVideo() {
   document.getElementById('vid-modal').style.display = 'flex';
 }
 
+function mountModalVideo(srcFn) {
+  var media = document.getElementById('vm-media');
+  media.style.display = 'block';
+  media.innerHTML =
+    '<video id="vm-video" controls autoplay muted playsinline loop preload="auto" webkit-playsinline></video>' +
+    '<button id="vm-sound">&#128266; \u041d\u0410\u0416\u041c\u0418 \u2014 \u0412\u041a\u041b\u042e\u0427\u0418\u0422\u042c \u0417\u0412\u0423\u041a</button>' +
+    '<div id="vm-hint" style="font-size:11px;color:#7a9a82;margin-top:8px;line-height:1.4;">\u0427\u0451\u0440\u043d\u044b\u0439 \u044d\u043a\u0440\u0430\u043d? \u041e\u0442\u043a\u0440\u043e\u0439 \u044d\u0442\u043e\u0442 \u0444\u0430\u0439\u043b \u0432 <b>Safari</b> (\u0432\u0441\u0442\u0440\u043e\u0435\u043d\u043d\u044b\u0439 \u0431\u0440\u0430\u0443\u0437\u0435\u0440 \u043d\u0435 \u043f\u0440\u043e\u0438\u0433\u0440\u044b\u0432\u0430\u0435\u0442 \u0432\u0438\u0434\u0435\u043e).</div>';
+  var vid = document.getElementById('vm-video');
+  var sbtn = document.getElementById('vm-sound');
+  vid.src = srcFn();
+  vid.load();
+  var tryplay = function() { var p = vid.play(); if (p && p.catch) p.catch(function(){}); };
+  vid.addEventListener('loadeddata', tryplay);
+  tryplay();
+  sbtn.addEventListener('click', function() {
+    vid.muted = !vid.muted;
+    if (!vid.muted) { vid.volume = 1; tryplay(); sbtn.className = 'off'; sbtn.innerHTML = '&#128263; \u0412\u042b\u041a\u041b\u042e\u0427\u0418\u0422\u042c \u0417\u0412\u0423\u041a'; }
+    else { sbtn.className = ''; sbtn.innerHTML = '&#128266; \u041d\u0410\u0416\u041c\u0418 \u2014 \u0412\u041a\u041b\u042e\u0427\u0418\u0422\u042c \u0417\u0412\u0423\u041a'; }
+  });
+}
+
+function dayQuote(s) {
+  if (s >= 8) return '"8 \u0438\u0437 8. \u0427\u0438\u0441\u0442\u0430\u044f \u043f\u043e\u0431\u0435\u0434\u0430. Top G \u0434\u043d\u044f."';
+  return (QUOTES[s] || QUOTES[0]);
+}
+
+function showDaySummary() {
+  var s = calcScore(answers), rk = getRank(s);
+  var u = document.getElementById('vm-urg');
+  u.innerHTML = '&#127916; \u0418\u0422\u041e\u0413 \u0414\u041d\u042f';
+  u.style.color = '#2BE84F';
+  document.getElementById('vm-title').innerHTML = rk.ic + ' ' + rk.nm + '<br>' + s + ' \u0438\u0437 ' + MX + ' \u0431\u0430\u043b\u043b\u043e\u0432';
+  document.getElementById('vm-sub').textContent = dayQuote(s);
+  if (WIN_VIDEO) { mountModalVideo(winSrc); }
+  else { var m = document.getElementById('vm-media'); m.style.display = 'none'; m.innerHTML = ''; }
+  document.getElementById('vm-close').textContent = '\u0417\u0410\u041a\u0420\u042b\u0422\u042c';
+  document.getElementById('vid-modal').style.display = 'flex';
+}
+
 function checkVideoAlert() {
   if (editMode || videoShownThisSession) return;
   var w = topMissedHabit();
@@ -630,6 +670,7 @@ document.getElementById('btn-start').addEventListener('click', function() {
 });
 
 document.getElementById('btn-stats').addEventListener('click', function() { showPage('pg-stats'); });
+document.getElementById('btn-day-summary').addEventListener('click', showDaySummary);
 
 document.getElementById('btn-restart').addEventListener('click', function() {
   videoShownThisSession = false;
