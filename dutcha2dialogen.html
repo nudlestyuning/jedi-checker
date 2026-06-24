@@ -3,364 +3,1090 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spreekexamen A2 — диалоги по ролям</title>
+<title>Spreekexamen A2</title>
 <style>
-  :root{
-    --paper:#F3F1EA;--ink:#23211C;--muted:#6E6A5E;--line:#D9D5C8;
-    --a:#284B8C;--a-soft:#E7ECF6;--b:#8A2F3B;--b-soft:#F4E7E9;
-    --doc:#3F5E45;--doc-soft:#E7EEE6;
-    --shadow:0 1px 2px rgba(40,35,25,.06),0 4px 16px rgba(40,35,25,.07);
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:760px;margin:0 auto;padding:0 16px 80px}
-  header{position:sticky;top:0;z-index:20;background:linear-gradient(var(--paper) 75%,rgba(243,241,234,0));padding:16px 0 4px}
-  .title{font-family:Georgia,serif;font-size:22px;font-weight:600}
-  .sub{color:var(--muted);font-size:13px;margin:3px 0 10px}
-  .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
-  .toggle{appearance:none;border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-size:13px;font-weight:600;padding:8px 12px;border-radius:10px;cursor:pointer;box-shadow:var(--shadow)}
-  .toggle.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-  .chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:thin}
-  .chips::-webkit-scrollbar{height:5px}
-  .chips::-webkit-scrollbar-thumb{background:var(--line);border-radius:5px}
-  .chip{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;display:flex;gap:6px;align-items:center;box-shadow:var(--shadow)}
-  .chip .num{font-family:Georgia,serif;font-style:italic;color:var(--a);font-weight:400}
-  section{margin-bottom:40px}
-  .topic-head{margin:28px 0 10px;display:flex;gap:12px;align-items:baseline}
-  .topic-num{font-family:Georgia,serif;font-size:40px;line-height:.9;color:var(--a);font-style:italic;flex:none}
-  .topic-nl{font-family:Georgia,serif;font-size:19px;font-weight:600}
-  .topic-ru{color:var(--muted);font-size:13.5px;margin-top:2px}
-  .scene-label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:20px 0 8px;font-weight:700}
-  .line{display:grid;grid-template-columns:32px 1fr;gap:10px;padding:10px 13px 10px 11px;border-radius:12px;border:1px solid var(--line);box-shadow:var(--shadow);margin-bottom:8px;position:relative;overflow:hidden}
-  .line::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
-  .line.a::before{background:var(--a)}.line.b::before{background:var(--b)}
-  .line.a{background:linear-gradient(90deg,var(--a-soft),#fff 60%)}
-  .line.b{background:linear-gradient(90deg,var(--b-soft),#fff 60%)}
-  .cue{font-size:11px;font-weight:800;letter-spacing:.04em;padding-top:2px}
-  .line.a .cue{color:var(--a)}.line.b .cue{color:var(--b)}
-  .nl{font-size:15.5px;font-weight:500}
-  .ru{font-size:13px;color:var(--muted);font-style:italic;margin-top:2px}
-  .doc-wrap{margin-top:22px;border:1px solid var(--doc);border-radius:14px;background:var(--doc-soft);padding:14px 14px 6px}
-  .doc-title{display:flex;align-items:center;gap:8px;font-family:Georgia,serif;font-size:15px;font-weight:600;color:var(--doc);margin:0 0 3px}
-  .badge{font-size:10px;letter-spacing:.14em;text-transform:uppercase;background:var(--doc);color:#fff;padding:3px 8px;border-radius:999px;font-family:-apple-system,sans-serif;font-weight:700}
-  .doc-hint{font-size:12px;color:#5a7560;margin:0 0 10px}
-  .qa{background:#fff;border:1px solid #cfe0cf;border-radius:11px;padding:10px 12px;margin-bottom:8px}
-  .q{font-size:14px;font-weight:600}
-  .q-ru{display:block;font-size:12px;font-weight:400;color:var(--muted);font-style:italic;margin-top:2px}
-  .ans{margin-top:7px;padding-top:7px;border-top:1px dashed #d7e4d7}
-  .a-lab{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--doc);font-weight:700}
-  .a-nl{font-size:14px;margin-top:2px}
-  .a-ru{font-size:12px;color:var(--muted);font-style:italic;margin-top:2px}
-  footer{margin-top:20px;color:var(--muted);font-size:12px;text-align:center;line-height:1.6}
+:root{--p:#F3F1EA;--ink:#23211C;--mu:#6E6A5E;--li:#D9D5C8;
+  --a:#284B8C;--as:#E7ECF6;--b:#8A2F3B;--bs:#F4E7E9;
+  --doc:#3F5E45;--ds:#E7EEE6;--sh:0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.08)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--p);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 80px}
 
-  /* hide/show toggles */
-  body.hide-ru .ru,.hide-ru .q-ru,.hide-ru .a-ru{display:none}
-  body.role-a .line.b{opacity:.45}
-  body.role-b .line.a{opacity:.45}
+/* ---- CSS-only controls ---- */
+#ru-show,#ro-a,#ro-b,#ro-off{display:none}
 
-  /* grammar tooltip */
-  .nl{cursor:pointer;border-radius:4px;transition:background .1s}
-  .nl:active{background:rgba(40,75,140,.1)}
-  #gram{position:fixed;top:8px;left:50%;transform:translateX(-50%) translateY(-10px);z-index:300;
-    background:#23211C;color:#F3F1EA;border-radius:14px;padding:12px 36px 11px 14px;
-    max-width:min(340px,calc(100vw - 20px));width:max-content;font-size:13px;
-    box-shadow:0 8px 32px rgba(0,0,0,.4);opacity:0;pointer-events:none;
-    transition:opacity .18s,transform .18s}
-  #gram.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all}
-  #gram .gx{position:absolute;top:9px;right:12px;font-size:15px;color:#888;cursor:pointer}
-  #gram .gx:hover{color:#fff}
-  #gram .gt{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#E8C97A;margin-bottom:4px}
-  #gram .gr{font-weight:400;color:#aaa;text-transform:none;letter-spacing:0;font-size:11px}
-  #gram .gs{font-family:monospace;font-size:13px;color:#9BC4F0;margin-bottom:5px}
-  #gram .ge{font-size:11.5px;color:#a8a496;line-height:1.5;border-top:1px solid #3a3830;padding-top:5px;margin-top:3px}
+/* translation hidden by default */
+.ru,.qru,.aru{display:none}
+#ru-show:checked~.wrap .ru,
+#ru-show:checked~.wrap .qru,
+#ru-show:checked~.wrap .aru{display:block}
 
-  @media(max-width:480px){.topic-num{font-size:32px}.nl{font-size:15px}}
+/* role dimming */
+#ro-a:checked~.wrap .line.b{opacity:.4}
+#ro-b:checked~.wrap .line.a{opacity:.4}
+
+/* label as button */
+label.tog{display:inline-block;border:1px solid var(--li);background:#fff;color:var(--ink);
+  font:inherit;font-size:13px;font-weight:600;padding:8px 12px;border-radius:10px;cursor:pointer;
+  box-shadow:var(--sh);white-space:nowrap;user-select:none;-webkit-user-select:none}
+#ru-show:checked~.wrap label[for=ru-show]{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#ro-a:checked~.wrap label[for=ro-a]{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#ro-b:checked~.wrap label[for=ro-b]{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#ro-off:checked~.wrap label[for=ro-off]{background:var(--ink);color:var(--p);border-color:var(--ink)}
+
+/* hide/show label text */
+.lbl-show{display:inline}.lbl-hide{display:none}
+#ru-show:checked~.wrap .lbl-show{display:none}
+#ru-show:checked~.wrap .lbl-hide{display:inline}
+
+header{position:sticky;top:0;z-index:20;background:linear-gradient(var(--p) 75%,rgba(243,241,234,0));padding:14px 0 4px}
+.ttl{font-family:Georgia,serif;font-size:21px;font-weight:600}
+.sub{color:var(--mu);font-size:12.5px;margin:2px 0 10px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:3px 0 10px;scrollbar-width:thin}
+.chips::-webkit-scrollbar{height:5px}.chips::-webkit-scrollbar-thumb{background:var(--li);border-radius:5px}
+.chip{flex:none;border:1px solid var(--li);background:#fff;border-radius:999px;padding:7px 13px;
+  font-size:13px;font-weight:600;color:var(--mu);text-decoration:none;display:flex;gap:6px;
+  align-items:center;box-shadow:var(--sh)}
+.cn{font-family:Georgia,serif;font-style:italic;color:var(--a);font-weight:400}
+
+section{margin-bottom:36px}
+.th{margin:26px 0 10px;display:flex;gap:12px;align-items:baseline}
+.tn{font-family:Georgia,serif;font-size:38px;line-height:.9;color:var(--a);font-style:italic;flex:none}
+.tnl{font-family:Georgia,serif;font-size:18px;font-weight:600}
+.tru{color:var(--mu);font-size:13px;margin-top:2px}
+.sl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin:18px 0 8px;font-weight:700}
+
+.line{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:10px 12px 10px 10px;
+  border-radius:12px;border:1px solid var(--li);box-shadow:var(--sh);margin-bottom:8px;
+  position:relative;overflow:hidden}
+.line::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+.line.a::before{background:var(--a)}.line.b::before{background:var(--b)}
+.line.a{background:linear-gradient(90deg,var(--as),#fff 60%)}
+.line.b{background:linear-gradient(90deg,var(--bs),#fff 60%)}
+.cue{font-size:11px;font-weight:800;letter-spacing:.04em;padding-top:3px}
+.line.a .cue{color:var(--a)}.line.b .cue{color:var(--b)}
+
+/* details = clickable Dutch sentence */
+details.nd>summary{list-style:none;font-size:15.5px;font-weight:500;cursor:pointer;
+  border-radius:4px;padding:1px 2px;-webkit-user-select:none;user-select:none}
+details.nd>summary::-webkit-details-marker{display:none}
+details.nd[open]>summary{color:var(--a)}
+.gram{background:#23211C;color:#F3F1EA;border-radius:10px;padding:10px 12px;margin-top:6px;font-size:12px;line-height:1.6}
+.gram b{color:#E8C97A;font-size:10px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:2px}
+.gram .gru{color:#aaa;font-size:11px;font-weight:400;text-transform:none;letter-spacing:0}
+.gram code{display:block;color:#9BC4F0;font-family:monospace;font-size:12px;margin:3px 0}
+.ru{font-size:13px;color:var(--mu);font-style:italic;margin-top:3px}
+
+.dw{margin-top:20px;border:1px solid var(--doc);border-radius:14px;background:var(--ds);padding:14px 14px 6px}
+.dt{display:flex;align-items:center;gap:8px;font-family:Georgia,serif;font-size:15px;font-weight:600;color:var(--doc);margin:0 0 3px}
+.db{font-size:10px;letter-spacing:.14em;text-transform:uppercase;background:var(--doc);color:#fff;padding:3px 8px;border-radius:999px;font-family:-apple-system,sans-serif;font-weight:700}
+.dh{font-size:12px;color:#5a7560;margin:0 0 10px}
+.qa{background:#fff;border:1px solid #cfe0cf;border-radius:11px;padding:10px 12px;margin-bottom:8px}
+.q{font-size:14px;font-weight:600}
+.qru{display:block;font-size:12px;font-weight:400;color:var(--mu);font-style:italic;margin-top:2px}
+.ans{margin-top:7px;padding-top:7px;border-top:1px dashed #d7e4d7}
+.al{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--doc);font-weight:700}
+.anl{font-size:14px;margin-top:2px}
+.aru{font-size:12px;color:var(--mu);font-style:italic;margin-top:2px}
+
+footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-height:1.6}
+@media(max-width:480px){.tn{font-size:30px}details.nd>summary{font-size:15px}}
 </style>
 </head>
-<body class="hide-ru">
+<body>
+<!-- CSS-only checkboxes/radios — must be siblings of .wrap -->
+<input type="checkbox" id="ru-show">
+<input type="radio" name="role" id="ro-off" checked>
+<input type="radio" name="role" id="ro-a">
+<input type="radio" name="role" id="ro-b">
+
 <div class="wrap">
 <header>
-  <h1 class="title">Spreekexamen A2 &middot; диалоги</h1>
-  <p class="sub">Читайте вслух. <b style="color:var(--a)">А</b> и <b style="color:var(--b)">Б</b> по очереди. Нажмите на предложение &mdash; грамматика.</p>
+  <h1 class="ttl">Spreekexamen A2 &middot; диалоги</h1>
+  <p class="sub">Нажми на фразу &rarr; грамматика. Нажми ещё раз &rarr; скрыть.</p>
   <div class="controls">
-    <button class="toggle" id="ruBtn" onclick="toggleRu()">Показать перевод</button>
-    <button class="toggle" id="raBtnA" onclick="setRole('a')">Я &mdash; А</button>
-    <button class="toggle" id="raBtnB" onclick="setRole('b')">Я &mdash; Б</button>
-    <button class="toggle" id="raBtnOff" onclick="setRole('off')" style="background:var(--ink);color:var(--paper);border-color:var(--ink)">Всё</button>
+    <label class="tog" for="ru-show"><span class="lbl-show">Показать перевод</span><span class="lbl-hide">Скрыть перевод</span></label>
+    <label class="tog" for="ro-off">Все</label>
+    <label class="tog" for="ro-a">Я &mdash; А</label>
+    <label class="tog" for="ro-b">Я &mdash; Б</label>
   </div>
   <nav class="chips">
-<a href="#t1" class="chip"><span class="num">1</span>Выходные</a>
-<a href="#t2" class="chip"><span class="num">2</span>Отпуск</a>
-<a href="#t3" class="chip"><span class="num">3</span>Леуварден</a>
-<a href="#t4" class="chip"><span class="num">4</span>Город/страна</a>
-<a href="#t5" class="chip"><span class="num">5</span>Погода</a>
-<a href="#t6" class="chip"><span class="num">6</span>Работа</a>
-<a href="#t7" class="chip"><span class="num">7</span>Готовить</a>
-<a href="#t8" class="chip"><span class="num">8</span>Еда</a>
-<a href="#t9" class="chip"><span class="num">9</span>Жильё</a>
-<a href="#t10" class="chip"><span class="num">10</span>Раньше</a>
+<a href="#t1" class="chip"><span class="cn">1</span>Выходные</a>
+<a href="#t2" class="chip"><span class="cn">2</span>Отпуск</a>
+<a href="#t3" class="chip"><span class="cn">3</span>Леуварден</a>
+<a href="#t4" class="chip"><span class="cn">4</span>Город</a>
+<a href="#t5" class="chip"><span class="cn">5</span>Погода</a>
+<a href="#t6" class="chip"><span class="cn">6</span>Работа</a>
+<a href="#t7" class="chip"><span class="cn">7</span>Готовить</a>
+<a href="#t8" class="chip"><span class="cn">8</span>Еда</a>
+<a href="#t9" class="chip"><span class="cn">9</span>Жильё</a>
+<a href="#t10" class="chip"><span class="cn">10</span>Раньше</a>
   </nav>
 </header>
 <main>
 <section id="t1">
-<div class="topic-head"><div class="topic-num">1</div><div><h2 class="topic-nl">Wat heb je gisteren of in het weekend gedaan?</h2><p class="topic-ru">Что ты делал вчера или на выходных?</p></div></div>
-<div class="scene-label">Диалог · lees om de beurt</div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Hé, wat heb je gisteren gedaan?</div><div class="ru">Привет, что ты делал вчера?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Gisteren heb ik gewerkt. En jij?</div><div class="ru">Вчера я работал. А ты?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">In het weekend heb ik mijn auto gewassen. Daarna ben ik naar de stad gegaan.</div><div class="ru">На выходных я помыл машину. Потом я поехал в город.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Leuk! Wat heb je in de stad gedaan?</div><div class="ru">Класс! Что ты делал в городе?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ik heb koffie gedronken met een vriend. En jij, wat heb je in het weekend gedaan?</div><div class="ru">Я пил кофе с другом. А ты, что ты делал на выходных?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ik ben thuis gebleven. Ik heb een film gekeken en pizza gegeten.</div><div class="ru">Я остался дома. Посмотрел фильм и поел пиццу.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Klinkt goed. Heb je ook gesport?</div><div class="ru">Звучит хорошо. А спортом занимался?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ja, zaterdag ben ik naar de sportschool geweest.</div><div class="ru">Да, в субботу ходил в спортзал.</div></div></div>
-<div class="doc-wrap"><div class="doc-title"><span class="badge">Docent</span>Vragen van de docent</div><p class="doc-hint">Преподаватель задаёт вопросы — отвечайте сами.</p>
-<div class="qa"><div class="q">Met wie was je in de stad?<span class="q-ru">С кем ты был в городе?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik was er met een vriend.</div><div class="a-ru">Я был там с другом.</div></div></div>
-<div class="qa"><div class="q">Heb je iets lekkers gegeten of gedronken?<span class="q-ru">Ты что-нибудь вкусное ел или пил?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, ik heb koffie gedronken en een broodje gegeten.</div><div class="a-ru">Да, я пил кофе и съел бутерброд.</div></div></div>
-<div class="qa"><div class="q">Vond je het gezellig?<span class="q-ru">Тебе было уютно?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, het was heel gezellig.</div><div class="a-ru">Да, было очень уютно.</div></div></div>
-<div class="qa"><div class="q">Was het duur?<span class="q-ru">Это было дорого?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Nee, het was niet zo duur.</div><div class="a-ru">Нет, не очень дорого.</div></div></div>
-<div class="qa"><div class="q">Wat ga je volgend weekend doen?<span class="q-ru">Что будешь делать в следующие выходные?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Volgend weekend ga ik naar mijn familie.</div><div class="a-ru">В следующие выходные поеду к семье.</div></div></div>
+<div class="th"><div class="tn">1</div><div><h2 class="tnl">Wat heb je gisteren of in het weekend gedaan?</h2><p class="tru">Что ты делал вчера или на выходных?</p></div></div>
+<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Hé, wat heb je gisteren gedaan?</summary>
+      <div class="gram"><b>Perfectum</b> <span class="gru">завершённое действие</span><code>hebben + ge…[t/d]</code>ik heb gewerkt · hij heeft gezien · wij hebben gegeten</div>
+    </details>
+    <div class="ru">Привет, что ты делал вчера?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Gisteren heb ik gewerkt. En jij?</summary>
+      <div class="gram"><b>Perfectum</b> <span class="gru">завершённое действие</span><code>hebben + ge…[t/d]</code>ik heb gewerkt · hij heeft gezien · wij hebben gegeten</div>
+    </details>
+    <div class="ru">Вчера я работал. А ты?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>In het weekend heb ik mijn auto gewassen. Daarna ben ik naar de stad gegaan.</summary>
+      <div class="gram"><b>Perfectum</b> <span class="gru">завершённое действие</span><code>hebben + ge…[t/d]</code>ik heb gewerkt · hij heeft gezien · wij hebben gegeten</div>
+    </details>
+    <div class="ru">На выходных я помыл машину. Потом я поехал в город.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Leuk! Wat heb je in de stad gedaan?</summary>
+      <div class="gram"><b>Perfectum</b> <span class="gru">завершённое действие</span><code>hebben + ge…[t/d]</code>ik heb gewerkt · hij heeft gezien · wij hebben gegeten</div>
+    </details>
+    <div class="ru">Класс! Что ты делал в городе?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ik heb koffie gedronken met een vriend. En jij, wat heb je in het weekend gedaan?</summary>
+      <div class="gram"><b>Perfectum</b> <span class="gru">завершённое действие</span><code>hebben + ge…[t/d]</code>ik heb gewerkt · hij heeft gezien · wij hebben gegeten</div>
+    </details>
+    <div class="ru">Я пил кофе с другом. А ты, что ты делал на выходных?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ik ben thuis gebleven. Ik heb een film gekeken en pizza gegeten.</summary>
+      <div class="gram"><b>Perfectum</b> <span class="gru">завершённое действие</span><code>hebben + ge…[t/d]</code>ik heb gewerkt · hij heeft gezien · wij hebben gegeten</div>
+    </details>
+    <div class="ru">Я остался дома. Посмотрел фильм и поел пиццу.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Klinkt goed. Heb je ook gesport?</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Звучит хорошо. А спортом занимался?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ja, zaterdag ben ik naar de sportschool geweest.</summary>
+      <div class="gram"><b>Perfectum (met zijn)</b> <span class="gru">движение / смена состояния</span><code>zijn + ge…[en]</code>ik ben gegaan · hij is geweest · wij zijn gebleven</div>
+    </details>
+    <div class="ru">Да, в субботу ходил в спортзал.</div>
+  </div>
+</div>
+<div class="dw"><div class="dt"><span class="db">Docent</span>Vragen van de docent</div><p class="dh">Преподаватель задаёт вопросы &mdash; отвечайте сами.</p>
+<div class="qa"><div class="q">Met wie was je in de stad?<span class="qru">С кем ты был в городе?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik was er met een vriend.</div><div class="aru">Я был там с другом.</div></div></div>
+<div class="qa"><div class="q">Heb je iets lekkers gegeten of gedronken?<span class="qru">Ты что-нибудь вкусное ел или пил?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, ik heb koffie gedronken en een broodje gegeten.</div><div class="aru">Да, я пил кофе и съел бутерброд.</div></div></div>
+<div class="qa"><div class="q">Vond je het gezellig?<span class="qru">Тебе было уютно?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, het was heel gezellig.</div><div class="aru">Да, было очень уютно.</div></div></div>
+<div class="qa"><div class="q">Was het duur?<span class="qru">Это было дорого?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Nee, het was niet zo duur.</div><div class="aru">Нет, не очень дорого.</div></div></div>
+<div class="qa"><div class="q">Wat ga je volgend weekend doen?<span class="qru">Что будешь делать в следующие выходные?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Volgend weekend ga ik naar mijn familie.</div><div class="aru">В следующие выходные поеду к семье.</div></div></div>
 </div></section>
-
 <section id="t2">
-<div class="topic-head"><div class="topic-num">2</div><div><h2 class="topic-nl">Samen plannen maken voor een vakantie.</h2><p class="topic-ru">Вместе планируете отпуск, предлагаете варианты.</p></div></div>
-<div class="scene-label">Диалог · lees om de beurt</div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Zullen we samen op vakantie gaan?</div><div class="ru">Поедем вместе в отпуск?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Goed idee! Waar wil je naartoe?</div><div class="ru">Хорошая идея! Куда хочешь?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ik wil graag naar Spanje. Het is daar warm.</div><div class="ru">Я бы хотел в Испанию. Там тепло.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Spanje is leuk, maar ik wil liever naar de bergen.</div><div class="ru">Испания — здорово, но я лучше в горы.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">We kunnen ook naar Oostenrijk gaan. Daar zijn mooie bergen.</div><div class="ru">Можем поехать в Австрию. Там красивые горы.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ja, perfect. Gaan we met de auto of het vliegtuig?</div><div class="ru">Да, отлично. Поедем на машине или полетим?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Laten we met de auto gaan. Dat is goedkoper.</div><div class="ru">Давай на машине. Это дешевле.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Oké. En waar slapen we? In een hotel of op een camping?</div><div class="ru">Окей. А где спим? В отеле или в кемпинге?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ik stel een hotel voor. Een camping is te koud voor mij.</div><div class="ru">Я предлагаю отель. Кемпинг для меня слишком холодный.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Afgesproken! Ik boek het hotel.</div><div class="ru">Договорились! Я забронирую отель.</div></div></div>
-<div class="doc-wrap"><div class="doc-title"><span class="badge">Docent</span>Vragen van de docent</div><p class="doc-hint">Преподаватель задаёт вопросы — отвечайте сами.</p>
-<div class="qa"><div class="q">Met wie ga je op vakantie?<span class="q-ru">С кем ты едешь в отпуск?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik ga met mijn vriend op vakantie.</div><div class="a-ru">Я еду в отпуск с другом.</div></div></div>
-<div class="qa"><div class="q">Heb je iets lekkers gegeten tijdens de reis?<span class="q-ru">Ты что-нибудь вкусное ел в дороге?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, we hebben onderweg iets gegeten in een restaurant.</div><div class="a-ru">Да, мы поели в ресторане по дороге.</div></div></div>
-<div class="qa"><div class="q">Vond je het leuk om te plannen?<span class="q-ru">Тебе понравилось планировать?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, ik vond het heel leuk.</div><div class="a-ru">Да, мне очень понравилось.</div></div></div>
-<div class="qa"><div class="q">Was het duur?<span class="q-ru">Это было дорого?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Het kost ongeveer vijfhonderd euro per persoon.</div><div class="a-ru">Около пятисот евро на человека.</div></div></div>
-<div class="qa"><div class="q">Hoeveel dagen willen jullie op vakantie gaan?<span class="q-ru">Сколько дней хотите отдыхать?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">We willen een week op vakantie gaan.</div><div class="a-ru">Мы хотим поехать на неделю.</div></div></div>
+<div class="th"><div class="tn">2</div><div><h2 class="tnl">Samen plannen maken voor een vakantie.</h2><p class="tru">Вместе планируете отпуск, предлагаете варианты.</p></div></div>
+<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Zullen we samen op vakantie gaan?</summary>
+      <div class="gram"><b>Voorstel</b> <span class="gru">предложение — «давайте»</span><code>Laten we … / Zullen we …</code>Laten we gaan · Zullen we samen eten?</div>
+    </details>
+    <div class="ru">Поедем вместе в отпуск?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Goed idee! Waar wil je naartoe?</summary>
+      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
+    </details>
+    <div class="ru">Хорошая идея! Куда хочешь?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ik wil graag naar Spanje. Het is daar warm.</summary>
+      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
+    </details>
+    <div class="ru">Я бы хотел в Испанию. Там тепло.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Spanje is leuk, maar ik wil liever naar de bergen.</summary>
+      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
+    </details>
+    <div class="ru">Испания — здорово, но я лучше в горы.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>We kunnen ook naar Oostenrijk gaan. Daar zijn mooie bergen.</summary>
+      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
+    </details>
+    <div class="ru">Можем поехать в Австрию. Там красивые горы.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ja, perfect. Gaan we met de auto of het vliegtuig?</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Да, отлично. Поедем на машине или полетим?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Laten we met de auto gaan. Dat is goedkoper.</summary>
+      <div class="gram"><b>Voorstel</b> <span class="gru">предложение — «давайте»</span><code>Laten we … / Zullen we …</code>Laten we gaan · Zullen we samen eten?</div>
+    </details>
+    <div class="ru">Давай на машине. Это дешевле.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Oké. En waar slapen we? In een hotel of op een camping?</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Окей. А где спим? В отеле или в кемпинге?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ik stel een hotel voor. Een camping is te koud voor mij.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Я предлагаю отель. Кемпинг для меня слишком холодный.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Afgesproken! Ik boek het hotel.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Договорились! Я забронирую отель.</div>
+  </div>
+</div>
+<div class="dw"><div class="dt"><span class="db">Docent</span>Vragen van de docent</div><p class="dh">Преподаватель задаёт вопросы &mdash; отвечайте сами.</p>
+<div class="qa"><div class="q">Met wie ga je op vakantie?<span class="qru">С кем ты едешь в отпуск?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik ga met mijn vriend op vakantie.</div><div class="aru">Я еду в отпуск с другом.</div></div></div>
+<div class="qa"><div class="q">Heb je iets lekkers gegeten tijdens de reis?<span class="qru">Ты что-нибудь вкусное ел в дороге?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, we hebben onderweg gegeten in een restaurant.</div><div class="aru">Да, мы поели в ресторане по дороге.</div></div></div>
+<div class="qa"><div class="q">Vond je het leuk om te plannen?<span class="qru">Тебе понравилось планировать?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, ik vond het heel leuk.</div><div class="aru">Да, мне очень понравилось.</div></div></div>
+<div class="qa"><div class="q">Was het duur?<span class="qru">Это было дорого?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Het kost ongeveer vijfhonderd euro per persoon.</div><div class="aru">Около пятисот евро на человека.</div></div></div>
+<div class="qa"><div class="q">Hoeveel dagen willen jullie op vakantie gaan?<span class="qru">Сколько дней хотите отдыхать?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">We willen een week op vakantie gaan.</div><div class="aru">Мы хотим поехать на неделю.</div></div></div>
 </div></section>
-
 <section id="t3">
-<div class="topic-head"><div class="topic-num">3</div><div><h2 class="topic-nl">Praat over Leeuwarden — wat vind je leuk?</h2><p class="topic-ru">Расскажите о Леувардене: что вам нравится, достопримечательности.</p></div></div>
-<div class="scene-label">Диалог · lees om de beurt</div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Wat vind jij leuk aan Leeuwarden?</div><div class="ru">Что тебе нравится в Леувардене?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ik vind het centrum mooi. Er zijn veel oude gebouwen.</div><div class="ru">Мне нравится центр. Там много старых зданий.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ja, en de Oldehove is heel bekend. Dat is een scheve toren.</div><div class="ru">Да, и Олдехове очень известна. Это кривая башня.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Klopt. Ik vind ook de grachten mooi.</div><div class="ru">Верно. Мне ещё нравятся каналы.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ben je weleens in het Fries Museum geweest?</div><div class="ru">Ты был во Фризском музее?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ja, een keer. Het was interessant.</div><div class="ru">Да, один раз. Было интересно.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">In de zomer zijn er veel terrasjes. Dat vind ik gezellig.</div><div class="ru">Летом много террас. По-моему, это уютно.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Mee eens. Leeuwarden is een rustige, gezellige stad.</div><div class="ru">Согласен. Леуварден — спокойный, уютный город.</div></div></div>
-<div class="doc-wrap"><div class="doc-title"><span class="badge">Docent</span>Vragen van de docent</div><p class="doc-hint">Преподаватель задаёт вопросы — отвечайте сами.</p>
-<div class="qa"><div class="q">Was je er alleen of met iemand?<span class="q-ru">Ты был там один или с кем-то?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik was er met mijn vriend.</div><div class="a-ru">Я был там с другом.</div></div></div>
-<div class="qa"><div class="q">Heb je iets lekkers gegeten in het centrum?<span class="q-ru">Ты что-нибудь вкусное ел в центре?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, ik heb gebak gegeten op een terras.</div><div class="a-ru">Да, я ел выпечку на террасе.</div></div></div>
-<div class="qa"><div class="q">Vond je het gezellig?<span class="q-ru">Тебе было уютно?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, het was heel gezellig.</div><div class="a-ru">Да, было очень уютно.</div></div></div>
-<div class="qa"><div class="q">Was het duur?<span class="q-ru">Было ли там дорого?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Nee, een terras is niet zo duur.</div><div class="a-ru">Нет, терраса — не так дорого.</div></div></div>
-<div class="qa"><div class="q">Welke bezienswaardigheid vind je het mooist?<span class="q-ru">Какая достопримечательность нравится больше всего?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik vind de Oldehove het mooist.</div><div class="a-ru">Больше всего мне нравится Олдехове.</div></div></div>
+<div class="th"><div class="tn">3</div><div><h2 class="tnl">Praat over Leeuwarden — wat vind je leuk?</h2><p class="tru">Расскажите о Леувардене: достопримечательности.</p></div></div>
+<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Wat vind jij leuk aan Leeuwarden?</summary>
+      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
+    </details>
+    <div class="ru">Что тебе нравится в Леувардене?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ik vind het centrum mooi. Er zijn veel oude gebouwen.</summary>
+      <div class="gram"><b>Perfectum (met zijn)</b> <span class="gru">движение / смена состояния</span><code>zijn + ge…[en]</code>ik ben gegaan · hij is geweest · wij zijn gebleven</div>
+    </details>
+    <div class="ru">Мне нравится центр. Там много старых зданий.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ja, en de Oldehove is heel bekend. Dat is een scheve toren.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Да, и Олдехове очень известна. Это кривая башня.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Klopt. Ik vind ook de grachten mooi.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Верно. Мне ещё нравятся каналы.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ben je weleens in het Fries Museum geweest?</summary>
+      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
+    </details>
+    <div class="ru">Ты был во Фризском музее?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ja, een keer. Het was interessant.</summary>
+      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
+    </details>
+    <div class="ru">Да, один раз. Было интересно.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>In de zomer zijn er veel terrasjes. Dat vind ik gezellig.</summary>
+      <div class="gram"><b>Perfectum (met zijn)</b> <span class="gru">движение / смена состояния</span><code>zijn + ge…[en]</code>ik ben gegaan · hij is geweest · wij zijn gebleven</div>
+    </details>
+    <div class="ru">Летом много террас. По-моему, это уютно.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Mee eens. Leeuwarden is een rustige, gezellige stad.</summary>
+      <div class="gram"><b>Perfectum (met zijn)</b> <span class="gru">движение / смена состояния</span><code>zijn + ge…[en]</code>ik ben gegaan · hij is geweest · wij zijn gebleven</div>
+    </details>
+    <div class="ru">Согласен. Леуварден — спокойный, уютный город.</div>
+  </div>
+</div>
+<div class="dw"><div class="dt"><span class="db">Docent</span>Vragen van de docent</div><p class="dh">Преподаватель задаёт вопросы &mdash; отвечайте сами.</p>
+<div class="qa"><div class="q">Was je er alleen of met iemand?<span class="qru">Ты был там один или с кем-то?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik was er met mijn vriend.</div><div class="aru">Я был там с другом.</div></div></div>
+<div class="qa"><div class="q">Heb je iets lekkers gegeten in het centrum?<span class="qru">Ты что-нибудь вкусное ел в центре?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, ik heb gebak gegeten op een terras.</div><div class="aru">Да, я ел выпечку на террасе.</div></div></div>
+<div class="qa"><div class="q">Vond je het gezellig?<span class="qru">Тебе было уютно?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, het was heel gezellig.</div><div class="aru">Да, было очень уютно.</div></div></div>
+<div class="qa"><div class="q">Was het duur?<span class="qru">Было ли там дорого?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Nee, een terras is niet zo duur.</div><div class="aru">Нет, терраса — не так дорого.</div></div></div>
+<div class="qa"><div class="q">Welke bezienswaardigheid vind je het mooist?<span class="qru">Какая достопримечательность нравится больше всего?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik vind de Oldehove het mooist.</div><div class="aru">Больше всего мне нравится Олдехове.</div></div></div>
 </div></section>
-
 <section id="t4">
-<div class="topic-head"><div class="topic-num">4</div><div><h2 class="topic-nl">Vertel over jouw stad of land — wat is leuk voor toeristen?</h2><p class="topic-ru">Расскажите о своём городе/стране: что интересно туристам.</p></div></div>
-<div class="scene-label">Диалог · lees om de beurt</div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Waar kom jij vandaan?</div><div class="ru">Откуда ты?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ik kom uit Oekraïne. En jij?</div><div class="ru">Я из Украины. А ты?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ik kom ook uit Oekraïne. Wat is leuk voor toeristen in jouw stad?</div><div class="ru">Я тоже из Украины. Что интересно туристам в твоём городе?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Er zijn veel parken en oude kerken. En het eten is lekker!</div><div class="ru">Там много парков и старых церквей. И вкусная еда!</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Klinkt mooi. Is het er duur?</div><div class="ru">Звучит красиво. Там дорого?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Nee, het is niet zo duur. Het eten is goedkoop.</div><div class="ru">Нет, не очень дорого. Еда дешёвая.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Wat moeten toeristen zeker zien?</div><div class="ru">Что туристам обязательно надо увидеть?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ze moeten het centrum en de rivier bezoeken.</div><div class="ru">Им стоит посетить центр и реку.</div></div></div>
-<div class="doc-wrap"><div class="doc-title"><span class="badge">Docent</span>Vragen van de docent</div><p class="doc-hint">Преподаватель задаёт вопросы — отвечайте сами.</p>
-<div class="qa"><div class="q">Was je er alleen of met iemand?<span class="q-ru">Ты был там один или с кем-то?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Nee, ik was er met mijn familie.</div><div class="a-ru">Нет, я был там с семьёй.</div></div></div>
-<div class="qa"><div class="q">Wat at je graag in jouw land?<span class="q-ru">Что ты любил есть в своей стране?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik at graag borsjt en vareniki.</div><div class="a-ru">Я любил есть борщ и вареники.</div></div></div>
-<div class="qa"><div class="q">Vond je het leuk om er te wonen?<span class="q-ru">Тебе нравилось там жить?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, ik vond het heel leuk.</div><div class="a-ru">Да, мне очень нравилось.</div></div></div>
-<div class="qa"><div class="q">Was het duur om er te leven?<span class="q-ru">Там было дорого жить?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Nee, het was goedkoper dan hier.</div><div class="a-ru">Нет, было дешевле, чем здесь.</div></div></div>
-<div class="qa"><div class="q">Mis je jouw stad?<span class="q-ru">Скучаешь по своему городу?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, ik mis mijn stad soms, vooral mijn vrienden.</div><div class="a-ru">Да, иногда скучаю, особенно по друзьям.</div></div></div>
+<div class="th"><div class="tn">4</div><div><h2 class="tnl">Vertel over jouw stad of land.</h2><p class="tru">Расскажите о своём городе/стране: что интересно туристам.</p></div></div>
+<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Waar kom jij vandaan?</summary>
+      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
+    </details>
+    <div class="ru">Откуда ты?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ik kom uit Oekraïne. En jij?</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Я из Украины. А ты?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ik kom ook uit Oekraïne. Wat is leuk voor toeristen in jouw stad?</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Я тоже из Украины. Что интересно туристам в твоём городе?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Er zijn veel parken en oude kerken. En het eten is lekker!</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Там много парков и старых церквей. И вкусная еда!</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Klinkt mooi. Is het er duur?</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Звучит красиво. Там дорого?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Nee, het is niet zo duur. Het eten is goedkoop.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Нет, не очень дорого. Еда дешёвая.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Wat moeten toeristen zeker zien?</summary>
+      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
+    </details>
+    <div class="ru">Что туристам обязательно надо увидеть?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ze moeten het centrum en de rivier bezoeken.</summary>
+      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
+    </details>
+    <div class="ru">Им стоит посетить центр и реку.</div>
+  </div>
+</div>
+<div class="dw"><div class="dt"><span class="db">Docent</span>Vragen van de docent</div><p class="dh">Преподаватель задаёт вопросы &mdash; отвечайте сами.</p>
+<div class="qa"><div class="q">Was je er alleen of met iemand?<span class="qru">Ты был там один или с кем-то?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Nee, ik was er met mijn familie.</div><div class="aru">Нет, я был там с семьёй.</div></div></div>
+<div class="qa"><div class="q">Wat at je graag in jouw land?<span class="qru">Что ты любил есть в своей стране?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik at graag borsjt en vareniki.</div><div class="aru">Я любил есть борщ и вареники.</div></div></div>
+<div class="qa"><div class="q">Vond je het leuk om er te wonen?<span class="qru">Тебе нравилось там жить?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, ik vond het heel leuk.</div><div class="aru">Да, мне очень нравилось.</div></div></div>
+<div class="qa"><div class="q">Was het duur om er te leven?<span class="qru">Там было дорого жить?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Nee, het was goedkoper dan hier.</div><div class="aru">Нет, было дешевле, чем здесь.</div></div></div>
+<div class="qa"><div class="q">Mis je jouw stad?<span class="qru">Скучаешь по своему городу?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, ik mis mijn stad soms.</div><div class="aru">Да, иногда скучаю.</div></div></div>
 </div></section>
-
 <section id="t5">
-<div class="topic-head"><div class="topic-num">5</div><div><h2 class="topic-nl">Praat over het weer in Nederland en in jouw land.</h2><p class="topic-ru">Погода в Нидерландах и у вас: поговорите о различиях.</p></div></div>
-<div class="scene-label">Диалог · lees om de beurt</div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Hoe is het weer vandaag?</div><div class="ru">Какая сегодня погода?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Het regent en het is koud. Typisch Nederlands weer!</div><div class="ru">Дождь и холодно. Типичная голландская погода!</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ja, hier regent het vaak. In mijn land is het anders.</div><div class="ru">Да, здесь часто идёт дождь. У меня в стране иначе.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Hoe is het weer in jouw land?</div><div class="ru">А какая погода в твоей стране?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">In de zomer is het heel warm, soms dertig graden. In de winter sneeuwt het veel.</div><div class="ru">Летом очень жарко, иногда тридцать градусов. Зимой много снега.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Dat is een groot verschil. Hier sneeuwt het bijna nooit.</div><div class="ru">Это большая разница. Здесь снег почти никогда не идёт.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Klopt. En hier waait het ook veel.</div><div class="ru">Верно. И здесь ещё часто ветер.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Welk weer vind jij mooi?</div><div class="ru">Какая погода тебе нравится?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ik hou van de zon. Regen vind ik niet leuk.</div><div class="ru">Я люблю солнце. Дождь мне не нравится.</div></div></div>
-<div class="doc-wrap"><div class="doc-title"><span class="badge">Docent</span>Vragen van de docent</div><p class="doc-hint">Преподаватель задаёт вопросы — отвечайте сами.</p>
-<div class="qa"><div class="q">Was je gisteren alleen thuis of met iemand?<span class="q-ru">Ты был вчера дома один или с кем-то?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Nee, ik was thuis met mijn gezin.</div><div class="a-ru">Нет, я был дома с семьёй.</div></div></div>
-<div class="qa"><div class="q">Heb je iets lekkers gegeten thuis?<span class="q-ru">Ты что-нибудь вкусное ел дома?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, ik heb soep gemaakt. Dat is lekker als het koud is.</div><div class="a-ru">Да, я приготовил суп. Это вкусно, когда холодно.</div></div></div>
-<div class="qa"><div class="q">Vond je het gezellig binnen?<span class="q-ru">Тебе было уютно дома?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, heel gezellig met de familie.</div><div class="a-ru">Да, очень уютно с семьёй.</div></div></div>
-<div class="qa"><div class="q">Wat doe je als het regent?<span class="q-ru">Что ты делаешь, когда идёт дождь?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Als het regent, blijf ik thuis.</div><div class="a-ru">Когда идёт дождь, я остаюсь дома.</div></div></div>
-<div class="qa"><div class="q">Welk seizoen vind je het fijnst?<span class="q-ru">Какое время года тебе нравится больше всего?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik vind de lente het fijnst, want het is niet te warm.</div><div class="a-ru">Больше всего мне нравится весна, потому что не слишком жарко.</div></div></div>
+<div class="th"><div class="tn">5</div><div><h2 class="tnl">Praat over het weer in Nederland en in jouw land.</h2><p class="tru">Погода в Нидерландах и у вас: различия.</p></div></div>
+<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Hoe is het weer vandaag?</summary>
+      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
+    </details>
+    <div class="ru">Какая сегодня погода?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Het regent en het is koud. Typisch Nederlands weer!</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Дождь и холодно. Типичная голландская погода!</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ja, hier regent het vaak. In mijn land is het anders.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Да, здесь часто идёт дождь. У меня в стране иначе.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Hoe is het weer in jouw land?</summary>
+      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
+    </details>
+    <div class="ru">А какая погода в твоей стране?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>In de zomer is het heel warm, soms dertig graden. In de winter sneeuwt het veel.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Летом очень жарко, иногда тридцать градусов. Зимой много снега.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Dat is een groot verschil. Hier sneeuwt het bijna nooit.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Это большая разница. Здесь снег почти никогда не идёт.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Klopt. En hier waait het ook veel.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Верно. И здесь ещё часто ветер.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Welk weer vind jij mooi?</summary>
+      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
+    </details>
+    <div class="ru">Какая погода тебе нравится?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ik hou van de zon. Regen vind ik niet leuk.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Я люблю солнце. Дождь мне не нравится.</div>
+  </div>
+</div>
+<div class="dw"><div class="dt"><span class="db">Docent</span>Vragen van de docent</div><p class="dh">Преподаватель задаёт вопросы &mdash; отвечайте сами.</p>
+<div class="qa"><div class="q">Was je gisteren alleen thuis of met iemand?<span class="qru">Ты был вчера дома один или с кем-то?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Nee, ik was thuis met mijn gezin.</div><div class="aru">Нет, я был дома с семьёй.</div></div></div>
+<div class="qa"><div class="q">Heb je iets lekkers gegeten thuis?<span class="qru">Ты что-нибудь вкусное ел дома?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, ik heb soep gemaakt. Dat is lekker als het koud is.</div><div class="aru">Да, я приготовил суп. Это вкусно, когда холодно.</div></div></div>
+<div class="qa"><div class="q">Vond je het gezellig binnen?<span class="qru">Тебе было уютно дома?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, heel gezellig met de familie.</div><div class="aru">Да, очень уютно с семьёй.</div></div></div>
+<div class="qa"><div class="q">Wat doe je als het regent?<span class="qru">Что ты делаешь, когда идёт дождь?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Als het regent, blijf ik thuis.</div><div class="aru">Когда идёт дождь, я остаюсь дома.</div></div></div>
+<div class="qa"><div class="q">Welk seizoen vind je het fijnst?<span class="qru">Какое время года тебе нравится больше всего?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik vind de lente het fijnst, want het is niet te warm.</div><div class="aru">Больше всего мне нравится весна.</div></div></div>
 </div></section>
-
 <section id="t6">
-<div class="topic-head"><div class="topic-num">6</div><div><h2 class="topic-nl">Vertel elkaar over werk of studie.</h2><p class="topic-ru">Расскажите друг другу о работе или учёбе.</p></div></div>
-<div class="scene-label">Диалог · lees om de beurt</div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Wat voor werk doe jij?</div><div class="ru">Кем ты работаешь?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ik werk in een fabriek. Ik ben machineoperator. En jij?</div><div class="ru">Я работаю на заводе. Я оператор станка. А ты?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ik leer Nederlands en ik werk in een winkel.</div><div class="ru">Я учу нидерландский и работаю в магазине.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Vind je je werk leuk?</div><div class="ru">Тебе нравится твоя работа?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ja, maar het is soms druk. En jij?</div><div class="ru">Да, но иногда много дел. А ты?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Mijn werk is zwaar, maar het betaalt goed.</div><div class="ru">Моя работа тяжёлая, но хорошо оплачивается.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Hoe laat begin je 's ochtends?</div><div class="ru">Во сколько ты начинаешь утром?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ik werk in ploegen. Soms begin ik om zes uur.</div><div class="ru">Я работаю по сменам. Иногда начинаю в шесть.</div></div></div>
-<div class="doc-wrap"><div class="doc-title"><span class="badge">Docent</span>Vragen van de docent</div><p class="doc-hint">Преподаватель задаёт вопросы — отвечайте сами.</p>
-<div class="qa"><div class="q">Eet je iets lekkers op je werk?<span class="q-ru">Ты ешь что-нибудь вкусное на работе?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, ik eet een broodje en drink koffie.</div><div class="a-ru">Да, я ем бутерброд и пью кофе.</div></div></div>
-<div class="qa"><div class="q">Ben je moe na je werk?<span class="q-ru">Ты устаёшь после работы?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, soms ben ik heel moe na mijn werk.</div><div class="a-ru">Да, иногда я очень устаю после работы.</div></div></div>
-<div class="qa"><div class="q">Vind je je werk leuk?<span class="q-ru">Тебе нравится твоя работа?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, maar het is soms zwaar.</div><div class="a-ru">Да, но иногда тяжело.</div></div></div>
-<div class="qa"><div class="q">Hoeveel uur per week werk je?<span class="q-ru">Сколько часов в неделю ты работаешь?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik werk ongeveer veertig uur per week.</div><div class="a-ru">Я работаю около сорока часов в неделю.</div></div></div>
-<div class="qa"><div class="q">Hoe ga je naar je werk?<span class="q-ru">Как ты добираешься до работы?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik ga met de auto naar mijn werk.</div><div class="a-ru">Я езжу на работу на машине.</div></div></div>
+<div class="th"><div class="tn">6</div><div><h2 class="tnl">Vertel elkaar over werk of studie.</h2><p class="tru">Расскажите друг другу о работе или учёбе.</p></div></div>
+<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Wat voor werk doe jij?</summary>
+      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
+    </details>
+    <div class="ru">Кем ты работаешь?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ik werk in een fabriek. Ik ben machineoperator. En jij?</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Я работаю на заводе. Я оператор станка. А ты?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ik leer Nederlands en ik werk in een winkel.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Я учу нидерландский и работаю в магазине.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Vind je je werk leuk?</summary>
+      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
+    </details>
+    <div class="ru">Тебе нравится твоя работа?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ja, maar het is soms druk. En jij?</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Да, но иногда много дел. А ты?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Mijn werk is zwaar, maar het betaalt goed.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Моя работа тяжёлая, но хорошо оплачивается.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Hoe laat begin je 's ochtends?</summary>
+      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
+    </details>
+    <div class="ru">Во сколько ты начинаешь утром?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ik werk in ploegen. Soms begin ik om zes uur.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Я работаю по сменам. Иногда начинаю в шесть.</div>
+  </div>
+</div>
+<div class="dw"><div class="dt"><span class="db">Docent</span>Vragen van de docent</div><p class="dh">Преподаватель задаёт вопросы &mdash; отвечайте сами.</p>
+<div class="qa"><div class="q">Eet je iets lekkers op je werk?<span class="qru">Ты ешь что-нибудь вкусное на работе?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, ik eet een broodje en drink koffie.</div><div class="aru">Да, я ем бутерброд и пью кофе.</div></div></div>
+<div class="qa"><div class="q">Ben je moe na je werk?<span class="qru">Ты устаёшь после работы?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, soms ben ik heel moe na mijn werk.</div><div class="aru">Да, иногда я очень устаю после работы.</div></div></div>
+<div class="qa"><div class="q">Vind je je werk leuk?<span class="qru">Тебе нравится твоя работа?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, maar het is soms zwaar.</div><div class="aru">Да, но иногда тяжело.</div></div></div>
+<div class="qa"><div class="q">Hoeveel uur per week werk je?<span class="qru">Сколько часов в неделю ты работаешь?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik werk ongeveer veertig uur per week.</div><div class="aru">Я работаю около сорока часов в неделю.</div></div></div>
+<div class="qa"><div class="q">Hoe ga je naar je werk?<span class="qru">Как ты добираешься до работы?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik ga met de auto naar mijn werk.</div><div class="aru">Я езжу на работу на машине.</div></div></div>
 </div></section>
-
 <section id="t7">
-<div class="topic-head"><div class="topic-num">7</div><div><h2 class="topic-nl">Je wilt spaghetti maken — vraag hoe dat moet.</h2><p class="topic-ru">Вы хотите приготовить спагетти, но не знаете как. Спросите.</p></div></div>
-<div class="scene-label">Диалог · lees om de beurt</div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ik wil spaghetti maken, maar ik weet niet hoe. Kun je me helpen?</div><div class="ru">Я хочу приготовить спагетти, но не знаю как. Поможешь?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Natuurlijk. Eerst kook je water in een pan.</div><div class="ru">Конечно. Сначала вскипяти воду в кастрюле.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Oké, en dan?</div><div class="ru">Окей, а потом?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Dan doe je de spaghetti in het water. Het kookt ongeveer tien minuten.</div><div class="ru">Потом положи спагетти в воду. Варятся около десяти минут.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">En de saus?</div><div class="ru">А соус?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Voor de saus bak je ui en knoflook. Daarna doe je tomaten erbij.</div><div class="ru">Для соуса обжарь лук и чеснок. Потом добавь помидоры.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Moet ik ook kaas gebruiken?</div><div class="ru">Сыр тоже нужен?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ja, je kunt kaas erover doen. Dat is lekker.</div><div class="ru">Да, можешь посыпать сыром сверху. Это вкусно.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Bedankt! Nu weet ik het.</div><div class="ru">Спасибо! Теперь я знаю.</div></div></div>
-<div class="doc-wrap"><div class="doc-title"><span class="badge">Docent</span>Vragen van de docent</div><p class="doc-hint">Преподаватель задаёт вопросы — отвечайте сами.</p>
-<div class="qa"><div class="q">Heb je het alleen gegeten of met iemand?<span class="q-ru">Ты ел один или с кем-то?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik heb het met mijn gezin gegeten.</div><div class="a-ru">Я ел это с семьёй.</div></div></div>
-<div class="qa"><div class="q">Heb je het lekker gevonden?<span class="q-ru">Тебе понравилось на вкус?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, het was heel lekker!</div><div class="a-ru">Да, было очень вкусно!</div></div></div>
-<div class="qa"><div class="q">Was het duur?<span class="q-ru">Это было дорого?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Nee, de ingrediënten zijn goedkoop.</div><div class="a-ru">Нет, ингредиенты дешёвые.</div></div></div>
-<div class="qa"><div class="q">Hoeveel zout doe je in het water?<span class="q-ru">Сколько соли кладёшь в воду?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik doe een beetje zout in het water.</div><div class="a-ru">Я кладу немного соли в воду.</div></div></div>
-<div class="qa"><div class="q">Hoe lang duurt het in totaal?<span class="q-ru">Сколько это занимает всего?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Het duurt ongeveer twintig minuten.</div><div class="a-ru">Это занимает около двадцати минут.</div></div></div>
+<div class="th"><div class="tn">7</div><div><h2 class="tnl">Je wilt spaghetti maken — vraag hoe dat moet.</h2><p class="tru">Вы хотите приготовить спагетти, но не знаете как.</p></div></div>
+<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ik wil spaghetti maken, maar ik weet niet hoe. Kun je me helpen?</summary>
+      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
+    </details>
+    <div class="ru">Я хочу приготовить спагетти, но не знаю как. Поможешь?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Natuurlijk. Eerst kook je water in een pan.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Конечно. Сначала вскипяти воду в кастрюле.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Oké, en dan?</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Окей, а потом?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Dan doe je de spaghetti in het water. Het kookt ongeveer tien minuten.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Потом положи спагетти в воду. Варятся около десяти минут.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>En de saus?</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">А соус?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Voor de saus bak je ui en knoflook. Daarna doe je tomaten erbij.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Для соуса обжарь лук и чеснок. Потом добавь помидоры.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Moet ik ook kaas gebruiken?</summary>
+      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
+    </details>
+    <div class="ru">Сыр тоже нужен?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ja, je kunt kaas erover doen. Dat is lekker.</summary>
+      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
+    </details>
+    <div class="ru">Да, можешь посыпать сыром сверху. Это вкусно.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Bedankt! Nu weet ik het.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Спасибо! Теперь я знаю.</div>
+  </div>
+</div>
+<div class="dw"><div class="dt"><span class="db">Docent</span>Vragen van de docent</div><p class="dh">Преподаватель задаёт вопросы &mdash; отвечайте сами.</p>
+<div class="qa"><div class="q">Heb je het alleen gegeten of met iemand?<span class="qru">Ты ел один или с кем-то?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik heb het met mijn gezin gegeten.</div><div class="aru">Я ел это с семьёй.</div></div></div>
+<div class="qa"><div class="q">Heb je het lekker gevonden?<span class="qru">Тебе понравилось на вкус?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, het was heel lekker!</div><div class="aru">Да, было очень вкусно!</div></div></div>
+<div class="qa"><div class="q">Was het duur?<span class="qru">Это было дорого?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Nee, de ingrediënten zijn goedkoop.</div><div class="aru">Нет, ингредиенты дешёвые.</div></div></div>
+<div class="qa"><div class="q">Hoeveel zout doe je in het water?<span class="qru">Сколько соли кладёшь в воду?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik doe een beetje zout in het water.</div><div class="aru">Я кладу немного соли в воду.</div></div></div>
+<div class="qa"><div class="q">Hoe lang duurt het in totaal?<span class="qru">Сколько это занимает всего?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Het duurt ongeveer twintig minuten.</div><div class="aru">Это занимает около двадцати минут.</div></div></div>
 </div></section>
-
 <section id="t8">
-<div class="topic-head"><div class="topic-num">8</div><div><h2 class="topic-nl">Favoriete gerechten en gerechten die je mist.</h2><p class="topic-ru">Любимые блюда и блюда, по которым вы скучаете.</p></div></div>
-<div class="scene-label">Диалог · lees om de beurt</div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Wat is jouw favoriete gerecht?</div><div class="ru">Какое твоё любимое блюдо?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Mijn favoriete gerecht is borsjt. Dat is soep met bieten. En jij?</div><div class="ru">Моё любимое блюдо — борщ. Это суп со свёклой. А ты?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ik hou van vareniki. Mis je eten uit je land?</div><div class="ru">Я люблю вареники. Скучаешь по еде из своей страны?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ja, ik mis het brood uit mijn land. Hier is het anders.</div><div class="ru">Да, скучаю по хлебу из своей страны. Здесь он другой.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ik mis de soep van mijn moeder.</div><div class="ru">Я скучаю по маминому супу.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Kook je zelf eten uit je land?</div><div class="ru">Ты сам готовишь блюда своей страны?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Soms, maar het is moeilijk om de juiste producten te vinden.</div><div class="ru">Иногда, но трудно найти нужные продукты.</div></div></div>
-<div class="doc-wrap"><div class="doc-title"><span class="badge">Docent</span>Vragen van de docent</div><p class="doc-hint">Преподаватель задаёт вопросы — отвечайте сами.</p>
-<div class="qa"><div class="q">Eet je vaak alleen of met iemand?<span class="q-ru">Ты часто ешь один или с кем-то?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik eet meestal met mijn gezin.</div><div class="a-ru">Я обычно ем с семьёй.</div></div></div>
-<div class="qa"><div class="q">Heb je iets lekkers gegeten vandaag?<span class="q-ru">Ты что-нибудь вкусное сегодня ел?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, ik heb borsjt gemaakt. Het was heel lekker.</div><div class="a-ru">Да, я приготовил борщ. Было очень вкусно.</div></div></div>
-<div class="qa"><div class="q">Vond je het lekker?<span class="q-ru">Тебе понравилось на вкус?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, heel lekker!</div><div class="a-ru">Да, очень вкусно!</div></div></div>
-<div class="qa"><div class="q">Was het duur in de winkel?<span class="q-ru">Это было дорого в магазине?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Nee, de producten zijn niet zo duur.</div><div class="a-ru">Нет, продукты не такие дорогие.</div></div></div>
-<div class="qa"><div class="q">Kook je vaak zelf?<span class="q-ru">Ты часто готовишь сам?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Nee, ik kook niet vaak, omdat ik weinig tijd heb.</div><div class="a-ru">Нет, готовлю нечасто, потому что мало времени.</div></div></div>
+<div class="th"><div class="tn">8</div><div><h2 class="tnl">Favoriete gerechten en gerechten die je mist.</h2><p class="tru">Любимые блюда и блюда, по которым вы скучаете.</p></div></div>
+<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Wat is jouw favoriete gerecht?</summary>
+      <div class="gram"><b>Perfectum (met zijn)</b> <span class="gru">движение / смена состояния</span><code>zijn + ge…[en]</code>ik ben gegaan · hij is geweest · wij zijn gebleven</div>
+    </details>
+    <div class="ru">Какое твоё любимое блюдо?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Mijn favoriete gerecht is borsjt. Dat is soep met bieten. En jij?</summary>
+      <div class="gram"><b>Perfectum (met zijn)</b> <span class="gru">движение / смена состояния</span><code>zijn + ge…[en]</code>ik ben gegaan · hij is geweest · wij zijn gebleven</div>
+    </details>
+    <div class="ru">Моё любимое блюдо — борщ. Это суп со свёклой. А ты?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ik hou van vareniki. Mis je eten uit je land?</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Я люблю вареники. Скучаешь по еде из своей страны?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ja, ik mis het brood uit mijn land. Hier is het anders.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Да, скучаю по хлебу из своей страны. Здесь он другой.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ik mis de soep van mijn moeder.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Я скучаю по маминому супу.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Kook je zelf eten uit je land?</summary>
+      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
+    </details>
+    <div class="ru">Ты сам готовишь блюда своей страны?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Soms, maar het is moeilijk om de juiste producten te vinden.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Иногда, но трудно найти нужные продукты.</div>
+  </div>
+</div>
+<div class="dw"><div class="dt"><span class="db">Docent</span>Vragen van de docent</div><p class="dh">Преподаватель задаёт вопросы &mdash; отвечайте сами.</p>
+<div class="qa"><div class="q">Eet je vaak alleen of met iemand?<span class="qru">Ты часто ешь один или с кем-то?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik eet meestal met mijn gezin.</div><div class="aru">Я обычно ем с семьёй.</div></div></div>
+<div class="qa"><div class="q">Heb je iets lekkers gegeten vandaag?<span class="qru">Ты что-нибудь вкусное сегодня ел?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, ik heb borsjt gemaakt. Het was heel lekker.</div><div class="aru">Да, я приготовил борщ. Было очень вкусно.</div></div></div>
+<div class="qa"><div class="q">Vond je het lekker?<span class="qru">Тебе понравилось на вкус?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, heel lekker!</div><div class="aru">Да, очень вкусно!</div></div></div>
+<div class="qa"><div class="q">Was het duur in de winkel?<span class="qru">Это было дорого в магазине?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Nee, de producten zijn niet zo duur.</div><div class="aru">Нет, продукты не такие дорогие.</div></div></div>
+<div class="qa"><div class="q">Kook je vaak zelf?<span class="qru">Ты часто готовишь сам?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Nee, ik kook niet vaak, omdat ik weinig tijd heb.</div><div class="aru">Нет, готовлю нечасто, потому что мало времени.</div></div></div>
 </div></section>
-
 <section id="t9">
-<div class="topic-head"><div class="topic-num">9</div><div><h2 class="topic-nl">Vertel over jullie woning en je meubels.</h2><p class="topic-ru">Расскажите о жилье: как выглядит дом и какая мебель.</p></div></div>
-<div class="scene-label">Диалог · lees om de beurt</div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Hoe ziet jouw huis eruit?</div><div class="ru">Как выглядит твой дом?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ik woon in een klein appartement. Het heeft twee kamers.</div><div class="ru">Я живу в маленькой квартире. В ней две комнаты.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Wat voor meubels heb je in de woonkamer?</div><div class="ru">Какая мебель у тебя в гостиной?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ik heb een bank, een tafel en een tv. En jij?</div><div class="ru">У меня диван, стол и телевизор. А у тебя?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Mijn woonkamer is groter. Ik heb een bank, twee stoelen en een grote kast.</div><div class="ru">Моя гостиная больше. У меня диван, два стула и большой шкаф.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Welke kleur hebben je muren?</div><div class="ru">Какого цвета у тебя стены?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Mijn muren zijn wit en de vloer is van hout.</div><div class="ru">Стены белые, а пол деревянный.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Heb je veel spullen?</div><div class="ru">У тебя много вещей?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Nee, niet veel. Mijn huis is klein, dus ik heb weinig spullen.</div><div class="ru">Нет, немного. Дом маленький, поэтому вещей мало.</div></div></div>
-<div class="doc-wrap"><div class="doc-title"><span class="badge">Docent</span>Vragen van de docent</div><p class="doc-hint">Преподаватель задаёт вопросы — отвечайте сами.</p>
-<div class="qa"><div class="q">Woon je er alleen of met iemand?<span class="q-ru">Ты там живёшь один или с кем-то?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik woon met mijn gezin.</div><div class="a-ru">Я живу с семьёй.</div></div></div>
-<div class="qa"><div class="q">Eet je thuis of ga je naar een restaurant?<span class="q-ru">Ты ешь дома или ходишь в ресторан?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik eet meestal thuis. Dat is goedkoper.</div><div class="a-ru">Я обычно ем дома. Это дешевле.</div></div></div>
-<div class="qa"><div class="q">Vind je het gezellig bij jou thuis?<span class="q-ru">Тебе уютно у тебя дома?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, het is heel gezellig.</div><div class="a-ru">Да, очень уютно.</div></div></div>
-<div class="qa"><div class="q">Is de huur duur?<span class="q-ru">Аренда дорогая?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, de huur is een beetje duur.</div><div class="a-ru">Да, аренда немного дорогая.</div></div></div>
-<div class="qa"><div class="q">Vind je de inrichting belangrijk?<span class="q-ru">Для тебя важна обстановка?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, ik vind het belangrijk dat het gezellig is.</div><div class="a-ru">Да, мне важно, чтобы было уютно.</div></div></div>
+<div class="th"><div class="tn">9</div><div><h2 class="tnl">Vertel over jullie woning en je meubels.</h2><p class="tru">Расскажите о жилье: как выглядит дом и какая мебель.</p></div></div>
+<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Hoe ziet jouw huis eruit?</summary>
+      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
+    </details>
+    <div class="ru">Как выглядит твой дом?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ik woon in een klein appartement. Het heeft twee kamers.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Я живу в маленькой квартире. В ней две комнаты.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Wat voor meubels heb je in de woonkamer?</summary>
+      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
+    </details>
+    <div class="ru">Какая мебель у тебя в гостиной?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ik heb een bank, een tafel en een tv. En jij?</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">У меня диван, стол и телевизор. А у тебя?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Mijn woonkamer is groter. Ik heb een bank, twee stoelen en een grote kast.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Моя гостиная больше. У меня диван, два стула и большой шкаф.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Welke kleur hebben je muren?</summary>
+      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
+    </details>
+    <div class="ru">Какого цвета у тебя стены?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Mijn muren zijn wit en de vloer is van hout.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Стены белые, а пол деревянный.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Heb je veel spullen?</summary>
+      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
+    </details>
+    <div class="ru">У тебя много вещей?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Nee, niet veel. Mijn huis is klein, dus ik heb weinig spullen.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Нет, немного. Дом маленький, поэтому вещей мало.</div>
+  </div>
+</div>
+<div class="dw"><div class="dt"><span class="db">Docent</span>Vragen van de docent</div><p class="dh">Преподаватель задаёт вопросы &mdash; отвечайте сами.</p>
+<div class="qa"><div class="q">Woon je er alleen of met iemand?<span class="qru">Ты там живёшь один или с кем-то?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik woon met mijn gezin.</div><div class="aru">Я живу с семьёй.</div></div></div>
+<div class="qa"><div class="q">Eet je thuis of ga je naar een restaurant?<span class="qru">Ты ешь дома или ходишь в ресторан?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik eet meestal thuis. Dat is goedkoper.</div><div class="aru">Я обычно ем дома. Это дешевле.</div></div></div>
+<div class="qa"><div class="q">Vind je het gezellig bij jou thuis?<span class="qru">Тебе уютно у тебя дома?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, het is heel gezellig.</div><div class="aru">Да, очень уютно.</div></div></div>
+<div class="qa"><div class="q">Is de huur duur?<span class="qru">Аренда дорогая?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, de huur is een beetje duur.</div><div class="aru">Да, аренда немного дорогая.</div></div></div>
+<div class="qa"><div class="q">Vind je de inrichting belangrijk?<span class="qru">Для тебя важна обстановка?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, ik vind het belangrijk dat het gezellig is.</div><div class="aru">Да, мне важно, чтобы было уютно.</div></div></div>
 </div></section>
-
 <section id="t10">
-<div class="topic-head"><div class="topic-num">10</div><div><h2 class="topic-nl">Vertel over vroeger — waar en hoe woonden jullie?</h2><p class="topic-ru">Расскажите о прошлом: где и как вы жили раньше.</p></div></div>
-<div class="scene-label">Диалог · lees om de beurt</div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Waar woonde jij vroeger?</div><div class="ru">Где ты жил раньше?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Vroeger woonde ik in Oekraïne, in een groot huis. En jij?</div><div class="ru">Раньше я жил в Украине, в большом доме. А ты?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Ik woonde in een appartement in de stad. Het was klein.</div><div class="ru">Я жил в квартире в городе. Она была маленькая.</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Woonde je alleen?</div><div class="ru">Ты жил один?</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Nee, ik woonde met mijn familie. En jij?</div><div class="ru">Нет, я жил с семьёй. А ты?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ik woonde ook met mijn ouders. We hadden een tuin.</div><div class="ru">Я тоже жил с родителями. У нас был сад.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Hoe was je leven daar?</div><div class="ru">Какой была твоя жизнь там?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Het was rustig. Ik had veel vrienden in de buurt.</div><div class="ru">Было спокойно. У меня было много друзей по соседству.</div></div></div>
-<div class="line a"><div class="cue">A</div><div><div class="nl">Mis je dat soms?</div><div class="ru">Ты иногда по этому скучаешь?</div></div></div>
-<div class="line b"><div class="cue">B</div><div><div class="nl">Ja, soms wel. Maar nu vind ik het hier ook fijn.</div><div class="ru">Да, иногда. Но сейчас мне и здесь хорошо.</div></div></div>
-<div class="doc-wrap"><div class="doc-title"><span class="badge">Docent</span>Vragen van de docent</div><p class="doc-hint">Преподаватель задаёт вопросы — отвечайте сами.</p>
-<div class="qa"><div class="q">Woonde je alleen of met iemand?<span class="q-ru">Ты жил один или с кем-то?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik woonde met mijn familie.</div><div class="a-ru">Я жил с семьёй.</div></div></div>
-<div class="qa"><div class="q">Wat at je vroeger graag?<span class="q-ru">Что ты любил есть раньше?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik at vroeger graag soep van mijn moeder.</div><div class="a-ru">Раньше я любил есть мамин суп.</div></div></div>
-<div class="qa"><div class="q">Vond je het leuk om daar te wonen?<span class="q-ru">Тебе нравилось там жить?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, het was heel gezellig en rustig.</div><div class="a-ru">Да, было очень уютно и спокойно.</div></div></div>
-<div class="qa"><div class="q">Was het goedkoper om te leven?<span class="q-ru">Там было дешевле жить?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ja, het leven was goedkoper dan hier.</div><div class="a-ru">Да, жизнь была дешевле, чем здесь.</div></div></div>
-<div class="qa"><div class="q">Waarom ben je naar Nederland gekomen?<span class="q-ru">Почему ты переехал в Нидерланды?</span></div><div class="ans"><span class="a-lab">Antwoord</span><div class="a-nl">Ik ben naar Nederland gekomen voor een veilig leven en werk.</div><div class="a-ru">Я переехал в Нидерланды ради безопасной жизни и работы.</div></div></div>
+<div class="th"><div class="tn">10</div><div><h2 class="tnl">Vertel over vroeger — waar en hoe woonden jullie?</h2><p class="tru">Расскажите о прошлом: где и как вы жили раньше.</p></div></div>
+<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Waar woonde jij vroeger?</summary>
+      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
+    </details>
+    <div class="ru">Где ты жил раньше?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Vroeger woonde ik in Oekraïne, in een groot huis. En jij?</summary>
+      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
+    </details>
+    <div class="ru">Раньше я жил в Украине, в большом доме. А ты?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Ik woonde in een appartement in de stad. Het was klein.</summary>
+      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
+    </details>
+    <div class="ru">Я жил в квартире в городе. Она была маленькая.</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Woonde je alleen?</summary>
+      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
+    </details>
+    <div class="ru">Ты жил один?</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Nee, ik woonde met mijn familie. En jij?</summary>
+      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
+    </details>
+    <div class="ru">Нет, я жил с семьёй. А ты?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ik woonde ook met mijn ouders. We hadden een tuin.</summary>
+      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
+    </details>
+    <div class="ru">Я тоже жил с родителями. У нас был сад.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Hoe was je leven daar?</summary>
+      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
+    </details>
+    <div class="ru">Какой была твоя жизнь там?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Het was rustig. Ik had veel vrienden in de buurt.</summary>
+      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
+    </details>
+    <div class="ru">Было спокойно. У меня было много друзей по соседству.</div>
+  </div>
+</div>
+<div class="line a">
+  <div class="cue">A</div>
+  <div>
+    <details class="nd">
+      <summary>Mis je dat soms?</summary>
+      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
+    </details>
+    <div class="ru">Ты иногда по этому скучаешь?</div>
+  </div>
+</div>
+<div class="line b">
+  <div class="cue">B</div>
+  <div>
+    <details class="nd">
+      <summary>Ja, soms wel. Maar nu vind ik het hier ook fijn.</summary>
+      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
+    </details>
+    <div class="ru">Да, иногда. Но сейчас мне и здесь хорошо.</div>
+  </div>
+</div>
+<div class="dw"><div class="dt"><span class="db">Docent</span>Vragen van de docent</div><p class="dh">Преподаватель задаёт вопросы &mdash; отвечайте сами.</p>
+<div class="qa"><div class="q">Woonde je alleen of met iemand?<span class="qru">Ты жил один или с кем-то?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik woonde met mijn familie.</div><div class="aru">Я жил с семьёй.</div></div></div>
+<div class="qa"><div class="q">Wat at je vroeger graag?<span class="qru">Что ты любил есть раньше?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik at vroeger graag soep van mijn moeder.</div><div class="aru">Раньше я любил есть мамин суп.</div></div></div>
+<div class="qa"><div class="q">Vond je het leuk om daar te wonen?<span class="qru">Тебе нравилось там жить?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, het was heel gezellig en rustig.</div><div class="aru">Да, было очень уютно и спокойно.</div></div></div>
+<div class="qa"><div class="q">Was het goedkoper om te leven?<span class="qru">Там было дешевле жить?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ja, het leven was goedkoper dan hier.</div><div class="aru">Да, жизнь была дешевле, чем здесь.</div></div></div>
+<div class="qa"><div class="q">Waarom ben je naar Nederland gekomen?<span class="qru">Почему ты переехал в Нидерланды?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik ben naar Nederland gekomen voor een veilig leven en werk.</div><div class="aru">Я переехал в Нидерланды ради безопасной жизни и работы.</div></div></div>
 </div></section>
 </main>
-<footer>Уровень A2 &middot; Start.nl Deel 2. Шпаргалка для репетиции.<br>
-Нажмите на любое предложение — увидите грамматику.</footer>
+<footer>Уровень A2 &middot; Start.nl Deel 2. Шпаргалка для репетиции &mdash; читайте, пока не сможете без подглядывания.</footer>
 </div>
-
-<div id="gram">
-  <span class="gx" onclick="hideGram()">&#x2715;</span>
-  <div class="gt" id="gt"></div>
-  <div class="gs" id="gs"></div>
-  <div class="ge" id="ge"></div>
-</div>
-
-<script>
-function toggleRu(){
-  var on=document.body.classList.toggle('hide-ru')===false;
-  document.getElementById('ruBtn').textContent=on?'Скрыть перевод':'Показать перевод';
-  document.getElementById('ruBtn').className='toggle'+(on?' on':'');
-}
-var curRole='off';
-function setRole(r){
-  curRole=r;
-  document.body.classList.remove('role-a','role-b');
-  if(r==='a')document.body.classList.add('role-a');
-  if(r==='b')document.body.classList.add('role-b');
-  ['A','B','Off'].forEach(function(x){
-    var btn=document.getElementById('raBtn'+x);
-    btn.style.background=r===x.toLowerCase()?'var(--ink)':'#fff';
-    btn.style.color=r===x.toLowerCase()?'var(--paper)':'var(--ink)';
-    btn.style.borderColor=r===x.toLowerCase()?'var(--ink)':'var(--line)';
-  });
-}
-
-function gramNote(txt){
-  if(/\b(heb|heeft|hebben)\b[\s\S]*\bge\w+\b/.test(txt))
-    return{t:"Perfectum",r:"завершённое действие",s:"hebben + ge…[t/d]",e:"ik heb gewerkt · hij heeft gezien · wij hebben gegeten"};
-  if(/\b(ben|bent|is|zijn)\b[\s\S]*\bge\w+\b/.test(txt))
-    return{t:"Perfectum (met zijn)",r:"движение / смена состояния",s:"zijn + ge…[en]",e:"ik ben gegaan · hij is geweest · wij zijn gebleven"};
-  if(/\b(was|waren|had|hadden|ging|gingen|woonde|vond|deed|zag|at|speelde|dronk|bleef)\b/.test(txt))
-    return{t:"Imperfectum",r:"рассказ о прошлом",s:"stam + te/de · of onregelmatig",e:"gaan→ging · zijn→was · hebben→had · werken→werkte"};
-  if(/\b(wil|wilt|willen|kan|kunt|kunnen|moet|moeten|mag|zal|zullen|zou)\b/.test(txt))
-    return{t:"Modaal werkwoord",r:"хочу / могу / должен",s:"modaal + infinitief (в конце)",e:"ik wil gaan · ik kan helpen · hij moet werken"};
-  if(/\b(laten we|zullen we)\b/i.test(txt))
-    return{t:"Voorstel",r:"предложение — «davajte»",s:"Laten we … / Zullen we …",e:"Laten we gaan · Zullen we samen eten?"};
-  if(/^(Wie|Wat|Waar|Wanneer|Hoe|Welk|Welke|Hoeveel)\b/.test(txt))
-    return{t:"W-vraag",r:"вопрос с вопросительным словом",s:"Vraagwoord + werkwoord + subject",e:"Wat doe jij? · Waar woon je? · Hoe laat ga je?"};
-  if(/^(Ben|Heb|Is|Ga|Kun|Moet|Woon|Vind|Mis|Eet|Was|Woonde|Vond|Kook|Werk)\b/.test(txt))
-    return{t:"Ja/Nee-vraag",r:"вопрос — да/нет",s:"werkwoord + subject + …?",e:"Ben je moe? · Heb je gegeten? · Ga je mee?"};
-  if(/\b(ga|gaat|gaan)\b/.test(txt)&&/\b\w+en\b/.test(txt))
-    return{t:"Toekomst (gaan)",r:"ближайшее будущее",s:"gaan + infinitief",e:"ik ga eten · jij gaat werken · we gaan kopen"};
-  return{t:"Tegenwoordige tijd",r:"настоящее время",s:"stam (+ t voor hij/zij/het)",e:"ik werk · jij werkt · hij werkt · wij werken"};
-}
-
-var gram=document.getElementById('gram');
-function hideGram(){gram.classList.remove('show')}
-document.addEventListener('click',function(e){
-  var nl=e.target.closest('.nl');
-  if(!nl){hideGram();return;}
-  var n=gramNote(nl.textContent.trim());
-  document.getElementById('gt').innerHTML=n.t+' <span class="gr">&middot; '+n.r+'</span>';
-  document.getElementById('gs').textContent=n.s;
-  document.getElementById('ge').textContent=n.e;
-  gram.classList.add('show');
-  e.stopPropagation();
-});
-</script>
 </body>
 </html>
