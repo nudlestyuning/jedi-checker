@@ -12,8 +12,8 @@
 body{background:var(--p);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
 .wrap{max-width:760px;margin:0 auto;padding:0 16px 80px}
 
-/* ---- CSS-only controls ---- */
-#ru-show,#ro-a,#ro-b,#ro-off{display:none}
+/* ---- all hidden inputs ---- */
+#ru-show,.gi,#ro-a,#ro-b,#ro-off{display:none}
 
 /* translation hidden by default */
 .ru,.qru,.aru{display:none}
@@ -25,6 +25,9 @@ body{background:var(--p);color:var(--ink);font-family:-apple-system,BlinkMacSyst
 #ro-a:checked~.wrap .line.b{opacity:.4}
 #ro-b:checked~.wrap .line.a{opacity:.4}
 
+/* grammar hidden by default — revealed per-checkbox in generated rules below */
+.gram{display:none}
+
 /* label as button */
 label.tog{display:inline-block;border:1px solid var(--li);background:#fff;color:var(--ink);
   font:inherit;font-size:13px;font-weight:600;padding:8px 12px;border-radius:10px;cursor:pointer;
@@ -32,9 +35,6 @@ label.tog{display:inline-block;border:1px solid var(--li);background:#fff;color:
 #ru-show:checked~.wrap label[for=ru-show]{background:var(--ink);color:var(--p);border-color:var(--ink)}
 #ro-a:checked~.wrap label[for=ro-a]{background:var(--ink);color:var(--p);border-color:var(--ink)}
 #ro-b:checked~.wrap label[for=ro-b]{background:var(--ink);color:var(--p);border-color:var(--ink)}
-#ro-off:checked~.wrap label[for=ro-off]{background:var(--ink);color:var(--p);border-color:var(--ink)}
-
-/* hide/show label text */
 .lbl-show{display:inline}.lbl-hide{display:none}
 #ru-show:checked~.wrap .lbl-show{display:none}
 #ru-show:checked~.wrap .lbl-hide{display:inline}
@@ -55,7 +55,7 @@ section{margin-bottom:36px}
 .tn{font-family:Georgia,serif;font-size:38px;line-height:.9;color:var(--a);font-style:italic;flex:none}
 .tnl{font-family:Georgia,serif;font-size:18px;font-weight:600}
 .tru{color:var(--mu);font-size:13px;margin-top:2px}
-.sl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);margin:18px 0 8px;font-weight:700}
+.sl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin:18px 0 8px;font-weight:700}
 
 .line{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:10px 12px 10px 10px;
   border-radius:12px;border:1px solid var(--li);box-shadow:var(--sh);margin-bottom:8px;
@@ -64,19 +64,113 @@ section{margin-bottom:36px}
 .line.a::before{background:var(--a)}.line.b::before{background:var(--b)}
 .line.a{background:linear-gradient(90deg,var(--as),#fff 60%)}
 .line.b{background:linear-gradient(90deg,var(--bs),#fff 60%)}
-.cue{font-size:11px;font-weight:800;letter-spacing:.04em;padding-top:3px}
+.cue{font-size:11px;font-weight:800;letter-spacing:.04em;padding-top:4px}
 .line.a .cue{color:var(--a)}.line.b .cue{color:var(--b)}
 
-/* details = clickable Dutch sentence */
-details.nd>summary{list-style:none;font-size:15.5px;font-weight:500;cursor:pointer;
-  border-radius:4px;padding:1px 2px;-webkit-user-select:none;user-select:none}
-details.nd>summary::-webkit-details-marker{display:none}
-details.nd[open]>summary{color:var(--a)}
-.gram{background:#23211C;color:#F3F1EA;border-radius:10px;padding:10px 12px;margin-top:6px;font-size:12px;line-height:1.6}
-.gram b{color:#E8C97A;font-size:10px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:2px}
-.gram .gru{color:#aaa;font-size:11px;font-weight:400;text-transform:none;letter-spacing:0}
-.gram code{display:block;color:#9BC4F0;font-family:monospace;font-size:12px;margin:3px 0}
-.ru{font-size:13px;color:var(--mu);font-style:italic;margin-top:3px}
+/* line content */
+.lc{display:flex;flex-direction:column;gap:0}
+.nr{display:flex;align-items:flex-start;gap:6px;margin-bottom:2px}
+.nl{font-size:15.5px;font-weight:500;flex:1}
+.gb{flex:none;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--mu);
+  color:var(--mu);font-size:11px;font-weight:800;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;margin-top:2px;user-select:none;-webkit-user-select:none;
+  line-height:1}
+.ru{font-size:13px;color:var(--mu);font-style:italic;margin-top:2px}
+
+/* grammar card — shown via per-id rules */
+.gram{background:#23211C;color:#F3F1EA;border-radius:10px;padding:10px 12px;margin:5px 0 4px;font-size:12px;line-height:1.6}
+.gram b{color:#E8C97A;font-size:10px;letter-spacing:.1em;text-transform:uppercase;display:inline}
+.gram .gru{color:#aaa;font-size:11px;margin-left:6px}
+.gram code{display:block;color:#9BC4F0;font-family:monospace;font-size:12.5px;margin:4px 0 3px}
+.gram .ge{color:#a8a496;font-size:11.5px}
+
+/* per-checkbox gram reveal */
+#g1:checked~.gram{display:block}#g1:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g2:checked~.gram{display:block}#g2:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g3:checked~.gram{display:block}#g3:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g4:checked~.gram{display:block}#g4:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g5:checked~.gram{display:block}#g5:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g6:checked~.gram{display:block}#g6:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g7:checked~.gram{display:block}#g7:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g8:checked~.gram{display:block}#g8:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g9:checked~.gram{display:block}#g9:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g10:checked~.gram{display:block}#g10:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g11:checked~.gram{display:block}#g11:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g12:checked~.gram{display:block}#g12:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g13:checked~.gram{display:block}#g13:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g14:checked~.gram{display:block}#g14:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g15:checked~.gram{display:block}#g15:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g16:checked~.gram{display:block}#g16:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g17:checked~.gram{display:block}#g17:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g18:checked~.gram{display:block}#g18:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g19:checked~.gram{display:block}#g19:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g20:checked~.gram{display:block}#g20:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g21:checked~.gram{display:block}#g21:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g22:checked~.gram{display:block}#g22:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g23:checked~.gram{display:block}#g23:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g24:checked~.gram{display:block}#g24:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g25:checked~.gram{display:block}#g25:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g26:checked~.gram{display:block}#g26:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g27:checked~.gram{display:block}#g27:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g28:checked~.gram{display:block}#g28:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g29:checked~.gram{display:block}#g29:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g30:checked~.gram{display:block}#g30:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g31:checked~.gram{display:block}#g31:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g32:checked~.gram{display:block}#g32:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g33:checked~.gram{display:block}#g33:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g34:checked~.gram{display:block}#g34:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g35:checked~.gram{display:block}#g35:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g36:checked~.gram{display:block}#g36:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g37:checked~.gram{display:block}#g37:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g38:checked~.gram{display:block}#g38:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g39:checked~.gram{display:block}#g39:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g40:checked~.gram{display:block}#g40:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g41:checked~.gram{display:block}#g41:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g42:checked~.gram{display:block}#g42:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g43:checked~.gram{display:block}#g43:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g44:checked~.gram{display:block}#g44:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g45:checked~.gram{display:block}#g45:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g46:checked~.gram{display:block}#g46:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g47:checked~.gram{display:block}#g47:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g48:checked~.gram{display:block}#g48:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g49:checked~.gram{display:block}#g49:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g50:checked~.gram{display:block}#g50:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g51:checked~.gram{display:block}#g51:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g52:checked~.gram{display:block}#g52:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g53:checked~.gram{display:block}#g53:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g54:checked~.gram{display:block}#g54:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g55:checked~.gram{display:block}#g55:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g56:checked~.gram{display:block}#g56:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g57:checked~.gram{display:block}#g57:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g58:checked~.gram{display:block}#g58:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g59:checked~.gram{display:block}#g59:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g60:checked~.gram{display:block}#g60:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g61:checked~.gram{display:block}#g61:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g62:checked~.gram{display:block}#g62:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g63:checked~.gram{display:block}#g63:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g64:checked~.gram{display:block}#g64:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g65:checked~.gram{display:block}#g65:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g66:checked~.gram{display:block}#g66:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g67:checked~.gram{display:block}#g67:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g68:checked~.gram{display:block}#g68:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g69:checked~.gram{display:block}#g69:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g70:checked~.gram{display:block}#g70:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g71:checked~.gram{display:block}#g71:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g72:checked~.gram{display:block}#g72:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g73:checked~.gram{display:block}#g73:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g74:checked~.gram{display:block}#g74:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g75:checked~.gram{display:block}#g75:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g76:checked~.gram{display:block}#g76:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g77:checked~.gram{display:block}#g77:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g78:checked~.gram{display:block}#g78:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g79:checked~.gram{display:block}#g79:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g80:checked~.gram{display:block}#g80:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g81:checked~.gram{display:block}#g81:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g82:checked~.gram{display:block}#g82:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g83:checked~.gram{display:block}#g83:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g84:checked~.gram{display:block}#g84:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g85:checked~.gram{display:block}#g85:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
+#g86:checked~.gram{display:block}#g86:checked~.nr .gb{background:var(--ink);color:var(--p);border-color:var(--ink)}
 
 .dw{margin-top:20px;border:1px solid var(--doc);border-radius:14px;background:var(--ds);padding:14px 14px 6px}
 .dt{display:flex;align-items:center;gap:8px;font-family:Georgia,serif;font-size:15px;font-weight:600;color:var(--doc);margin:0 0 3px}
@@ -91,11 +185,10 @@ details.nd[open]>summary{color:var(--a)}
 .aru{font-size:12px;color:var(--mu);font-style:italic;margin-top:2px}
 
 footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-height:1.6}
-@media(max-width:480px){.tn{font-size:30px}details.nd>summary{font-size:15px}}
+@media(max-width:480px){.tn{font-size:30px}.nl{font-size:15px}}
 </style>
 </head>
 <body>
-<!-- CSS-only checkboxes/radios — must be siblings of .wrap -->
 <input type="checkbox" id="ru-show">
 <input type="radio" name="role" id="ro-off" checked>
 <input type="radio" name="role" id="ro-a">
@@ -104,7 +197,7 @@ footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-hei
 <div class="wrap">
 <header>
   <h1 class="ttl">Spreekexamen A2 &middot; диалоги</h1>
-  <p class="sub">Нажми на фразу &rarr; грамматика. Нажми ещё раз &rarr; скрыть.</p>
+  <p class="sub">Кнопка <b>?</b> рядом с фразой &mdash; грамматика. Перевод &mdash; кнопка ниже.</p>
   <div class="controls">
     <label class="tog" for="ru-show"><span class="lbl-show">Показать перевод</span><span class="lbl-hide">Скрыть перевод</span></label>
     <label class="tog" for="ro-off">Все</label>
@@ -127,84 +220,132 @@ footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-hei
 <main>
 <section id="t1">
 <div class="th"><div class="tn">1</div><div><h2 class="tnl">Wat heb je gisteren of in het weekend gedaan?</h2><p class="tru">Что ты делал вчера или на выходных?</p></div></div>
-<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<p class="sl">Диалог &mdash; кнопка <b>?</b> показывает грамматику</p>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Hé, wat heb je gisteren gedaan?</summary>
-      <div class="gram"><b>Perfectum</b> <span class="gru">завершённое действие</span><code>hebben + ge…[t/d]</code>ik heb gewerkt · hij heeft gezien · wij hebben gegeten</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g1" class="gi">
+    <div class="nr">
+      <span class="nl">Hé, wat heb je gisteren gedaan?</span>
+      <label for="g1" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Perfectum</b><span class="gru">завершённое действие</span>
+      <code>hebben + ge…[t/d]</code>
+      <span class="ge">ik heb gewerkt · hij heeft gezien · wij hebben gegeten</span>
+    </div>
     <div class="ru">Привет, что ты делал вчера?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Gisteren heb ik gewerkt. En jij?</summary>
-      <div class="gram"><b>Perfectum</b> <span class="gru">завершённое действие</span><code>hebben + ge…[t/d]</code>ik heb gewerkt · hij heeft gezien · wij hebben gegeten</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g2" class="gi">
+    <div class="nr">
+      <span class="nl">Gisteren heb ik gewerkt. En jij?</span>
+      <label for="g2" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Perfectum</b><span class="gru">завершённое действие</span>
+      <code>hebben + ge…[t/d]</code>
+      <span class="ge">ik heb gewerkt · hij heeft gezien · wij hebben gegeten</span>
+    </div>
     <div class="ru">Вчера я работал. А ты?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>In het weekend heb ik mijn auto gewassen. Daarna ben ik naar de stad gegaan.</summary>
-      <div class="gram"><b>Perfectum</b> <span class="gru">завершённое действие</span><code>hebben + ge…[t/d]</code>ik heb gewerkt · hij heeft gezien · wij hebben gegeten</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g3" class="gi">
+    <div class="nr">
+      <span class="nl">In het weekend heb ik mijn auto gewassen. Daarna ben ik naar de stad gegaan.</span>
+      <label for="g3" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Perfectum</b><span class="gru">завершённое действие</span>
+      <code>hebben + ge…[t/d]</code>
+      <span class="ge">ik heb gewerkt · hij heeft gezien · wij hebben gegeten</span>
+    </div>
     <div class="ru">На выходных я помыл машину. Потом я поехал в город.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Leuk! Wat heb je in de stad gedaan?</summary>
-      <div class="gram"><b>Perfectum</b> <span class="gru">завершённое действие</span><code>hebben + ge…[t/d]</code>ik heb gewerkt · hij heeft gezien · wij hebben gegeten</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g4" class="gi">
+    <div class="nr">
+      <span class="nl">Leuk! Wat heb je in de stad gedaan?</span>
+      <label for="g4" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Perfectum</b><span class="gru">завершённое действие</span>
+      <code>hebben + ge…[t/d]</code>
+      <span class="ge">ik heb gewerkt · hij heeft gezien · wij hebben gegeten</span>
+    </div>
     <div class="ru">Класс! Что ты делал в городе?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ik heb koffie gedronken met een vriend. En jij, wat heb je in het weekend gedaan?</summary>
-      <div class="gram"><b>Perfectum</b> <span class="gru">завершённое действие</span><code>hebben + ge…[t/d]</code>ik heb gewerkt · hij heeft gezien · wij hebben gegeten</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g5" class="gi">
+    <div class="nr">
+      <span class="nl">Ik heb koffie gedronken met een vriend. En jij, wat heb je in het weekend gedaan?</span>
+      <label for="g5" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Perfectum</b><span class="gru">завершённое действие</span>
+      <code>hebben + ge…[t/d]</code>
+      <span class="ge">ik heb gewerkt · hij heeft gezien · wij hebben gegeten</span>
+    </div>
     <div class="ru">Я пил кофе с другом. А ты, что ты делал на выходных?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ik ben thuis gebleven. Ik heb een film gekeken en pizza gegeten.</summary>
-      <div class="gram"><b>Perfectum</b> <span class="gru">завершённое действие</span><code>hebben + ge…[t/d]</code>ik heb gewerkt · hij heeft gezien · wij hebben gegeten</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g6" class="gi">
+    <div class="nr">
+      <span class="nl">Ik ben thuis gebleven. Ik heb een film gekeken en pizza gegeten.</span>
+      <label for="g6" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Perfectum</b><span class="gru">завершённое действие</span>
+      <code>hebben + ge…[t/d]</code>
+      <span class="ge">ik heb gewerkt · hij heeft gezien · wij hebben gegeten</span>
+    </div>
     <div class="ru">Я остался дома. Посмотрел фильм и поел пиццу.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Klinkt goed. Heb je ook gesport?</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g7" class="gi">
+    <div class="nr">
+      <span class="nl">Klinkt goed. Heb je ook gesport?</span>
+      <label for="g7" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Звучит хорошо. А спортом занимался?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ja, zaterdag ben ik naar de sportschool geweest.</summary>
-      <div class="gram"><b>Perfectum (met zijn)</b> <span class="gru">движение / смена состояния</span><code>zijn + ge…[en]</code>ik ben gegaan · hij is geweest · wij zijn gebleven</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g8" class="gi">
+    <div class="nr">
+      <span class="nl">Ja, zaterdag ben ik naar de sportschool geweest.</span>
+      <label for="g8" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Perfectum (met zijn)</b><span class="gru">движение / смена состояния</span>
+      <code>zijn + ge…[en]</code>
+      <span class="ge">ik ben gegaan · hij is geweest · wij zijn gebleven</span>
+    </div>
     <div class="ru">Да, в субботу ходил в спортзал.</div>
   </div>
 </div>
@@ -217,104 +358,164 @@ footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-hei
 </div></section>
 <section id="t2">
 <div class="th"><div class="tn">2</div><div><h2 class="tnl">Samen plannen maken voor een vakantie.</h2><p class="tru">Вместе планируете отпуск, предлагаете варианты.</p></div></div>
-<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<p class="sl">Диалог &mdash; кнопка <b>?</b> показывает грамматику</p>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Zullen we samen op vakantie gaan?</summary>
-      <div class="gram"><b>Voorstel</b> <span class="gru">предложение — «давайте»</span><code>Laten we … / Zullen we …</code>Laten we gaan · Zullen we samen eten?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g9" class="gi">
+    <div class="nr">
+      <span class="nl">Zullen we samen op vakantie gaan?</span>
+      <label for="g9" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Voorstel</b><span class="gru">предложение — «давайте»</span>
+      <code>Laten we … / Zullen we …</code>
+      <span class="ge">Laten we gaan · Zullen we samen eten?</span>
+    </div>
     <div class="ru">Поедем вместе в отпуск?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Goed idee! Waar wil je naartoe?</summary>
-      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g10" class="gi">
+    <div class="nr">
+      <span class="nl">Goed idee! Waar wil je naartoe?</span>
+      <label for="g10" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Modaal werkwoord</b><span class="gru">хочу / могу / должен</span>
+      <code>modaal + infinitief (в конце)</code>
+      <span class="ge">ik wil gaan · ik kan helpen · hij moet werken</span>
+    </div>
     <div class="ru">Хорошая идея! Куда хочешь?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ik wil graag naar Spanje. Het is daar warm.</summary>
-      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g11" class="gi">
+    <div class="nr">
+      <span class="nl">Ik wil graag naar Spanje. Het is daar warm.</span>
+      <label for="g11" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Modaal werkwoord</b><span class="gru">хочу / могу / должен</span>
+      <code>modaal + infinitief (в конце)</code>
+      <span class="ge">ik wil gaan · ik kan helpen · hij moet werken</span>
+    </div>
     <div class="ru">Я бы хотел в Испанию. Там тепло.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Spanje is leuk, maar ik wil liever naar de bergen.</summary>
-      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g12" class="gi">
+    <div class="nr">
+      <span class="nl">Spanje is leuk, maar ik wil liever naar de bergen.</span>
+      <label for="g12" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Modaal werkwoord</b><span class="gru">хочу / могу / должен</span>
+      <code>modaal + infinitief (в конце)</code>
+      <span class="ge">ik wil gaan · ik kan helpen · hij moet werken</span>
+    </div>
     <div class="ru">Испания — здорово, но я лучше в горы.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>We kunnen ook naar Oostenrijk gaan. Daar zijn mooie bergen.</summary>
-      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g13" class="gi">
+    <div class="nr">
+      <span class="nl">We kunnen ook naar Oostenrijk gaan. Daar zijn mooie bergen.</span>
+      <label for="g13" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Modaal werkwoord</b><span class="gru">хочу / могу / должен</span>
+      <code>modaal + infinitief (в конце)</code>
+      <span class="ge">ik wil gaan · ik kan helpen · hij moet werken</span>
+    </div>
     <div class="ru">Можем поехать в Австрию. Там красивые горы.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ja, perfect. Gaan we met de auto of het vliegtuig?</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g14" class="gi">
+    <div class="nr">
+      <span class="nl">Ja, perfect. Gaan we met de auto of het vliegtuig?</span>
+      <label for="g14" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Да, отлично. Поедем на машине или полетим?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Laten we met de auto gaan. Dat is goedkoper.</summary>
-      <div class="gram"><b>Voorstel</b> <span class="gru">предложение — «давайте»</span><code>Laten we … / Zullen we …</code>Laten we gaan · Zullen we samen eten?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g15" class="gi">
+    <div class="nr">
+      <span class="nl">Laten we met de auto gaan. Dat is goedkoper.</span>
+      <label for="g15" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Voorstel</b><span class="gru">предложение — «давайте»</span>
+      <code>Laten we … / Zullen we …</code>
+      <span class="ge">Laten we gaan · Zullen we samen eten?</span>
+    </div>
     <div class="ru">Давай на машине. Это дешевле.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Oké. En waar slapen we? In een hotel of op een camping?</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g16" class="gi">
+    <div class="nr">
+      <span class="nl">Oké. En waar slapen we? In een hotel of op een camping?</span>
+      <label for="g16" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Окей. А где спим? В отеле или в кемпинге?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ik stel een hotel voor. Een camping is te koud voor mij.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g17" class="gi">
+    <div class="nr">
+      <span class="nl">Ik stel een hotel voor. Een camping is te koud voor mij.</span>
+      <label for="g17" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Я предлагаю отель. Кемпинг для меня слишком холодный.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Afgesproken! Ik boek het hotel.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g18" class="gi">
+    <div class="nr">
+      <span class="nl">Afgesproken! Ik boek het hotel.</span>
+      <label for="g18" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Договорились! Я забронирую отель.</div>
   </div>
 </div>
@@ -327,84 +528,132 @@ footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-hei
 </div></section>
 <section id="t3">
 <div class="th"><div class="tn">3</div><div><h2 class="tnl">Praat over Leeuwarden — wat vind je leuk?</h2><p class="tru">Расскажите о Леувардене: достопримечательности.</p></div></div>
-<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<p class="sl">Диалог &mdash; кнопка <b>?</b> показывает грамматику</p>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Wat vind jij leuk aan Leeuwarden?</summary>
-      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g19" class="gi">
+    <div class="nr">
+      <span class="nl">Wat vind jij leuk aan Leeuwarden?</span>
+      <label for="g19" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>W-vraag</b><span class="gru">вопрос с вопросит. словом</span>
+      <code>Vraagwoord + werkwoord + subject</code>
+      <span class="ge">Wat doe jij? · Waar woon je? · Hoe laat ga je?</span>
+    </div>
     <div class="ru">Что тебе нравится в Леувардене?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ik vind het centrum mooi. Er zijn veel oude gebouwen.</summary>
-      <div class="gram"><b>Perfectum (met zijn)</b> <span class="gru">движение / смена состояния</span><code>zijn + ge…[en]</code>ik ben gegaan · hij is geweest · wij zijn gebleven</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g20" class="gi">
+    <div class="nr">
+      <span class="nl">Ik vind het centrum mooi. Er zijn veel oude gebouwen.</span>
+      <label for="g20" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Perfectum (met zijn)</b><span class="gru">движение / смена состояния</span>
+      <code>zijn + ge…[en]</code>
+      <span class="ge">ik ben gegaan · hij is geweest · wij zijn gebleven</span>
+    </div>
     <div class="ru">Мне нравится центр. Там много старых зданий.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ja, en de Oldehove is heel bekend. Dat is een scheve toren.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g21" class="gi">
+    <div class="nr">
+      <span class="nl">Ja, en de Oldehove is heel bekend. Dat is een scheve toren.</span>
+      <label for="g21" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Да, и Олдехове очень известна. Это кривая башня.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Klopt. Ik vind ook de grachten mooi.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g22" class="gi">
+    <div class="nr">
+      <span class="nl">Klopt. Ik vind ook de grachten mooi.</span>
+      <label for="g22" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Верно. Мне ещё нравятся каналы.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ben je weleens in het Fries Museum geweest?</summary>
-      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g23" class="gi">
+    <div class="nr">
+      <span class="nl">Ben je weleens in het Fries Museum geweest?</span>
+      <label for="g23" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Ja/Nee-vraag</b><span class="gru">вопрос — да/нет</span>
+      <code>werkwoord + subject + …?</code>
+      <span class="ge">Ben je moe? · Heb je gegeten? · Ga je mee?</span>
+    </div>
     <div class="ru">Ты был во Фризском музее?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ja, een keer. Het was interessant.</summary>
-      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g24" class="gi">
+    <div class="nr">
+      <span class="nl">Ja, een keer. Het was interessant.</span>
+      <label for="g24" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Imperfectum</b><span class="gru">рассказ о прошлом</span>
+      <code>stam + te/de · onregelmatig</code>
+      <span class="ge">gaan→ging · zijn→was · hebben→had · werken→werkte</span>
+    </div>
     <div class="ru">Да, один раз. Было интересно.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>In de zomer zijn er veel terrasjes. Dat vind ik gezellig.</summary>
-      <div class="gram"><b>Perfectum (met zijn)</b> <span class="gru">движение / смена состояния</span><code>zijn + ge…[en]</code>ik ben gegaan · hij is geweest · wij zijn gebleven</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g25" class="gi">
+    <div class="nr">
+      <span class="nl">In de zomer zijn er veel terrasjes. Dat vind ik gezellig.</span>
+      <label for="g25" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Perfectum (met zijn)</b><span class="gru">движение / смена состояния</span>
+      <code>zijn + ge…[en]</code>
+      <span class="ge">ik ben gegaan · hij is geweest · wij zijn gebleven</span>
+    </div>
     <div class="ru">Летом много террас. По-моему, это уютно.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Mee eens. Leeuwarden is een rustige, gezellige stad.</summary>
-      <div class="gram"><b>Perfectum (met zijn)</b> <span class="gru">движение / смена состояния</span><code>zijn + ge…[en]</code>ik ben gegaan · hij is geweest · wij zijn gebleven</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g26" class="gi">
+    <div class="nr">
+      <span class="nl">Mee eens. Leeuwarden is een rustige, gezellige stad.</span>
+      <label for="g26" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Perfectum (met zijn)</b><span class="gru">движение / смена состояния</span>
+      <code>zijn + ge…[en]</code>
+      <span class="ge">ik ben gegaan · hij is geweest · wij zijn gebleven</span>
+    </div>
     <div class="ru">Согласен. Леуварден — спокойный, уютный город.</div>
   </div>
 </div>
@@ -417,84 +666,132 @@ footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-hei
 </div></section>
 <section id="t4">
 <div class="th"><div class="tn">4</div><div><h2 class="tnl">Vertel over jouw stad of land.</h2><p class="tru">Расскажите о своём городе/стране: что интересно туристам.</p></div></div>
-<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<p class="sl">Диалог &mdash; кнопка <b>?</b> показывает грамматику</p>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Waar kom jij vandaan?</summary>
-      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g27" class="gi">
+    <div class="nr">
+      <span class="nl">Waar kom jij vandaan?</span>
+      <label for="g27" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>W-vraag</b><span class="gru">вопрос с вопросит. словом</span>
+      <code>Vraagwoord + werkwoord + subject</code>
+      <span class="ge">Wat doe jij? · Waar woon je? · Hoe laat ga je?</span>
+    </div>
     <div class="ru">Откуда ты?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ik kom uit Oekraïne. En jij?</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g28" class="gi">
+    <div class="nr">
+      <span class="nl">Ik kom uit Oekraïne. En jij?</span>
+      <label for="g28" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Я из Украины. А ты?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ik kom ook uit Oekraïne. Wat is leuk voor toeristen in jouw stad?</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g29" class="gi">
+    <div class="nr">
+      <span class="nl">Ik kom ook uit Oekraïne. Wat is leuk voor toeristen in jouw stad?</span>
+      <label for="g29" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Я тоже из Украины. Что интересно туристам в твоём городе?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Er zijn veel parken en oude kerken. En het eten is lekker!</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g30" class="gi">
+    <div class="nr">
+      <span class="nl">Er zijn veel parken en oude kerken. En het eten is lekker!</span>
+      <label for="g30" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Там много парков и старых церквей. И вкусная еда!</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Klinkt mooi. Is het er duur?</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g31" class="gi">
+    <div class="nr">
+      <span class="nl">Klinkt mooi. Is het er duur?</span>
+      <label for="g31" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Звучит красиво. Там дорого?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Nee, het is niet zo duur. Het eten is goedkoop.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g32" class="gi">
+    <div class="nr">
+      <span class="nl">Nee, het is niet zo duur. Het eten is goedkoop.</span>
+      <label for="g32" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Нет, не очень дорого. Еда дешёвая.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Wat moeten toeristen zeker zien?</summary>
-      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g33" class="gi">
+    <div class="nr">
+      <span class="nl">Wat moeten toeristen zeker zien?</span>
+      <label for="g33" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Modaal werkwoord</b><span class="gru">хочу / могу / должен</span>
+      <code>modaal + infinitief (в конце)</code>
+      <span class="ge">ik wil gaan · ik kan helpen · hij moet werken</span>
+    </div>
     <div class="ru">Что туристам обязательно надо увидеть?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ze moeten het centrum en de rivier bezoeken.</summary>
-      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g34" class="gi">
+    <div class="nr">
+      <span class="nl">Ze moeten het centrum en de rivier bezoeken.</span>
+      <label for="g34" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Modaal werkwoord</b><span class="gru">хочу / могу / должен</span>
+      <code>modaal + infinitief (в конце)</code>
+      <span class="ge">ik wil gaan · ik kan helpen · hij moet werken</span>
+    </div>
     <div class="ru">Им стоит посетить центр и реку.</div>
   </div>
 </div>
@@ -507,94 +804,148 @@ footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-hei
 </div></section>
 <section id="t5">
 <div class="th"><div class="tn">5</div><div><h2 class="tnl">Praat over het weer in Nederland en in jouw land.</h2><p class="tru">Погода в Нидерландах и у вас: различия.</p></div></div>
-<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<p class="sl">Диалог &mdash; кнопка <b>?</b> показывает грамматику</p>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Hoe is het weer vandaag?</summary>
-      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g35" class="gi">
+    <div class="nr">
+      <span class="nl">Hoe is het weer vandaag?</span>
+      <label for="g35" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>W-vraag</b><span class="gru">вопрос с вопросит. словом</span>
+      <code>Vraagwoord + werkwoord + subject</code>
+      <span class="ge">Wat doe jij? · Waar woon je? · Hoe laat ga je?</span>
+    </div>
     <div class="ru">Какая сегодня погода?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Het regent en het is koud. Typisch Nederlands weer!</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g36" class="gi">
+    <div class="nr">
+      <span class="nl">Het regent en het is koud. Typisch Nederlands weer!</span>
+      <label for="g36" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Дождь и холодно. Типичная голландская погода!</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ja, hier regent het vaak. In mijn land is het anders.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g37" class="gi">
+    <div class="nr">
+      <span class="nl">Ja, hier regent het vaak. In mijn land is het anders.</span>
+      <label for="g37" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Да, здесь часто идёт дождь. У меня в стране иначе.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Hoe is het weer in jouw land?</summary>
-      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g38" class="gi">
+    <div class="nr">
+      <span class="nl">Hoe is het weer in jouw land?</span>
+      <label for="g38" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>W-vraag</b><span class="gru">вопрос с вопросит. словом</span>
+      <code>Vraagwoord + werkwoord + subject</code>
+      <span class="ge">Wat doe jij? · Waar woon je? · Hoe laat ga je?</span>
+    </div>
     <div class="ru">А какая погода в твоей стране?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>In de zomer is het heel warm, soms dertig graden. In de winter sneeuwt het veel.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g39" class="gi">
+    <div class="nr">
+      <span class="nl">In de zomer is het heel warm, soms dertig graden. In de winter sneeuwt het veel.</span>
+      <label for="g39" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Летом очень жарко, иногда тридцать градусов. Зимой много снега.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Dat is een groot verschil. Hier sneeuwt het bijna nooit.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g40" class="gi">
+    <div class="nr">
+      <span class="nl">Dat is een groot verschil. Hier sneeuwt het bijna nooit.</span>
+      <label for="g40" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Это большая разница. Здесь снег почти никогда не идёт.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Klopt. En hier waait het ook veel.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g41" class="gi">
+    <div class="nr">
+      <span class="nl">Klopt. En hier waait het ook veel.</span>
+      <label for="g41" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Верно. И здесь ещё часто ветер.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Welk weer vind jij mooi?</summary>
-      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g42" class="gi">
+    <div class="nr">
+      <span class="nl">Welk weer vind jij mooi?</span>
+      <label for="g42" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>W-vraag</b><span class="gru">вопрос с вопросит. словом</span>
+      <code>Vraagwoord + werkwoord + subject</code>
+      <span class="ge">Wat doe jij? · Waar woon je? · Hoe laat ga je?</span>
+    </div>
     <div class="ru">Какая погода тебе нравится?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ik hou van de zon. Regen vind ik niet leuk.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g43" class="gi">
+    <div class="nr">
+      <span class="nl">Ik hou van de zon. Regen vind ik niet leuk.</span>
+      <label for="g43" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Я люблю солнце. Дождь мне не нравится.</div>
   </div>
 </div>
@@ -607,84 +958,132 @@ footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-hei
 </div></section>
 <section id="t6">
 <div class="th"><div class="tn">6</div><div><h2 class="tnl">Vertel elkaar over werk of studie.</h2><p class="tru">Расскажите друг другу о работе или учёбе.</p></div></div>
-<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<p class="sl">Диалог &mdash; кнопка <b>?</b> показывает грамматику</p>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Wat voor werk doe jij?</summary>
-      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g44" class="gi">
+    <div class="nr">
+      <span class="nl">Wat voor werk doe jij?</span>
+      <label for="g44" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>W-vraag</b><span class="gru">вопрос с вопросит. словом</span>
+      <code>Vraagwoord + werkwoord + subject</code>
+      <span class="ge">Wat doe jij? · Waar woon je? · Hoe laat ga je?</span>
+    </div>
     <div class="ru">Кем ты работаешь?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ik werk in een fabriek. Ik ben machineoperator. En jij?</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g45" class="gi">
+    <div class="nr">
+      <span class="nl">Ik werk in een fabriek. Ik ben machineoperator. En jij?</span>
+      <label for="g45" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Я работаю на заводе. Я оператор станка. А ты?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ik leer Nederlands en ik werk in een winkel.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g46" class="gi">
+    <div class="nr">
+      <span class="nl">Ik leer Nederlands en ik werk in een winkel.</span>
+      <label for="g46" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Я учу нидерландский и работаю в магазине.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Vind je je werk leuk?</summary>
-      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g47" class="gi">
+    <div class="nr">
+      <span class="nl">Vind je je werk leuk?</span>
+      <label for="g47" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Ja/Nee-vraag</b><span class="gru">вопрос — да/нет</span>
+      <code>werkwoord + subject + …?</code>
+      <span class="ge">Ben je moe? · Heb je gegeten? · Ga je mee?</span>
+    </div>
     <div class="ru">Тебе нравится твоя работа?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ja, maar het is soms druk. En jij?</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g48" class="gi">
+    <div class="nr">
+      <span class="nl">Ja, maar het is soms druk. En jij?</span>
+      <label for="g48" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Да, но иногда много дел. А ты?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Mijn werk is zwaar, maar het betaalt goed.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g49" class="gi">
+    <div class="nr">
+      <span class="nl">Mijn werk is zwaar, maar het betaalt goed.</span>
+      <label for="g49" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Моя работа тяжёлая, но хорошо оплачивается.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Hoe laat begin je 's ochtends?</summary>
-      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g50" class="gi">
+    <div class="nr">
+      <span class="nl">Hoe laat begin je 's ochtends?</span>
+      <label for="g50" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>W-vraag</b><span class="gru">вопрос с вопросит. словом</span>
+      <code>Vraagwoord + werkwoord + subject</code>
+      <span class="ge">Wat doe jij? · Waar woon je? · Hoe laat ga je?</span>
+    </div>
     <div class="ru">Во сколько ты начинаешь утром?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ik werk in ploegen. Soms begin ik om zes uur.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g51" class="gi">
+    <div class="nr">
+      <span class="nl">Ik werk in ploegen. Soms begin ik om zes uur.</span>
+      <label for="g51" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Я работаю по сменам. Иногда начинаю в шесть.</div>
   </div>
 </div>
@@ -697,94 +1096,148 @@ footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-hei
 </div></section>
 <section id="t7">
 <div class="th"><div class="tn">7</div><div><h2 class="tnl">Je wilt spaghetti maken — vraag hoe dat moet.</h2><p class="tru">Вы хотите приготовить спагетти, но не знаете как.</p></div></div>
-<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<p class="sl">Диалог &mdash; кнопка <b>?</b> показывает грамматику</p>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ik wil spaghetti maken, maar ik weet niet hoe. Kun je me helpen?</summary>
-      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g52" class="gi">
+    <div class="nr">
+      <span class="nl">Ik wil spaghetti maken, maar ik weet niet hoe. Kun je me helpen?</span>
+      <label for="g52" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Modaal werkwoord</b><span class="gru">хочу / могу / должен</span>
+      <code>modaal + infinitief (в конце)</code>
+      <span class="ge">ik wil gaan · ik kan helpen · hij moet werken</span>
+    </div>
     <div class="ru">Я хочу приготовить спагетти, но не знаю как. Поможешь?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Natuurlijk. Eerst kook je water in een pan.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g53" class="gi">
+    <div class="nr">
+      <span class="nl">Natuurlijk. Eerst kook je water in een pan.</span>
+      <label for="g53" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Конечно. Сначала вскипяти воду в кастрюле.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Oké, en dan?</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g54" class="gi">
+    <div class="nr">
+      <span class="nl">Oké, en dan?</span>
+      <label for="g54" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Окей, а потом?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Dan doe je de spaghetti in het water. Het kookt ongeveer tien minuten.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g55" class="gi">
+    <div class="nr">
+      <span class="nl">Dan doe je de spaghetti in het water. Het kookt ongeveer tien minuten.</span>
+      <label for="g55" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Потом положи спагетти в воду. Варятся около десяти минут.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>En de saus?</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g56" class="gi">
+    <div class="nr">
+      <span class="nl">En de saus?</span>
+      <label for="g56" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">А соус?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Voor de saus bak je ui en knoflook. Daarna doe je tomaten erbij.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g57" class="gi">
+    <div class="nr">
+      <span class="nl">Voor de saus bak je ui en knoflook. Daarna doe je tomaten erbij.</span>
+      <label for="g57" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Для соуса обжарь лук и чеснок. Потом добавь помидоры.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Moet ik ook kaas gebruiken?</summary>
-      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g58" class="gi">
+    <div class="nr">
+      <span class="nl">Moet ik ook kaas gebruiken?</span>
+      <label for="g58" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Ja/Nee-vraag</b><span class="gru">вопрос — да/нет</span>
+      <code>werkwoord + subject + …?</code>
+      <span class="ge">Ben je moe? · Heb je gegeten? · Ga je mee?</span>
+    </div>
     <div class="ru">Сыр тоже нужен?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ja, je kunt kaas erover doen. Dat is lekker.</summary>
-      <div class="gram"><b>Modaal werkwoord</b> <span class="gru">хочу / могу / должен</span><code>modaal + infinitief (в конце)</code>ik wil gaan · ik kan helpen · hij moet werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g59" class="gi">
+    <div class="nr">
+      <span class="nl">Ja, je kunt kaas erover doen. Dat is lekker.</span>
+      <label for="g59" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Modaal werkwoord</b><span class="gru">хочу / могу / должен</span>
+      <code>modaal + infinitief (в конце)</code>
+      <span class="ge">ik wil gaan · ik kan helpen · hij moet werken</span>
+    </div>
     <div class="ru">Да, можешь посыпать сыром сверху. Это вкусно.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Bedankt! Nu weet ik het.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g60" class="gi">
+    <div class="nr">
+      <span class="nl">Bedankt! Nu weet ik het.</span>
+      <label for="g60" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Спасибо! Теперь я знаю.</div>
   </div>
 </div>
@@ -797,74 +1250,116 @@ footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-hei
 </div></section>
 <section id="t8">
 <div class="th"><div class="tn">8</div><div><h2 class="tnl">Favoriete gerechten en gerechten die je mist.</h2><p class="tru">Любимые блюда и блюда, по которым вы скучаете.</p></div></div>
-<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<p class="sl">Диалог &mdash; кнопка <b>?</b> показывает грамматику</p>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Wat is jouw favoriete gerecht?</summary>
-      <div class="gram"><b>Perfectum (met zijn)</b> <span class="gru">движение / смена состояния</span><code>zijn + ge…[en]</code>ik ben gegaan · hij is geweest · wij zijn gebleven</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g61" class="gi">
+    <div class="nr">
+      <span class="nl">Wat is jouw favoriete gerecht?</span>
+      <label for="g61" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Perfectum (met zijn)</b><span class="gru">движение / смена состояния</span>
+      <code>zijn + ge…[en]</code>
+      <span class="ge">ik ben gegaan · hij is geweest · wij zijn gebleven</span>
+    </div>
     <div class="ru">Какое твоё любимое блюдо?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Mijn favoriete gerecht is borsjt. Dat is soep met bieten. En jij?</summary>
-      <div class="gram"><b>Perfectum (met zijn)</b> <span class="gru">движение / смена состояния</span><code>zijn + ge…[en]</code>ik ben gegaan · hij is geweest · wij zijn gebleven</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g62" class="gi">
+    <div class="nr">
+      <span class="nl">Mijn favoriete gerecht is borsjt. Dat is soep met bieten. En jij?</span>
+      <label for="g62" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Perfectum (met zijn)</b><span class="gru">движение / смена состояния</span>
+      <code>zijn + ge…[en]</code>
+      <span class="ge">ik ben gegaan · hij is geweest · wij zijn gebleven</span>
+    </div>
     <div class="ru">Моё любимое блюдо — борщ. Это суп со свёклой. А ты?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ik hou van vareniki. Mis je eten uit je land?</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g63" class="gi">
+    <div class="nr">
+      <span class="nl">Ik hou van vareniki. Mis je eten uit je land?</span>
+      <label for="g63" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Я люблю вареники. Скучаешь по еде из своей страны?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ja, ik mis het brood uit mijn land. Hier is het anders.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g64" class="gi">
+    <div class="nr">
+      <span class="nl">Ja, ik mis het brood uit mijn land. Hier is het anders.</span>
+      <label for="g64" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Да, скучаю по хлебу из своей страны. Здесь он другой.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ik mis de soep van mijn moeder.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g65" class="gi">
+    <div class="nr">
+      <span class="nl">Ik mis de soep van mijn moeder.</span>
+      <label for="g65" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Я скучаю по маминому супу.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Kook je zelf eten uit je land?</summary>
-      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g66" class="gi">
+    <div class="nr">
+      <span class="nl">Kook je zelf eten uit je land?</span>
+      <label for="g66" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Ja/Nee-vraag</b><span class="gru">вопрос — да/нет</span>
+      <code>werkwoord + subject + …?</code>
+      <span class="ge">Ben je moe? · Heb je gegeten? · Ga je mee?</span>
+    </div>
     <div class="ru">Ты сам готовишь блюда своей страны?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Soms, maar het is moeilijk om de juiste producten te vinden.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g67" class="gi">
+    <div class="nr">
+      <span class="nl">Soms, maar het is moeilijk om de juiste producten te vinden.</span>
+      <label for="g67" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Иногда, но трудно найти нужные продукты.</div>
   </div>
 </div>
@@ -877,94 +1372,148 @@ footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-hei
 </div></section>
 <section id="t9">
 <div class="th"><div class="tn">9</div><div><h2 class="tnl">Vertel over jullie woning en je meubels.</h2><p class="tru">Расскажите о жилье: как выглядит дом и какая мебель.</p></div></div>
-<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<p class="sl">Диалог &mdash; кнопка <b>?</b> показывает грамматику</p>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Hoe ziet jouw huis eruit?</summary>
-      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g68" class="gi">
+    <div class="nr">
+      <span class="nl">Hoe ziet jouw huis eruit?</span>
+      <label for="g68" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>W-vraag</b><span class="gru">вопрос с вопросит. словом</span>
+      <code>Vraagwoord + werkwoord + subject</code>
+      <span class="ge">Wat doe jij? · Waar woon je? · Hoe laat ga je?</span>
+    </div>
     <div class="ru">Как выглядит твой дом?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ik woon in een klein appartement. Het heeft twee kamers.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g69" class="gi">
+    <div class="nr">
+      <span class="nl">Ik woon in een klein appartement. Het heeft twee kamers.</span>
+      <label for="g69" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Я живу в маленькой квартире. В ней две комнаты.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Wat voor meubels heb je in de woonkamer?</summary>
-      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g70" class="gi">
+    <div class="nr">
+      <span class="nl">Wat voor meubels heb je in de woonkamer?</span>
+      <label for="g70" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>W-vraag</b><span class="gru">вопрос с вопросит. словом</span>
+      <code>Vraagwoord + werkwoord + subject</code>
+      <span class="ge">Wat doe jij? · Waar woon je? · Hoe laat ga je?</span>
+    </div>
     <div class="ru">Какая мебель у тебя в гостиной?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ik heb een bank, een tafel en een tv. En jij?</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g71" class="gi">
+    <div class="nr">
+      <span class="nl">Ik heb een bank, een tafel en een tv. En jij?</span>
+      <label for="g71" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">У меня диван, стол и телевизор. А у тебя?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Mijn woonkamer is groter. Ik heb een bank, twee stoelen en een grote kast.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g72" class="gi">
+    <div class="nr">
+      <span class="nl">Mijn woonkamer is groter. Ik heb een bank, twee stoelen en een grote kast.</span>
+      <label for="g72" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Моя гостиная больше. У меня диван, два стула и большой шкаф.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Welke kleur hebben je muren?</summary>
-      <div class="gram"><b>W-vraag</b> <span class="gru">вопрос с вопросит. словом</span><code>Vraagwoord + werkwoord + subject</code>Wat doe jij? · Waar woon je? · Hoe laat ga je?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g73" class="gi">
+    <div class="nr">
+      <span class="nl">Welke kleur hebben je muren?</span>
+      <label for="g73" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>W-vraag</b><span class="gru">вопрос с вопросит. словом</span>
+      <code>Vraagwoord + werkwoord + subject</code>
+      <span class="ge">Wat doe jij? · Waar woon je? · Hoe laat ga je?</span>
+    </div>
     <div class="ru">Какого цвета у тебя стены?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Mijn muren zijn wit en de vloer is van hout.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g74" class="gi">
+    <div class="nr">
+      <span class="nl">Mijn muren zijn wit en de vloer is van hout.</span>
+      <label for="g74" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Стены белые, а пол деревянный.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Heb je veel spullen?</summary>
-      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g75" class="gi">
+    <div class="nr">
+      <span class="nl">Heb je veel spullen?</span>
+      <label for="g75" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Ja/Nee-vraag</b><span class="gru">вопрос — да/нет</span>
+      <code>werkwoord + subject + …?</code>
+      <span class="ge">Ben je moe? · Heb je gegeten? · Ga je mee?</span>
+    </div>
     <div class="ru">У тебя много вещей?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Nee, niet veel. Mijn huis is klein, dus ik heb weinig spullen.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g76" class="gi">
+    <div class="nr">
+      <span class="nl">Nee, niet veel. Mijn huis is klein, dus ik heb weinig spullen.</span>
+      <label for="g76" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Нет, немного. Дом маленький, поэтому вещей мало.</div>
   </div>
 </div>
@@ -977,104 +1526,164 @@ footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-hei
 </div></section>
 <section id="t10">
 <div class="th"><div class="tn">10</div><div><h2 class="tnl">Vertel over vroeger — waar en hoe woonden jullie?</h2><p class="tru">Расскажите о прошлом: где и как вы жили раньше.</p></div></div>
-<p class="sl">Диалог &middot; lees om de beurt &mdash; нажми на фразу &rarr; грамматика</p>
+<p class="sl">Диалог &mdash; кнопка <b>?</b> показывает грамматику</p>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Waar woonde jij vroeger?</summary>
-      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g77" class="gi">
+    <div class="nr">
+      <span class="nl">Waar woonde jij vroeger?</span>
+      <label for="g77" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Imperfectum</b><span class="gru">рассказ о прошлом</span>
+      <code>stam + te/de · onregelmatig</code>
+      <span class="ge">gaan→ging · zijn→was · hebben→had · werken→werkte</span>
+    </div>
     <div class="ru">Где ты жил раньше?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Vroeger woonde ik in Oekraïne, in een groot huis. En jij?</summary>
-      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g78" class="gi">
+    <div class="nr">
+      <span class="nl">Vroeger woonde ik in Oekraïne, in een groot huis. En jij?</span>
+      <label for="g78" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Imperfectum</b><span class="gru">рассказ о прошлом</span>
+      <code>stam + te/de · onregelmatig</code>
+      <span class="ge">gaan→ging · zijn→was · hebben→had · werken→werkte</span>
+    </div>
     <div class="ru">Раньше я жил в Украине, в большом доме. А ты?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Ik woonde in een appartement in de stad. Het was klein.</summary>
-      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g79" class="gi">
+    <div class="nr">
+      <span class="nl">Ik woonde in een appartement in de stad. Het was klein.</span>
+      <label for="g79" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Imperfectum</b><span class="gru">рассказ о прошлом</span>
+      <code>stam + te/de · onregelmatig</code>
+      <span class="ge">gaan→ging · zijn→was · hebben→had · werken→werkte</span>
+    </div>
     <div class="ru">Я жил в квартире в городе. Она была маленькая.</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Woonde je alleen?</summary>
-      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g80" class="gi">
+    <div class="nr">
+      <span class="nl">Woonde je alleen?</span>
+      <label for="g80" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Ja/Nee-vraag</b><span class="gru">вопрос — да/нет</span>
+      <code>werkwoord + subject + …?</code>
+      <span class="ge">Ben je moe? · Heb je gegeten? · Ga je mee?</span>
+    </div>
     <div class="ru">Ты жил один?</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Nee, ik woonde met mijn familie. En jij?</summary>
-      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g81" class="gi">
+    <div class="nr">
+      <span class="nl">Nee, ik woonde met mijn familie. En jij?</span>
+      <label for="g81" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Imperfectum</b><span class="gru">рассказ о прошлом</span>
+      <code>stam + te/de · onregelmatig</code>
+      <span class="ge">gaan→ging · zijn→was · hebben→had · werken→werkte</span>
+    </div>
     <div class="ru">Нет, я жил с семьёй. А ты?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ik woonde ook met mijn ouders. We hadden een tuin.</summary>
-      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g82" class="gi">
+    <div class="nr">
+      <span class="nl">Ik woonde ook met mijn ouders. We hadden een tuin.</span>
+      <label for="g82" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Imperfectum</b><span class="gru">рассказ о прошлом</span>
+      <code>stam + te/de · onregelmatig</code>
+      <span class="ge">gaan→ging · zijn→was · hebben→had · werken→werkte</span>
+    </div>
     <div class="ru">Я тоже жил с родителями. У нас был сад.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Hoe was je leven daar?</summary>
-      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g83" class="gi">
+    <div class="nr">
+      <span class="nl">Hoe was je leven daar?</span>
+      <label for="g83" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Imperfectum</b><span class="gru">рассказ о прошлом</span>
+      <code>stam + te/de · onregelmatig</code>
+      <span class="ge">gaan→ging · zijn→was · hebben→had · werken→werkte</span>
+    </div>
     <div class="ru">Какой была твоя жизнь там?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Het was rustig. Ik had veel vrienden in de buurt.</summary>
-      <div class="gram"><b>Imperfectum</b> <span class="gru">рассказ о прошлом</span><code>stam + te/de · onregelmatig</code>gaan→ging · zijn→was · hebben→had · werken→werkte</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g84" class="gi">
+    <div class="nr">
+      <span class="nl">Het was rustig. Ik had veel vrienden in de buurt.</span>
+      <label for="g84" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Imperfectum</b><span class="gru">рассказ о прошлом</span>
+      <code>stam + te/de · onregelmatig</code>
+      <span class="ge">gaan→ging · zijn→was · hebben→had · werken→werkte</span>
+    </div>
     <div class="ru">Было спокойно. У меня было много друзей по соседству.</div>
   </div>
 </div>
 <div class="line a">
   <div class="cue">A</div>
-  <div>
-    <details class="nd">
-      <summary>Mis je dat soms?</summary>
-      <div class="gram"><b>Ja/Nee-vraag</b> <span class="gru">вопрос — да/нет</span><code>werkwoord + subject + …?</code>Ben je moe? · Heb je gegeten? · Ga je mee?</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g85" class="gi">
+    <div class="nr">
+      <span class="nl">Mis je dat soms?</span>
+      <label for="g85" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Ja/Nee-vraag</b><span class="gru">вопрос — да/нет</span>
+      <code>werkwoord + subject + …?</code>
+      <span class="ge">Ben je moe? · Heb je gegeten? · Ga je mee?</span>
+    </div>
     <div class="ru">Ты иногда по этому скучаешь?</div>
   </div>
 </div>
 <div class="line b">
   <div class="cue">B</div>
-  <div>
-    <details class="nd">
-      <summary>Ja, soms wel. Maar nu vind ik het hier ook fijn.</summary>
-      <div class="gram"><b>Tegenwoordige tijd</b> <span class="gru">настоящее время</span><code>stam (+ t voor hij/zij/het)</code>ik werk · jij werkt · hij werkt · wij werken</div>
-    </details>
+  <div class="lc">
+    <input type="checkbox" id="g86" class="gi">
+    <div class="nr">
+      <span class="nl">Ja, soms wel. Maar nu vind ik het hier ook fijn.</span>
+      <label for="g86" class="gb" title="грамматика">?</label>
+    </div>
+    <div class="gram">
+      <b>Tegenwoordige tijd</b><span class="gru">настоящее время</span>
+      <code>stam (+ t voor hij/zij/het)</code>
+      <span class="ge">ik werk · jij werkt · hij werkt · wij werken</span>
+    </div>
     <div class="ru">Да, иногда. Но сейчас мне и здесь хорошо.</div>
   </div>
 </div>
@@ -1086,7 +1695,7 @@ footer{margin-top:16px;color:var(--mu);font-size:12px;text-align:center;line-hei
 <div class="qa"><div class="q">Waarom ben je naar Nederland gekomen?<span class="qru">Почему ты переехал в Нидерланды?</span></div><div class="ans"><span class="al">Antwoord</span><div class="anl">Ik ben naar Nederland gekomen voor een veilig leven en werk.</div><div class="aru">Я переехал в Нидерланды ради безопасной жизни и работы.</div></div></div>
 </div></section>
 </main>
-<footer>Уровень A2 &middot; Start.nl Deel 2. Шпаргалка для репетиции &mdash; читайте, пока не сможете без подглядывания.</footer>
+<footer>Уровень A2 &middot; Start.nl Deel 2. Шпаргалка для репетиции.</footer>
 </div>
 </body>
 </html>
