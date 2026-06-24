@@ -133,6 +133,31 @@
     .topic-num{font-size:32px}
     .nl{font-size:15px}
   }
+
+  /* ---------- grammar tooltip ---------- */
+  .nl{cursor:pointer;border-radius:4px;transition:background .12s}
+  .nl:hover{background:rgba(40,75,140,.07)}
+  .gram-tip{
+    position:fixed;top:0;left:50%;
+    transform:translateX(-50%) translateY(-12px);
+    z-index:300;
+    background:#23211C;color:#F3F1EA;
+    border-radius:14px;padding:13px 38px 12px 15px;
+    max-width:min(340px,calc(100vw - 24px));
+    width:max-content;font-size:13px;
+    box-shadow:0 8px 32px rgba(0,0,0,.4);
+    opacity:0;pointer-events:none;
+    transition:opacity .18s,transform .18s;
+    margin-top:8px;
+  }
+  .gram-tip.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all}
+  .tip-x{position:absolute;top:9px;right:12px;font-size:15px;color:#888;cursor:pointer;line-height:1}
+  .tip-x:hover{color:#fff}
+  .tip-tijd{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+    color:#E8C97A;margin-bottom:5px}
+  .tip-ru{font-weight:400;color:#aaa;text-transform:none;letter-spacing:0;font-size:11px}
+  .tip-struct{font-family:monospace;font-size:13px;color:#9BC4F0;margin-bottom:6px}
+  .tip-ex{font-size:11.5px;color:#a8a496;line-height:1.5;border-top:1px solid #3a3830;padding-top:6px;margin-top:4px}
 </style>
 </head>
 <body class="hide-ru">
@@ -181,8 +206,10 @@ const T = [
    ["b","Ja, zaterdag ben ik naar de sportschool geweest.","Да, в субботу ходил в спортзал."]
   ],
   doc:[
-   ["Met wie heb je koffie gedronken?","С кем ты пил кофе?","Ik heb koffie gedronken met mijn vriend.","Я пил кофе с моим другом."],
-   ["Hoe laat ben je naar bed gegaan?","Во сколько ты лёг спать?","Ik ben om elf uur naar bed gegaan.","Я лёг спать в одиннадцать."],
+   ["Met wie was je in de stad?","С кем ты был в городе?","Ik was er met een vriend.","Я был там с другом."],
+   ["Heb je iets lekkers gegeten of gedronken?","Ты что-нибудь вкусное ел или пил?","Ja, ik heb koffie gedronken en een broodje gegeten.","Да, я пил кофе и съел бутерброд."],
+   ["Vond je het gezellig?","Тебе было уютно/весело?","Ja, het was heel gezellig.","Да, было очень уютно."],
+   ["Was het duur?","Это было дорого?","Nee, het was niet zo duur.","Нет, не очень дорого."],
    ["Wat ga je volgend weekend doen?","Что будешь делать в следующие выходные?","Volgend weekend ga ik naar mijn familie.","В следующие выходные поеду к семье."]
   ]
  },
@@ -201,9 +228,11 @@ const T = [
    ["b","Afgesproken! Ik boek het hotel.","Договорились! Я забронирую отель."]
   ],
   doc:[
-   ["Hoeveel dagen willen jullie op vakantie gaan?","Сколько дней хотите отдыхать?","We willen een week op vakantie gaan.","Мы хотим поехать на неделю."],
-   ["Wat ga je daar doen?","Что будешь там делать?","Ik ga wandelen en foto's maken.","Буду гулять и фотографировать."],
-   ["Hoeveel kost de vakantie ongeveer?","Сколько примерно стоит отпуск?","Het kost ongeveer vijfhonderd euro per persoon.","Около пятисот евро на человека."]
+   ["Met wie ga je op vakantie?","С кем ты едешь в отпуск?","Ik ga met mijn vriend op vakantie.","Я еду в отпуск с другом."],
+   ["Heb je iets lekkers gegeten tijdens de reis?","Ты что-нибудь вкусное ел в дороге?","Ja, we hebben onderweg iets gegeten in een restaurant.","Да, мы поели в ресторане по дороге."],
+   ["Vond je het leuk om te plannen?","Тебе понравилось планировать?","Ja, ik vond het heel leuk.","Да, мне очень понравилось."],
+   ["Was het duur?","Это было дорого?","Het kost ongeveer vijfhonderd euro per persoon.","Около пятисот евро на человека."],
+   ["Hoeveel dagen willen jullie op vakantie gaan?","Сколько дней хотите отдыхать?","We willen een week op vakantie gaan.","Мы хотим поехать на неделю."]
   ]
  },
  {
@@ -219,9 +248,11 @@ const T = [
    ["b","Mee eens. Leeuwarden is een rustige, gezellige stad.","Согласен. Леуварден — спокойный, уютный город."]
   ],
   doc:[
-   ["Welke bezienswaardigheid vind je het mooist?","Какая достопримечательность нравится больше всего?","Ik vind de Oldehove het mooist.","Больше всего мне нравится Олдехове."],
-   ["Wat kun je daar in het weekend doen?","Что там можно делать на выходных?","Je kunt winkelen of op een terras zitten.","Можно ходить по магазинам или сидеть на террасе."],
-   ["Hoe ga je naar het centrum?","Как ты добираешься до центра?","Ik ga met de fiets naar het centrum.","Я еду в центр на велосипеде."]
+   ["Was je er alleen of met iemand?","Ты был там один или с кем-то?","Ik was er met mijn vriend.","Я был там с другом."],
+   ["Heb je iets lekkers gegeten in het centrum?","Ты что-нибудь вкусное ел в центре?","Ja, ik heb gebak gegeten op een terras.","Да, я ел выпечку на террасе."],
+   ["Vond je het gezellig?","Тебе было уютно?","Ja, het was heel gezellig.","Да, было очень уютно."],
+   ["Was het duur?","Было ли там дорого?","Nee, een terras is niet zo duur.","Нет, терраса — не так дорого."],
+   ["Welke bezienswaardigheid vind je het mooist?","Какая достопримечательность нравится больше всего?","Ik vind de Oldehove het mooist.","Больше всего мне нравится Олдехове."]
   ]
  },
  {
@@ -237,8 +268,10 @@ const T = [
    ["b","Ze moeten het centrum en de rivier bezoeken.","Им стоит посетить центр и реку."]
   ],
   doc:[
-   ["Hoeveel mensen wonen er in jouw stad?","Сколько людей живёт в твоём городе?","In mijn stad wonen ongeveer een miljoen mensen.","В моём городе живёт около миллиона человек."],
-   ["Wat is het beste seizoen om te komen?","Какой сезон лучше для поездки?","De zomer is het beste, want het is dan warm.","Лучше всего летом, потому что тогда тепло."],
+   ["Was je er alleen of met iemand?","Ты был там один или с кем-то?","Nee, ik was er met mijn familie.","Нет, я был там с семьёй."],
+   ["Wat at je graag in jouw land?","Что ты любил есть в своей стране?","Ik at graag borsjt en vareniki.","Я любил есть борщ и вареники."],
+   ["Vond je het leuk om er te wonen?","Тебе нравилось там жить?","Ja, ik vond het heel leuk.","Да, мне очень нравилось."],
+   ["Was het duur om er te leven?","Там было дорого жить?","Nee, het was goedkoper dan hier.","Нет, было дешевле, чем здесь."],
    ["Mis je jouw stad?","Скучаешь по своему городу?","Ja, ik mis mijn stad soms, vooral mijn vrienden.","Да, иногда скучаю, особенно по друзьям."]
   ]
  },
@@ -256,7 +289,9 @@ const T = [
    ["a","Ik hou van de zon. Regen vind ik niet leuk.","Я люблю солнце. Дождь мне не нравится."]
   ],
   doc:[
-   ["Wat voor weer hadden jullie gisteren?","Какая была погода вчера?","Gisteren was het bewolkt en koud.","Вчера было облачно и холодно."],
+   ["Was je gisteren alleen thuis of met iemand?","Ты был вчера дома один или с кем-то?","Nee, ik was thuis met mijn gezin.","Нет, я был дома с семьёй."],
+   ["Heb je iets lekkers gegeten thuis?","Ты что-нибудь вкусное ел дома?","Ja, ik heb soep gemaakt. Dat is lekker als het koud is.","Да, я приготовил суп. Это вкусно, когда холодно."],
+   ["Vond je het gezellig binnen?","Тебе было уютно дома?","Ja, heel gezellig met de familie.","Да, очень уютно с семьёй."],
    ["Wat doe je als het regent?","Что ты делаешь, когда идёт дождь?","Als het regent, blijf ik thuis.","Когда идёт дождь, я остаюсь дома."],
    ["Welk seizoen vind je het fijnst?","Какое время года тебе нравится больше всего?","Ik vind de lente het fijnst, want het is niet te warm.","Больше всего мне нравится весна, потому что не слишком жарко."]
   ]
@@ -274,8 +309,10 @@ const T = [
    ["b","Ik werk in ploegen. Soms begin ik om zes uur.","Я работаю по сменам. Иногда начинаю в шесть."]
   ],
   doc:[
+   ["Eet je iets lekkers op je werk?","Ты ешь что-нибудь вкусное на работе?","Ja, ik eet een broodje en drink koffie.","Да, я ем бутерброд и пью кофе."],
+   ["Ben je moe na je werk?","Ты устаёшь после работы?","Ja, soms ben ik heel moe na mijn werk.","Да, иногда я очень устаю после работы."],
+   ["Vind je je werk leuk?","Тебе нравится твоя работа?","Ja, maar het is soms zwaar.","Да, но иногда тяжело."],
    ["Hoeveel uur per week werk je?","Сколько часов в неделю ты работаешь?","Ik werk ongeveer veertig uur per week.","Я работаю около сорока часов в неделю."],
-   ["Wat wil je in de toekomst doen?","Чем хочешь заниматься в будущем?","Ik wil beter Nederlands leren en een betere baan vinden.","Хочу лучше выучить нидерландский и найти работу получше."],
    ["Hoe ga je naar je werk?","Как ты добираешься до работы?","Ik ga met de auto naar mijn werk.","Я езжу на работу на машине."]
   ]
  },
@@ -293,8 +330,10 @@ const T = [
    ["a","Bedankt! Nu weet ik het.","Спасибо! Теперь я знаю."]
   ],
   doc:[
+   ["Heb je het alleen gegeten of met iemand?","Ты ел один или с кем-то?","Ik heb het met mijn gezin gegeten.","Я ел это с семьёй."],
+   ["Heb je het lekker gevonden?","Тебе понравилось на вкус?","Ja, het was heel lekker!","Да, было очень вкусно!"],
+   ["Was het duur?","Это было дорого?","Nee, de ingrediënten zijn goedkoop.","Нет, ингредиенты дешёвые."],
    ["Hoeveel zout doe je in het water?","Сколько соли кладёшь в воду?","Ik doe een beetje zout in het water.","Я кладу немного соли в воду."],
-   ["Wat eet je erbij?","Что ты ешь к этому?","Ik eet er brood en salade bij.","Я ем с этим хлеб и салат."],
    ["Hoe lang duurt het in totaal?","Сколько это занимает всего?","Het duurt ongeveer twintig minuten.","Это занимает около двадцати минут."]
   ]
  },
@@ -310,8 +349,10 @@ const T = [
    ["a","Soms, maar het is moeilijk om de juiste producten te vinden.","Иногда, но трудно найти нужные продукты."]
   ],
   doc:[
-   ["Welk Nederlands gerecht vind je lekker?","Какое голландское блюдо тебе нравится?","Ik vind stamppot lekker.","Мне нравится стампот."],
-   ["Eet je vlees of ben je vegetariër?","Ты ешь мясо или вегетарианец?","Ik eet vlees, maar niet elke dag.","Я ем мясо, но не каждый день."],
+   ["Eet je vaak alleen of met iemand?","Ты часто ешь один или с кем-то?","Ik eet meestal met mijn gezin.","Я обычно ем с семьёй."],
+   ["Heb je iets lekkers gegeten vandaag?","Ты что-нибудь вкусное сегодня ел?","Ja, ik heb borsjt gemaakt. Het was heel lekker.","Да, я приготовил борщ. Было очень вкусно."],
+   ["Vond je het lekker?","Тебе понравилось на вкус?","Ja, heel lekker!","Да, очень вкусно!"],
+   ["Was het duur in de winkel?","Это было дорого в магазине?","Nee, de producten zijn niet zo duur.","Нет, продукты не такие дорогие."],
    ["Kook je vaak zelf?","Ты часто готовишь сам?","Nee, ik kook niet vaak, omdat ik weinig tijd heb.","Нет, готовлю нечасто, потому что мало времени."]
   ]
  },
@@ -329,9 +370,11 @@ const T = [
    ["a","Nee, niet veel. Mijn huis is klein, dus ik heb weinig spullen.","Нет, немного. Дом маленький, поэтому вещей мало."]
   ],
   doc:[
-   ["Waar staat je bed?","Где стоит твоя кровать?","Mijn bed staat in de slaapkamer, naast het raam.","Моя кровать стоит в спальне, рядом с окном."],
-   ["Vind je de inrichting belangrijk?","Для тебя важна обстановка?","Ja, ik vind het belangrijk dat het gezellig is.","Да, мне важно, чтобы было уютно."],
-   ["Wat staat er naast je bank?","Что стоит рядом с твоим диваном?","Naast mijn bank staat een lamp.","Рядом с диваном стоит лампа."]
+   ["Woon je er alleen of met iemand?","Ты там живёшь один или с кем-то?","Ik woon met mijn gezin.","Я живу с семьёй."],
+   ["Eet je thuis of ga je naar een restaurant?","Ты ешь дома или ходишь в ресторан?","Ik eet meestal thuis. Dat is goedkoper.","Я обычно ем дома. Это дешевле."],
+   ["Vind je het gezellig bij jou thuis?","Тебе уютно у тебя дома?","Ja, het is heel gezellig.","Да, очень уютно."],
+   ["Is de huur duur?","Аренда дорогая?","Ja, de huur is een beetje duur.","Да, аренда немного дорогая."],
+   ["Vind je de inrichting belangrijk?","Для тебя важна обстановка?","Ja, ik vind het belangrijk dat het gezellig is.","Да, мне важно, чтобы было уютно."]
   ]
  },
  {
@@ -349,8 +392,10 @@ const T = [
    ["b","Ja, soms wel. Maar nu vind ik het hier ook fijn.","Да, иногда. Но сейчас мне и здесь хорошо."]
   ],
   doc:[
-   ["Hoe ging je vroeger naar je werk?","Как ты раньше добирался на работу?","Ik ging vroeger met de bus naar mijn werk.","Раньше я ездил на работу на автобусе."],
-   ["Wat deed je in je vrije tijd?","Что ты делал в свободное время?","In mijn vrije tijd speelde ik voetbal.","В свободное время я играл в футбол."],
+   ["Woonde je alleen of met iemand?","Ты жил один или с кем-то?","Ik woonde met mijn familie.","Я жил с семьёй."],
+   ["Wat at je vroeger graag?","Что ты любил есть раньше?","Ik at vroeger graag soep van mijn moeder.","Раньше я любил есть мамин суп."],
+   ["Vond je het leuk om daar te wonen?","Тебе нравилось там жить?","Ja, het was heel gezellig en rustig.","Да, было очень уютно и спокойно."],
+   ["Was het goedkoper om te leven?","Там было дешевле жить?","Ja, het leven was goedkoper dan hier.","Да, жизнь была дешевле, чем здесь."],
    ["Waarom ben je naar Nederland gekomen?","Почему ты переехал в Нидерланды?","Ik ben naar Nederland gekomen voor een veilig leven en werk.","Я переехал в Нидерланды ради безопасной жизни и работы."]
   ]
  }
@@ -427,6 +472,87 @@ document.getElementById('nameB').oninput=e=>{names.b=e.target.value.trim()||"Б"
 
 buildChips();
 render();
+
+// ---------- grammar tooltip ----------
+const tip = document.createElement('div');
+tip.className = 'gram-tip';
+document.body.appendChild(tip);
+
+function gramNote(nl) {
+  // Perfectum met hebben
+  if (/\b(heb|heeft|hebben)\b[\s\S]*\bge\w+\b/.test(nl)) return {
+    tijd:"Perfectum", ru:"завершённое действие",
+    struct:"hebben + ge…[t/d]",
+    ex:"ik heb gewerkt · jij hebt gegeten · hij heeft gezien"
+  };
+  // Perfectum met zijn
+  if (/\b(ben|bent|is|zijn)\b[\s\S]*\bge\w+\b/.test(nl)) return {
+    tijd:"Perfectum (met zijn)", ru:"движение / смена состояния",
+    struct:"zijn + ge…[en]",
+    ex:"ik ben gegaan · hij is geweest · wij zijn gebleven"
+  };
+  // Imperfectum
+  if (/\b(was|waren|had|hadden|ging|gingen|woonde|woonden|vond|deed|zag|stond|kwamen|at|speelde|dronk|bleef)\b/.test(nl)) return {
+    tijd:"Imperfectum", ru:"рассказ о прошлом",
+    struct:"stam + te/de · или неправильная форма",
+    ex:"werken→werkte · gaan→ging · zijn→was · hebben→had"
+  };
+  // Modal
+  if (/\b(wil|wilt|willen|kan|kunt|kunnen|moet|moeten|mag|mogen|zal|zullen|zou|zouden)\b/.test(nl)) return {
+    tijd:"Modaal werkwoord", ru:"хочу / могу / должен",
+    struct:"modaal + infinitief (в конце)",
+    ex:"ik wil gaan · ik kan helpen · hij moet werken · we zullen zien"
+  };
+  // Laten we / Zullen we
+  if (/\b(laten we|zullen we)\b/i.test(nl)) return {
+    tijd:"Voorstel", ru:"предложение — «давайте»",
+    struct:"Laten we … / Zullen we …",
+    ex:"Laten we gaan · Zullen we samen eten? · Zullen we plannen?"
+  };
+  // W-vraag
+  if (/^(Wie|Wat|Waar|Wanneer|Hoe|Welk|Welke|Hoeveel)\b/.test(nl)) return {
+    tijd:"W-vraag", ru:"вопрос с вопросительным словом",
+    struct:"Vraagwoord + werkwoord + subject + …?",
+    ex:"Wat doe jij? · Waar woon je? · Hoe laat ga je?"
+  };
+  // Ja/Nee-vraag
+  if (/^(Ben|Heb|Is|Ga|Kun|Moet|Woon|Vind|Mis|Eet|Was|Woonde|Vond|Doe|Kook|Werk|Rij|Zal|Kan)\b/.test(nl)) return {
+    tijd:"Ja/Nee-vraag", ru:"вопрос — да/нет",
+    struct:"werkwoord + subject + …?",
+    ex:"Ben je moe? · Heb je gegeten? · Ga je mee?"
+  };
+  // Toekomst gaan
+  if (/\b(ga|gaat|gaan)\b/.test(nl) && /\b\w+en\b/.test(nl)) return {
+    tijd:"Toekomst (gaan)", ru:"ближайшее будущее",
+    struct:"gaan + infinitief",
+    ex:"ik ga eten · jij gaat werken · we gaan kopen"
+  };
+  // Tegenwoordige tijd (default)
+  return {
+    tijd:"Tegenwoordige tijd", ru:"настоящее время",
+    struct:"stam (+ t voor hij/zij/het)",
+    ex:"ik werk · jij werkt · hij werkt · wij werken"
+  };
+}
+
+function showTip(note) {
+  tip.innerHTML = `<span class="tip-x">✕</span>
+    <div class="tip-tijd">${note.tijd} <span class="tip-ru">· ${note.ru}</span></div>
+    <div class="tip-struct">${note.struct}</div>
+    <div class="tip-ex">${note.ex}</div>`;
+  tip.querySelector('.tip-x').onclick = hideTip;
+  tip.classList.add('show');
+}
+function hideTip() { tip.classList.remove('show'); }
+
+stage.addEventListener('click', e => {
+  const nlEl = e.target.closest('.nl');
+  if (!nlEl) { hideTip(); return; }
+  const note = gramNote(nlEl.textContent.trim());
+  showTip(note);
+  e.stopPropagation();
+});
+document.addEventListener('click', hideTip);
 </script>
 </body>
 </html>
