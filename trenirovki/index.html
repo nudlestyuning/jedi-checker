@@ -97,6 +97,14 @@ table.sets td:first-child{color:var(--muted);font-size:12.5px;text-align:center;
 .done.on{background:rgba(79,191,135,.16);border-color:var(--green);color:var(--green)}
 .setrow.filled .cell{border-color:#3B4A5C}
 
+.seq{margin-top:10px;border-top:1px solid var(--line)}
+.seg{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid var(--line);font-size:14px}
+.seg .tm{width:56px;color:#BCC8D6;font-variant-numeric:tabular-nums;font-weight:600}
+.seg .nm{flex:1;color:var(--muted)}
+.seg.acc .nm{color:var(--amber);font-weight:600}
+.seg.now{background:rgba(245,183,43,.1);border-radius:8px}
+.seg.now .nm{color:var(--text)}
+.seg.past{opacity:.4}
 .exfoot{display:flex;gap:8px;margin-top:10px}
 .btn{flex:1;padding:9px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line);
   font-size:13.5px;color:#CBD5E1;display:flex;align-items:center;justify-content:center;gap:6px}
@@ -320,6 +328,85 @@ const PROGRAMS = [
     { kind:"Завершение", num:6,
       ex:[{id:"stretch3", name:"Заминка / растяжка", free:true, placeholder:"Что тянул, сколько минут"}]}
   ]
+},
+{
+  id:"d4",
+  title:"День 4",
+  focus:"интервальное кардио",
+  blocks:[
+    { kind:"Задание", num:1,
+      note:"Если накопилась мышечная боль и усталость — устрой день отдыха и сдвинь программу на день вперёд. Если чувствуешь себя нормально — работаем без выходного.",
+      ex:[]},
+    { kind:"Интервалы", num:2,
+      note:"Бег по равнине или пересечённой местности, на улице или в помещении. Можно заменить на плавание, лыжи, эллипс, греблю или подъём по лестницам в таком же режиме.\nЗадача: после каждого ускорения вернуть пульс на 75–80% от максимума на фоне ровного темпа. Новое ускорение — только когда пульс вернулся. Кнопкой +30с продлевай спокойный отрезок, если пульс ещё высокий.",
+      ex:[
+        {id:"run-intervals", name:"Интервальный бег", interval:[
+          {t:300,l:"Спокойный бег"},
+          {t:25,l:"Ускорение",a:1},
+          {t:240,l:"Спокойный бег"},
+          {t:25,l:"Ускорение",a:1},
+          {t:240,l:"Спокойный бег"},
+          {t:25,l:"Ускорение",a:1},
+          {t:240,l:"Спокойный бег"},
+          {t:25,l:"Ускорение",a:1},
+          {t:240,l:"Спокойный бег"},
+          {t:25,l:"Ускорение",a:1},
+          {t:240,l:"Спокойный бег"},
+          {t:25,l:"Ускорение",a:1},
+          {t:300,l:"Заминка — спокойный бег"}
+        ]}
+      ]},
+    { kind:"Запись", num:3,
+      ex:[{id:"cardio4", name:"Как прошло", free:true, placeholder:"Дистанция, время, пульс на ускорениях и в восстановлении"}]},
+    { kind:"Завершение", num:4,
+      note:"Заминка: спокойный бег 5–7 мин с постепенным снижением скорости, затем переход на ходьбу.",
+      ex:[{id:"stretch4", name:"Заминка / растяжка", free:true, placeholder:"Что делал, сколько минут"}]}
+  ]
+},
+{
+  id:"d5",
+  title:"День 5",
+  focus:"многосуставные движения · отстающая группа",
+  warmup:"Разминка: 5 мин на любом кардиотренажёре в спокойном темпе — гребля, вело, бег, лыжи, эллипс.",
+  blocks:[
+    { kind:"Упражнение", num:1, restSec:150, restLabel:"Отдых между подходами: 2–3 мин",
+      note:"Новичкам — 2 рабочих подхода.",
+      ex:[
+        {id:"pullover-db", name:"Пуловер с гантелью", reps:"15 / 10 / 10 / 10", sets:4,
+         effort:"усилие 100% в конце каждого рабочего подхода",
+         scheme:["15 · 70%","10 · 100%","10 · 100%","10 · 100%"]}
+      ]},
+    { kind:"Упражнение", num:2, restSec:180, restLabel:"Отдых между подходами: 3 мин",
+      note:"Пирамида — вес растёт в каждом подходе.\nПоследние 1–2 повтора можно сделать форсированными, с помощью страхующего под локти.\nНовичкам — 1 разминочный и 1–2 рабочих подхода.",
+      ex:[
+        {id:"db-bench", name:"Жим гантелей лёжа", reps:"15 / 10 / 8 / 6–7", sets:4,
+         effort:"пирамида", scheme:["15 · 70%","10 · 90%","8 · 100%","6–7 · 100%"]}
+      ]},
+    { kind:"Упражнение", num:3, restSec:180, restLabel:"Отдых между подходами: 3 мин",
+      note:"Пирамида — вес растёт в каждом подходе.\nНовичкам — 1 разминочный и 2 рабочих подхода.",
+      ex:[
+        {id:"db-row", name:"Тяга гантели в наклоне", reps:"15 / 10 / 8 / 6–7", sets:4,
+         effort:"пирамида", scheme:["15 · 70%","10 · 90%","8 · 100%","6–7 · 100%"]}
+      ]},
+    { kind:"Упражнение", num:4, restSec:120, restLabel:"Отдых между подходами: 2 мин",
+      note:"Пирамида — вес растёт в каждом подходе.\nНовичкам — 1 разминочный и 2 рабочих подхода.",
+      ex:[
+        {id:"smith-press", name:"Жим штанги сидя на тренажёре Смита", alt:"можно заменить жимом гантелей сидя по той же схеме",
+         reps:"15 / 12 / 10 / 8", sets:4, effort:"пирамида",
+         scheme:["15 · 70%","12 · 90%","10 · 100%","8 · 100%"]}
+      ]},
+    { kind:"Упражнение", num:5, restSec:120, restLabel:"Отдых между подходами: 2 мин",
+      note:"Одно изолирующее упражнение до предела на ту часть тела, которая нуждается в дополнительной работе. Можно дополнительно нагрузить ноги, если нужно.",
+      ex:[
+        {id:"lagging-name", name:"Отстающая группа мышц", free:true, placeholder:"Какое упражнение выбрал и на какую группу"},
+        {id:"lagging", name:"Подходы", reps:"до предела", sets:4}
+      ]},
+    { kind:"Завершение", num:6,
+      ex:[{id:"stretch5", name:"Заминка / растяжка", free:true, placeholder:"Что тянул, сколько минут"}]},
+    { kind:"Кардио", num:7,
+      note:"Один вариант на выбор:\n1. Набрать 80 этажей подъёма по лестницам за день.\n2. Бег в спокойном темпе, можно иногда переходить на быструю ходьбу. Дистанция 3.75 км.\n3. Равносильная замена по расходу энергии.\nПульс 70–75% от максимума.",
+      ex:[{id:"cardio5", name:"Кардио", free:true, placeholder:"Например: бег 3.75 км, 22:30, пульс 143"}]}
+  ]
 }
 ];
 
@@ -382,6 +469,18 @@ const BUILTIN_VIDEOS = {
   ],
   "sldl-one-leg": [
     {l:"Техника", s:"video/sldl-one-leg.mp4"}
+  ],
+  "pullover-db": [
+    {l:"Техника", s:"video/pullover-db.mp4"}
+  ],
+  "db-bench": [
+    {l:"Техника", s:"video/db-bench.mp4"}
+  ],
+  "db-row": [
+    {l:"Техника", s:"video/db-row.mp4"}
+  ],
+  "smith-press": [
+    {l:"Техника", s:"video/smith-press.mp4"}
   ],
   "lunge-back": [
     {l:"Техника", s:"video/lunge-back.mp4"}
@@ -463,7 +562,7 @@ function render(){
   p.blocks.forEach(b=>{
     h+=`<section class="block"><div class="blockhead"><span class="num">${b.num}</span><span class="kind">${b.kind}</span></div>`;
     if(b.note) h+=`<p class="note">${b.note}</p>`;
-    const superset=b.ex.length>1;
+    const superset=b.kind==='Суперсерия';
     h+=`<div class="rail ${superset?'super':''}">`;
     b.ex.forEach(e=>{ h+=exHTML(e,b,s); });
     h+=`</div>`;
@@ -477,6 +576,20 @@ function render(){
 }
 
 function exHTML(e,b,s){
+  if(e.interval){
+    const segs=e.interval.map((x,i)=>
+      `<div class="seg ${x.a?'acc':''}" data-segi="${i}">
+         <span class="tm">${Math.floor(x.t/60)}:${String(x.t%60).padStart(2,'0')}</span>
+         <span class="nm">${x.l}</span></div>`).join('');
+    const tot=Math.round(e.interval.reduce((a,x)=>a+x.t,0)/60);
+    return `<div class="ex">
+      <h3>${e.name}</h3>
+      <div class="target"><span class="tag acc">${e.interval.filter(x=>x.a).length} ускорений</span>
+        <span class="tag">≈ ${tot} мин</span></div>
+      <div class="seq">${segs}</div>
+      <div class="exfoot"><button class="btn tech" data-seq="${e.id}">Запустить интервалы</button></div>
+    </div>`;
+  }
   if(e.free){
     const v=(s.free&&s.free[e.id])||'';
     return `<div class="ex"><h3>${e.name}</h3>
@@ -557,6 +670,7 @@ app.addEventListener('click',ev=>{
     if(s.ex[id][i].d) startRest(+b.dataset.rest);
     return;
   }
+  if(b.dataset.seq){ startSeq(b.dataset.seq); return; }
   if(b.dataset.copy){ copyPrev(b.dataset.copy); return; }
   if(b.dataset.addset){ addSet(b.dataset.addset); return; }
   if(b.dataset.tech){ openTech(b.dataset.tech); return; }
@@ -600,8 +714,45 @@ function startRest(sec){
   tEl.dataset.left=sec;
 }
 function paint(l){ tTime.textContent=Math.floor(l/60)+':'+String(Math.max(l%60,0)).padStart(2,'0'); tEl.dataset.left=l; }
-document.getElementById('tStop').onclick=()=>{clearInterval(rest);tEl.classList.remove('show');};
-document.getElementById('tPlus').onclick=()=>{const l=(+tEl.dataset.left||0)+30;clearInterval(rest);startRest(l);};
+let seq=null,seqI=0,seqLeft=0,seqT=null;
+function startSeq(id){
+  const e=findEx(id); if(!e||!e.interval)return;
+  clearInterval(rest); seq=e.interval; seqI=0; runSeg();
+}
+function runSeg(){
+  clearInterval(seqT);
+  if(!seq||seqI>=seq.length){stopSeq();toast('Интервалы завершены');return;}
+  seqLeft=seq[seqI].t; tEl.classList.add('show'); paintSeq(); markSeg();
+  seqT=setInterval(()=>{
+    seqLeft--; paintSeq();
+    if(seqLeft<=0){ seqI++; beep(); if(seq[seqI]&&seq[seqI].a)setTimeout(beep,320); runSeg(); }
+  },1000);
+}
+function paintSeq(){
+  const c=seq[seqI], nx=seq[seqI+1];
+  tTime.textContent=Math.floor(Math.max(seqLeft,0)/60)+':'+String(Math.max(seqLeft%60,0)).padStart(2,'0');
+  document.getElementById('tLbl').textContent=c.l+(nx?' → '+nx.l:' → финиш');
+}
+function markSeg(){
+  document.querySelectorAll('[data-segi]').forEach(el=>{
+    const i=+el.dataset.segi;
+    el.classList.toggle('now',i===seqI);
+    el.classList.toggle('past',i<seqI);
+  });
+}
+function stopSeq(){
+  clearInterval(seqT); seq=null; tEl.classList.remove('show');
+  document.getElementById('tLbl').textContent='Отдых';
+  document.querySelectorAll('[data-segi]').forEach(el=>el.classList.remove('now','past'));
+}
+document.getElementById('tStop').onclick=()=>{
+  if(seq){stopSeq();return;}
+  clearInterval(rest);tEl.classList.remove('show');
+};
+document.getElementById('tPlus').onclick=()=>{
+  if(seq){seqLeft+=30;paintSeq();return;}
+  const l=(+tEl.dataset.left||0)+30;clearInterval(rest);startRest(l);
+};
 function beep(){
   try{const c=new (window.AudioContext||window.webkitAudioContext)();
     const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);
